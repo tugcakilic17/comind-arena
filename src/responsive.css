@@ -1,0 +1,125 @@
+/* Fit narrow phones without changing the artwork's proportions. */
+body{min-width:320px}
+#app.screen-home{grid-template-columns:minmax(0,1fr)}
+.screen-home main,.screen-home .site-header{min-width:0}
+@media(max-width:359px){
+ .site-header nav>.account-button{width:136px}
+ .illustrated-game .scoreboard{padding-inline:7px;gap:3px}
+ .illustrated-game .avatar-slot{width:34px;height:44px}
+ .illustrated-game .player-score{gap:3px}
+ .illustrated-game .player-score strong{font-size:12px}
+ .illustrated-game:has(.local-cards) .player-score strong{font-size:11px}
+ .illustrated-game .player-score>b{font-size:24px}
+ .illustrated-game .timer-block{width:48px;flex:none}
+ .illustrated-game .timer-block strong{font-size:23px}
+ .illustrated-game .timer-block .game-inline-icon{width:19px;height:19px}
+}
+
+/* Results grow with their content on short screens; every action stays reachable. */
+@media(max-height:600px) and (max-width:600px){
+ #app.screen-result{height:auto;min-height:100dvh;overflow:visible}
+ .screen-result main{height:auto;min-height:100dvh;padding-top:100px}
+}
+@media(max-height:500px) and (orientation:landscape){
+ #app.screen-result{height:auto;min-height:100dvh;overflow:visible}
+ .screen-result main{height:auto;min-height:100dvh;padding-top:96px}
+ .illustrated-result{top:0}
+ .illustrated-result .result-player{flex-direction:row;gap:10px}
+ .result-portrait{order:0}
+ .illustrated-result .result-replay{min-height:44px;width:auto;flex:1;aspect-ratio:auto;padding:10px 12px;font-size:16px;white-space:normal}
+ .illustrated-result .result-home{flex:none}
+}
+
+/* Short windows and browser zoom must never put a dialog's controls off screen. */
+@media(max-height:560px){
+ .modal.illustrated-modal{
+  max-height:calc(100dvh - 24px);margin:auto;translate:none;
+  overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:#bdc8a6 #fff9e9;
+ }
+ .modal.illustrated-modal .account-mascot,
+ .modal.illustrated-modal .leave-mascot{display:none}
+ .modal.illustrated-modal .close-modal{top:10px;right:12px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0}
+ .modal.illustrated-modal .close-modal .icon{width:20px;height:20px}
+ .modal[data-kind="account"]:has(.account-status:not([hidden])){margin:auto;max-height:calc(100dvh - 24px)}
+ .account-content{padding:42px 28px 28px}
+ .leave-content,.modal[data-kind="pause"] .pause-content{padding:44px 28px 28px}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) h2{font-size:27px}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) .leave-description{font-size:15px;margin-top:10px}
+ .leave-continue{height:auto;min-height:48px;margin-top:16px;padding:12px;font-size:19px}
+ .leave-home{height:auto;min-height:44px;margin-top:8px;font-size:15px}
+ .help-content{min-height:0;padding:44px 24px 48px}
+ .help-practice{width:min(100%,300px);margin-top:12px}
+ .modal[data-kind="help"] h2{font-size:28px}
+ .modal[data-kind="help"] .help-description{font-size:15px}
+ .help-rules{margin-top:12px;padding-top:12px}
+ .help-ready{margin-top:14px;min-height:44px;height:auto}
+ .settings-content{padding:44px 26px 28px}
+ .modal[data-kind="settings"] h2{font-size:28px}
+ .modal[data-kind="settings"] .settings-description{font-size:14px;margin-top:6px}
+ .settings-level{margin-top:14px}
+ .settings-level h3{font-size:18px}
+ .modal[data-kind="settings"] .level-options{margin-top:10px}
+ .modal[data-kind="settings"] .level-options button{min-height:60px;font-size:16px}
+ .modal[data-kind="settings"] .settings-level-hint{min-height:2.8em;font-size:13px;margin-top:8px}
+ .modal[data-kind="settings"] .settings-sound{margin-top:10px;padding-top:12px}
+ .settings-ready{margin-top:16px;min-height:44px;height:auto}
+}
+
+@media(max-height:430px) and (min-width:450px){
+ .settings-content{padding:36px 26px 24px}
+ .modal[data-kind="settings"] h2{font-size:26px}
+ .settings-level{margin-top:10px}
+ .modal[data-kind="settings"] .settings-level-hint{min-height:2.2em}
+ .settings-ready{margin-top:12px}
+}
+
+@media(max-height:500px) and (orientation:landscape) and (max-width:600px){
+ .illustrated-game .game-toolbar{grid-template-columns:44px minmax(0,1fr) 88px;gap:4px}
+ .illustrated-game .game-art-button{width:44px;height:44px}
+ .illustrated-game .scoreboard{padding-inline:8px;gap:4px}
+ .illustrated-game .avatar-slot{width:28px;height:36px}
+ .illustrated-game .player-score{gap:3px}
+ .illustrated-game .player-score strong,.illustrated-game:has(.local-cards) .player-score strong{font-size:11px}
+ .illustrated-game .player-score>b{font-size:24px}
+ .illustrated-game .timer-block{width:44px;flex:none}
+ .illustrated-game .timer-block strong{font-size:23px}
+ .illustrated-game .timer-block .game-inline-icon{width:17px;height:17px}
+ .illustrated-game .game-cards{width:94%;gap:12px}
+}
+
+/* A narrow landscape window needs the same two-column help as a wide one. */
+@media(max-height:500px) and (min-width:450px) and (max-width:600px){
+ .help-content{display:grid;grid-template-columns:1fr 1fr;column-gap:14px;padding:38px 24px 24px}
+ .modal[data-kind="help"] h2,.modal[data-kind="help"] .help-description{grid-column:1/-1;max-width:none}
+ .help-practice{grid-column:1;grid-row:3/5;gap:6px;align-self:center}
+ .help-card-label{font-size:11px;gap:3px;white-space:nowrap}
+ .help-card-label::before{width:6px;height:6px}
+ .help-rules{grid-column:2;margin-top:10px;padding-top:10px}
+ .help-limits{font-size:12px;gap:8px}
+ .help-limits .game-inline-icon{width:17px;height:17px}
+ .modal[data-kind="help"] .help-rules p{font-size:12px}
+ .modal[data-kind="help"] .help-rules .help-together{font-size:11px}
+ .help-ready{grid-column:2;width:100%;font-size:16px;gap:6px;justify-self:center}
+}
+
+@media(max-height:430px) and (min-width:450px) and (max-width:600px){
+ .settings-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;padding:36px 24px 24px}
+ .modal[data-kind="settings"] h2{grid-column:1/-1}
+ .modal[data-kind="settings"] .settings-description{display:none}
+ .settings-level{grid-column:1;grid-row:2/4;margin:0}
+ .settings-level h3{font-size:16px}
+ .modal[data-kind="settings"] .level-options{gap:5px}
+ .modal[data-kind="settings"] .level-options button{font-size:14px;padding-inline:0}
+ .modal[data-kind="settings"] .settings-level-hint{font-size:12px;min-height:2.8em}
+ .modal[data-kind="settings"] .settings-sound{grid-column:2;grid-row:2;flex-direction:column;gap:8px;margin:0;padding:0;border:0}
+ .settings-ready{grid-column:2;grid-row:3;width:100%;margin:0;font-size:18px;gap:8px}
+ .settings-ready .icon{width:22px;height:22px}
+}
+
+@media(max-width:380px){
+ .ranking-top{grid-template-columns:repeat(2,max-content);justify-content:center}
+ .ranking-top .ranking-nav-button:first-child{grid-column:1}
+ .ranking-top .ranking-nav-button:nth-child(2){grid-column:2}
+ .ranking-top .ranking-range{display:none}
+}

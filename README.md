@@ -31,6 +31,12 @@ Site adresi: https://tugcakilic17.github.io/comind-arena/
 
 Pages mevcut statik oyunu sunar. Hesap, çevrim içi oda ve ortak sıralama için ayrıca backend gerekir.
 
+## Ekran uyumu kontrolü
+
+Ana sayfa, giriş, Google giriş bildirimi, yardım, ayarlar, sıralama, davet, yükleme hatası, oyun, mola, geri dönme ve iki sonuç durumu 320–2560 piksel genişlikte, dikey/yatay 24 pencere boyutunda kontrol edilir. Kontrol, açık ekranı yeniden boyutlandırır; taşan yazıları, örtülen düğmeleri, skor yerleşimini ve kaydırma sonrası düğmelere erişimi denetler. Çok kısa pencerelerde paneller ve sonuç sayfası gerektiğinde kaydırılır.
+
+Geliştirme sunucusu açıkken, kurulu Playwright paketinin dizinini `COMIND_PLAYWRIGHT_DIR` ile belirtip `npm run test:responsive` çalıştırın. Üretim önizlemesi için `COMIND_TEST_URL=http://127.0.0.1:4174/comind-arena/` kullanılabilir. Rapor ve ekran görüntüleri Git'e eklenmeyen `test-results/responsive/` klasörüne yazılır.
+
 ## İlk taslakta çalışanlar
 
 - Altıgen kartlarla gerçek eşleştirme oyunu: her kartta 6 simge, her iki kart arasında tam 1 ortak simge.

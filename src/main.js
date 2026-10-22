@@ -8,6 +8,7 @@ import { helpView } from './help-ui.js';
 import './settings-ui.css';
 import './frontend-flow.css';
 import './leaderboard-ui.css';
+import './responsive.css';
 import { baseUrl, prepareImages, markupImages } from './assets.js';
 import { readPreferences, savePreferences } from './preferences.js';
 import { inviteView } from './community-ui.js';
