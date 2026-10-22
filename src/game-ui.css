@@ -1,0 +1,145 @@
+.game-inline-icon{width:25px;height:25px}
+.game-control-asset{display:inline-block;object-fit:contain;image-rendering:auto;vertical-align:middle;pointer-events:none;flex-shrink:0}
+.game-symbol{display:grid;place-items:center;width:100%;aspect-ratio:1;pointer-events:none}
+.game-symbol-art{display:block;background:url('/assets/game-ui/symbols-atlas-v14.webp') no-repeat}
+.game-surface{position:absolute;inset:0;z-index:-1;display:block;overflow:hidden;pointer-events:none;user-select:none}
+.game-surface img{position:absolute;display:block;max-width:none;object-fit:fill;image-rendering:auto}
+.surface-boardTall{display:none}
+
+/* Every painted surface is a raster UI asset; CSS only lays out the live game. */
+#app.screen-game{height:100dvh;min-height:0}
+.screen-game .forest-background{background-image:url('/assets/game-ui/forest-calm-warm-v23.webp');background-position:center;background-size:cover;filter:none;transform:none}
+.screen-game .forest-background::after{display:block;background:#fff6d714}
+.screen-game main{width:100%;height:100%;min-height:0;flex:none}
+.illustrated-game{padding:18px 0 0;gap:8px}
+.illustrated-game .game-toolbar{grid-template-columns:1fr minmax(0,600px) 1fr;gap:20px;padding:0 3.5%;height:84px;flex-shrink:0;align-items:center}
+.illustrated-game .game-art-button{display:block;width:72px;height:72px;min-height:0;padding:0;border:0;border-radius:20px;background:none;box-shadow:none;filter:drop-shadow(0 3px 2px #643b2633);transition:transform .2s,filter .2s}
+.illustrated-game .game-control-image{display:block;width:100%;height:100%}
+.illustrated-game .game-art-button:hover{background:none;transform:translateY(-2px) scale(1.04);filter:drop-shadow(0 5px 3px #643b263b)}
+.illustrated-game .game-art-button:active{transform:translateY(2px) scale(.96)}
+.illustrated-game .game-tools{gap:16px;justify-self:end}
+.illustrated-game .game-sound>span:not(.game-control-image){display:none}
+.illustrated-game .game-sound>.game-control-image{display:block}
+.illustrated-game .scoreboard{position:relative;isolation:isolate;gap:16px;padding:0 22px;min-height:74px;height:74px;border:0;border-radius:0;background:none;box-shadow:none}
+.illustrated-game .player-score{gap:8px;min-width:0;align-items:center;color:#7951a5}
+.illustrated-game .player-score strong{font-size:22px;line-height:1.2;font-weight:800}
+.illustrated-game .player-score>b{font-size:40px;line-height:1;color:#7951a5;text-shadow:none}
+.illustrated-game .player-score.opponent,.illustrated-game .player-score.opponent>b{color:#347e45}
+.avatar-slot{position:relative;display:grid;place-items:center;width:78px;height:78px;flex-shrink:0;align-self:center}
+.screen-game .game-avatar{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;border:0;border-radius:0;background:none;box-shadow:none;filter:none}
+.avatar-cheer{opacity:0}
+.screen-game .avatar-cheer{width:100%;height:100%;inset:0}
+.avatar-slot.is-cheering .avatar-idle{opacity:0}
+.avatar-slot.is-cheering .avatar-cheer{opacity:1;animation:parrot-hooray .7s ease-in-out both}
+@keyframes parrot-hooray{0%{transform:translateY(1px) scale(.96)}30%{transform:translateY(-4px) scale(1.08) rotate(-4deg)}60%{transform:translateY(-1px) scale(1.04) rotate(4deg)}100%{transform:translateY(0) scale(1)}}
+.illustrated-game .timer-block{width:88px;min-height:46px;padding:0;border:0;color:#82440d;gap:2px;flex-wrap:nowrap}
+.illustrated-game .timer-block .game-inline-icon{width:34px;height:34px}
+.illustrated-game .timer-block strong{font-size:36px;font-weight:800;line-height:1}
+.illustrated-game .timer-block.time-low{color:#c74426}
+.illustrated-game .play-panel{isolation:isolate;min-height:0;max-height:none;padding:34px 0 52px;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;filter:none;gap:0}
+.illustrated-game .play-panel::before{display:none}
+.board-title{position:absolute;top:0;left:50%;translate:-50% 0;width:300px;height:52px;margin:0;line-height:0;z-index:1;overflow:hidden}
+.board-title img{position:absolute;display:block;width:104.98%;height:198.9%;left:-2.46%;top:-46.7%;object-fit:fill;image-rendering:auto;user-select:none;pointer-events:none}
+.illustrated-game #board{min-height:0;flex:1;display:flex;align-items:center}
+.illustrated-game .game-cards{position:relative;isolation:isolate;display:grid;width:min(72%,1200px);height:100%;min-height:0;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:8px;container-type:size}
+.illustrated-game .game-cards>.surface-woodenStage{inset:auto -8% -44px;height:clamp(100px,13dvh,145px);overflow:visible}
+.illustrated-game .player-card{position:relative;isolation:isolate;width:100%;height:100%;min-height:0;justify-content:flex-end;gap:0;padding:0;translate:none}
+.illustrated-game .hex-card{width:min(100%,calc(100cqh / 1.04));aspect-ratio:1/1.04;filter:none}
+.illustrated-game .hex-card::before,.illustrated-game .hex-card::after{content:'';position:absolute;pointer-events:none;z-index:-1;border-radius:50%}
+.illustrated-game .hex-card::before{left:8%;bottom:-1.4%;width:86%;height:12%;background:radial-gradient(ellipse,#4c321b52 0%,#4c321b24 40%,#4c321b00 72%);filter:blur(5px);transform:skewX(-8deg)}
+.illustrated-game .hex-card::after{left:30%;bottom:2.2%;width:40%;height:4%;background:radial-gradient(ellipse,#4c2c167d 0%,#4c2c1640 40%,#4c2c1600 73%);filter:blur(2px)}
+.illustrated-game .player-card>.surface-woodenStage{display:none}
+.illustrated-game .player-card .hex-card{transform:none}
+.hex-art{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:fill;user-select:none;pointer-events:none;filter:drop-shadow(2px 5px 5px #48332221)}
+.illustrated-game .card-owner{position:absolute;left:50%;top:3.3%;translate:-50% 0;display:grid;place-items:center;width:27%;height:6.3%;min-height:0;padding:0;border:0;border-radius:0;font-size:clamp(14px,1.9vw,27px);font-weight:800;letter-spacing:0;line-height:1;color:#82410d;background:none;box-shadow:none;white-space:nowrap;pointer-events:none;z-index:3}
+.illustrated-game .player-card:last-child .card-owner{top:3.3%;color:#096538;background:none;border:0}
+.illustrated-game .card-symbols{inset:10% 7% 8%}
+.illustrated-game .symbol{width:27%;height:28%;min-width:36px;min-height:36px;padding:0;background:none}
+.illustrated-game .symbol .game-symbol{scale:.88;filter:drop-shadow(0 3px 2px #5b4c2426)}
+.illustrated-game .symbol.pos-0{top:18%}
+.illustrated-game .symbol.pos-1,.illustrated-game .symbol.pos-2{top:38%}
+.illustrated-game .symbol.pos-3,.illustrated-game .symbol.pos-4{top:67%}
+.illustrated-game .symbol.pos-5{top:84%}
+.illustrated-game .match-feedback{position:absolute;bottom:75px;left:50%;translate:-50% 0;z-index:4;min-height:0;padding:0;line-height:1.2;font-size:17px;font-weight:800;color:#275d2e;white-space:nowrap;pointer-events:none}
+.illustrated-game .match-feedback .game-inline-icon{width:22px;height:22px}
+.illustrated-game .match-feedback.incorrect{color:#a84222}
+.illustrated-game .game-progress{position:absolute;bottom:9px;left:50%;translate:-50% 0;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:270px;height:64px;min-height:0;margin:0;padding:0 14px 9px;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;gap:6px;flex-shrink:0;z-index:4}
+/* Align the visible lettering and dots with the two painted ivory recesses. */
+.progress-caption{position:absolute;left:50%;top:27.5%;translate:-50% -50%;display:grid;place-items:center;width:44%;margin:0;font-size:16px;line-height:1;font-weight:800;color:#82410d;white-space:nowrap;text-align:center;font-variant-numeric:tabular-nums}
+.progress-dots{position:absolute;left:50%;top:64%;translate:-50% -50%;display:flex;align-items:center;justify-content:center;gap:5px;width:max-content}
+.progress-marker{display:grid;place-items:center;flex:none}
+.progress-dot{width:17px;height:17px;display:block}
+.dot-player-0{filter:hue-rotate(155deg) saturate(.92)}
+
+@media(min-width:1600px){.illustrated-game{padding-top:24px}.illustrated-game .game-toolbar{height:100px;grid-template-columns:1fr 760px 1fr}.illustrated-game .scoreboard{height:88px;padding-inline:28px}.avatar-slot{width:96px;height:96px}.illustrated-game .game-tools{gap:22px}.illustrated-game .game-art-button{width:84px;height:84px}.board-title{width:380px;height:66px}.illustrated-game .play-panel{padding-top:55px;padding-bottom:90px}.illustrated-game .game-progress{bottom:20px;width:320px;height:75px;padding-bottom:11px;gap:8px}.progress-caption{font-size:19px}.progress-dot{width:20px;height:20px}.progress-dots{gap:6px}}
+@media(max-width:1000px){
+ .illustrated-game .game-toolbar{grid-template-columns:70px minmax(0,600px) 140px;padding-inline:2%;gap:10px;height:76px}
+ .illustrated-game .game-art-button{width:62px;height:62px}
+ .illustrated-game .game-tools{gap:4px}
+ .illustrated-game .scoreboard{height:68px;min-height:0;padding-inline:15px;gap:10px}
+ .avatar-slot{width:62px;height:62px}
+ .illustrated-game .player-score{gap:5px}
+ .illustrated-game .player-score strong{font-size:18px}
+ .illustrated-game .player-score>b{font-size:34px}
+ .illustrated-game .timer-block{width:72px}
+ .illustrated-game .timer-block strong{font-size:32px}
+ .illustrated-game .timer-block .game-inline-icon{width:28px;height:28px}
+ .illustrated-game .game-cards{width:87%;gap:15px}
+ .illustrated-game .card-owner{font-size:19px}
+}
+@media(max-width:700px){
+ .illustrated-game{padding-top:5px;gap:4px}
+ .illustrated-game .game-toolbar{height:110px;grid-template-columns:50px minmax(0,1fr) 100px;grid-template-rows:46px 60px;gap:4px 6px;padding-inline:12px}
+ .illustrated-game .game-toolbar>.round-control{grid-column:1;grid-row:1}
+ .illustrated-game .game-tools{grid-column:3;grid-row:1;gap:4px}
+ .illustrated-game .game-art-button{width:46px;height:46px}
+ .illustrated-game .scoreboard{grid-column:1/-1;grid-row:2;height:60px;padding:0 12px;gap:6px}
+ .avatar-slot{width:48px;height:52px}
+ .illustrated-game .player-score{gap:4px}
+ .illustrated-game .player-score strong{font-size:16px}
+ .illustrated-game .player-score>b{font-size:29px}
+ .illustrated-game .timer-block{width:63px;min-height:38px}
+ .illustrated-game .timer-block strong{font-size:28px}
+ .illustrated-game .timer-block .game-inline-icon{width:23px;height:23px}
+ .board-title{width:265px;height:46px}
+ .illustrated-game .play-panel{padding:45px 0 64px}
+ .illustrated-game .game-cards{width:100%;gap:0}
+ .illustrated-game .card-owner{font-size:15px}
+ .illustrated-game:has(.local-cards) .card-owner{font-size:12px}
+ .illustrated-game:has(.local-cards) .player-score strong{font-size:13px}
+ .illustrated-game .game-progress{width:250px;height:59px;bottom:6px;padding-bottom:8px;gap:5px}
+ .progress-caption{font-size:15px}.progress-dot{width:16px;height:16px}.progress-dots{gap:4px}
+ .illustrated-game .match-feedback{bottom:68px;font-size:14px}
+ 
+}
+@media(max-width:900px) and (orientation:portrait) and (min-height:701px){
+ .screen-game .forest-background{background-size:auto 100%;background-position:center}
+ .illustrated-game .play-panel{padding-top:60px}
+ .illustrated-game .game-cards{width:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:32px}
+ .illustrated-game .game-cards>.surface-woodenStage{display:none}
+ .illustrated-game .player-card{justify-content:flex-end}
+ .illustrated-game .hex-card{width:min(86cqw,calc((50cqh - 16px)/1.04),410px)}
+ .illustrated-game .player-card>.surface-woodenStage{display:block;inset:auto 50% -27px auto;translate:50% 0;width:min(calc(86cqw * 1.18),calc((50cqh - 16px)/1.04 * 1.18),483.8px);height:82px;overflow:visible}
+ .illustrated-game .card-owner{font-size:18px}
+ .illustrated-game:has(.local-cards) .card-owner{font-size:14px}
+}
+@media(max-width:385px){.avatar-slot{width:42px}.illustrated-game .scoreboard{padding-inline:10px;gap:4px}.illustrated-game .player-score strong{font-size:14px}.illustrated-game .player-score>b{font-size:27px}.illustrated-game .timer-block{width:55px}.illustrated-game .timer-block strong{font-size:25px}}
+@media(max-height:500px) and (orientation:landscape){
+ .illustrated-game{padding-top:3px;gap:0}
+ .illustrated-game .game-toolbar{height:59px;grid-template-columns:52px minmax(0,550px) 104px;grid-template-rows:auto;gap:8px;padding-inline:2%}
+ .illustrated-game .scoreboard{grid-column:2;grid-row:1;height:50px;padding:0 12px;gap:6px}
+ .illustrated-game .game-tools{grid-column:3;grid-row:1;gap:0}
+ .illustrated-game .game-art-button{width:48px;height:48px}
+ .avatar-slot{width:43px;height:46px}
+ .illustrated-game .player-score strong{font-size:16px}.illustrated-game .player-score>b{font-size:29px}
+ .illustrated-game .timer-block{width:62px;min-height:32px}.illustrated-game .timer-block strong{font-size:27px}.illustrated-game .timer-block .game-inline-icon{width:23px;height:23px}
+ .illustrated-game .play-panel{padding:28px 0 43px}
+ .board-title{width:225px;height:39px}
+ .illustrated-game .game-cards{width:82%;gap:22px}
+ .illustrated-game .card-owner{font-size:15px}
+ .illustrated-game .game-progress{width:220px;height:48px;bottom:2px;padding-bottom:6px;gap:4px}
+ .progress-caption{font-size:12px}.progress-dot{width:13px;height:13px}.progress-dots{gap:4px}
+ .illustrated-game .match-feedback{bottom:49px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){.illustrated-game .game-art-button:hover,.illustrated-game .game-art-button:active{transform:none}.avatar-slot.is-cheering .avatar-cheer{animation:none}}
+

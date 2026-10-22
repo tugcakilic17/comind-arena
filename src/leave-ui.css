@@ -1,0 +1,49 @@
+/* Return-to-home confirmation shares the sign-in panel's frame and transitions. */
+
+.modal:is([data-kind="leave"],[data-kind="pause"]){--leave-width:clamp(480px,60vw,620px);width:min(var(--leave-width),calc(100vw - 32px));container-type:inline-size;max-width:none;max-height:calc(100dvh - 130px);margin:auto;translate:0 clamp(18px,5.8dvh,42px);padding:0;border:0;border-radius:32px;background:none;box-shadow:none;overflow:visible;color:#3d6042}
+.leave-mascot{position:absolute;z-index:1;left:50%;top:-21.5cqw;translate:-50% 0;width:37cqw;height:auto;pointer-events:none;user-select:none;filter:drop-shadow(0 3px 2px #78582b12)}
+.leave-content{display:flex;flex-direction:column;align-items:center;padding:13cqw 9cqw 7cqw}
+.modal:is([data-kind="leave"],[data-kind="pause"]) h2{margin:0;width:100%;color:#3d6042;font-size:clamp(27px,6.7cqw,42px);line-height:1.12;font-weight:800;letter-spacing:-.015em}
+.modal:is([data-kind="leave"],[data-kind="pause"]) .leave-description{width:100%;margin:2cqw 0 0;font-size:clamp(15px,3.6cqw,21px);font-weight:500;line-height:1.4;color:#8c9b7d}
+.leave-continue{display:flex;align-items:center;justify-content:center;gap:3cqw;width:100%;height:12.6cqw;min-height:52px;margin:5.2cqw 0 0;padding:0 3cqw;border:0;border-radius:4cqw;background:#fdcf9e;color:#8b512e;font-size:clamp(19px,4.8cqw,28px);font-weight:800;line-height:1.1;white-space:nowrap;transition:transform .34s cubic-bezier(.34,1.56,.64,1),filter .2s}
+.leave-continue .icon{width:5.4cqw;height:5.4cqw;flex:none}
+.leave-home{display:flex;align-items:center;justify-content:center;gap:2.5cqw;width:auto;height:9cqw;min-height:44px;margin:2cqw 0 0;padding:0 3cqw;border:0;background:none;color:#839674;font-size:clamp(15px,3.1cqw,19px);font-weight:650;line-height:1.2;transition:transform .34s cubic-bezier(.34,1.56,.64,1),color .2s}
+.leave-home .icon{width:5.4cqw;height:5.4cqw;flex:none}
+@media(hover:hover) and (pointer:fine){
+ .leave-continue:hover{transform:translateY(-2px) scale(1.025);filter:brightness(1.025)}
+ .leave-home:hover{transform:translateY(-2px);color:#617c53}
+ .leave-continue:hover .icon,.leave-home:hover .icon{animation:result-home-wave .55s ease-in-out}
+}
+.modal:is([data-kind="leave"],[data-kind="pause"]) .leave-continue:active{transform:translateY(1px) scale(.97,.94)}
+.modal:is([data-kind="leave"],[data-kind="pause"]) .leave-home:active{transform:translateY(1px) scale(.98)}
+@media(max-width:600px){
+ .modal:is([data-kind="leave"],[data-kind="pause"]){--leave-width:480px;translate:0 16px}
+ .leave-mascot{width:43cqw;top:-25cqw}
+ .leave-content{padding:16cqw 8cqw 8cqw}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) h2{font-size:clamp(25px,7.1cqw,32px)}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) .leave-description{font-size:15px;max-width:250px;margin-top:3cqw}
+ .leave-continue{height:16cqw;font-size:19px;gap:3cqw;margin-top:6cqw;border-radius:15px}
+ .leave-continue .icon,.leave-home .icon{width:25px;height:25px}
+ .leave-home{font-size:15px;height:12cqw;margin-top:3cqw}
+}
+@media(max-height:560px) and (min-width:601px){
+ .modal:is([data-kind="leave"],[data-kind="pause"]){--leave-width:520px;translate:0 18px;max-height:calc(100dvh - 100px)}
+ .leave-content{padding:8cqw 9cqw 3cqw}
+ .leave-mascot{width:29cqw;top:-15cqw}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) h2{font-size:25px}
+ .modal:is([data-kind="leave"],[data-kind="pause"]) .leave-description{font-size:14px;margin-top:1.5cqw}
+ .leave-continue{height:50px;font-size:21px;margin-top:3cqw}
+ .leave-continue .icon,.leave-home .icon{width:26px;height:26px}
+ .leave-home{height:40px;font-size:15px;margin-top:1cqw}
+}
+@media(prefers-reduced-motion:reduce){
+ .leave-continue,.leave-home{transition:none}
+ .leave-continue:hover,.leave-home:hover,.modal:is([data-kind="leave"],[data-kind="pause"]) .leave-continue:active,.modal:is([data-kind="leave"],[data-kind="pause"]) .leave-home:active{transform:none}
+ .leave-continue:hover .icon,.leave-home:hover .icon{animation:none}
+}
+
+/* Pause uses the same frame, mascot, controls and animations at a compact width. */
+.modal[data-kind="pause"]{--leave-width:clamp(410px,40vw,520px)}
+.modal[data-kind="pause"] .pause-content{padding-bottom:10cqw}
+@media(max-width:600px){.modal[data-kind="pause"] .pause-content{padding-bottom:11cqw}}
+@media(max-height:560px) and (min-width:601px){.modal[data-kind="pause"] .pause-content{padding-bottom:6cqw}}

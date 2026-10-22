@@ -1,0 +1,53 @@
+/* Reuse the common frame and mascot; all labels and controls stay crisp. */
+.modal[data-kind="settings"]{width:min(540px,calc(100vw - 32px));container-type:inline-size;max-width:none;max-height:none;margin:auto;translate:0 30px;padding:0;border:0;border-radius:32px;background:none;box-shadow:none;overflow:visible;color:#3d6042}
+.modal[data-kind="settings"] .settings-mascot{width:30cqw;top:-17.8cqw;margin-top:7px}
+.settings-content{display:flex;flex-direction:column;align-items:center;padding:11cqw 9cqw 14cqw}
+.modal[data-kind="settings"] h2{margin:0;font-size:clamp(29px,7.6cqw,40px);line-height:1.15;font-weight:800;letter-spacing:-.015em}
+.modal[data-kind="settings"] .settings-description{margin:1.5cqw 0 0;font-size:clamp(14px,3.4cqw,18px);line-height:1.45;color:#7b8c70;text-wrap:balance}
+.settings-level{width:100%;margin-top:5cqw}
+.settings-level h3{margin:0;color:#486a45;font-size:clamp(18px,4.3cqw,23px);font-weight:700;line-height:1.3}
+.modal[data-kind="settings"] .level-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2cqw;margin-top:3cqw;padding:0;background:none;border-radius:0;box-shadow:none}
+.modal[data-kind="settings"] .level-options button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw;min-height:16cqw;padding:2cqw 1cqw;border:1.5px solid #dfd5b6;border-radius:3cqw;background:#fffaf0;color:#7a8867;font-size:clamp(16px,3.7cqw,20px);font-weight:700;line-height:1.3;box-shadow:0 2px 0 #b6a07116;transition:background .2s,border-color .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.modal[data-kind="settings"] .level-options button.active{background:#e8f0d8;color:#426d3d;border-color:#8da86c;box-shadow:inset 0 0 0 1px #a4ba8770,0 2px 0 #839f5d1a}
+.settings-level-stars{display:flex;align-items:center;justify-content:center;gap:.2cqw;height:4.5cqw;pointer-events:none}
+.settings-level-stars .game-inline-icon{width:3.6cqw;height:3.6cqw;max-width:19px;max-height:19px}
+.modal[data-kind="settings"] .settings-level-hint{display:grid;place-items:center;min-height:3em;margin:2.5cqw 0 0;color:#7b8c70;font-size:clamp(13px,3cqw,16px);line-height:1.4;text-wrap:balance}
+.modal[data-kind="settings"] .settings-sound{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:3cqw;padding:4cqw 0 0;border-top:1px solid #dccda660;font-size:clamp(17px,3.8cqw,21px);color:#486a45;font-weight:700}
+.modal[data-kind="settings"] .settings-sound>span{font-size:inherit;color:inherit}
+.modal[data-kind="settings"] .sound-button{display:flex;align-items:center;justify-content:center;gap:9px;width:120px;min-height:44px;padding:8px 12px;border:1px solid #dbd2b4;border-radius:14px;background:#f3ecd8;box-shadow:none;color:#7b8869;font-size:15px;font-weight:650;text-shadow:none;transition:background .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.modal[data-kind="settings"] .sound-button[aria-pressed="true"]{background:#e8f0d8;border-color:#a4b987;color:#4b7745}
+.modal[data-kind="settings"] .sound-button .icon{width:20px;height:20px}
+.modal[data-kind="settings"] .sound-button span{white-space:nowrap}
+.settings-ready{width:75%;height:10cqw;min-height:46px;margin-top:5cqw;font-size:clamp(18px,4cqw,22px);border-radius:3.5cqw;gap:2cqw}
+.settings-ready .icon{width:4.6cqw;height:4.6cqw}
+@media(hover:hover) and (pointer:fine){.modal[data-kind="settings"] .level-options button:hover{transform:translateY(-2px);border-color:#a5b982}.modal[data-kind="settings"] .sound-button:hover{transform:translateY(-1px);filter:brightness(1.02)}}
+.modal[data-kind="settings"] .level-options button:active{transform:scale(.97)}
+@media(max-width:600px){
+ .modal[data-kind="settings"]{translate:0 20px}
+ .settings-content{padding:14cqw 8cqw 18cqw}
+ .modal[data-kind="settings"] .settings-mascot{width:35cqw;top:-20.5cqw}
+ .settings-level{margin-top:6cqw}
+ .modal[data-kind="settings"] .level-options{gap:2.5cqw;margin-top:4cqw}
+ .modal[data-kind="settings"] .level-options button{min-height:76px;border-radius:13px;gap:5px}
+ .settings-level-stars{height:20px;gap:1px}.settings-level-stars .game-inline-icon{width:16px;height:16px}
+ .modal[data-kind="settings"] .settings-level-hint{margin-top:3cqw;min-height:3.4em}
+ .modal[data-kind="settings"] .settings-sound{margin-top:4cqw;padding-top:5cqw}
+ .settings-ready{width:82%;margin-top:6cqw;border-radius:16px}
+ .settings-ready .icon{width:22px;height:22px}
+}
+@media(max-height:650px) and (min-width:601px){
+ .modal[data-kind="settings"]{width:min(500px,calc(100vw - 32px));translate:0 16px}
+ .settings-content{padding:7cqw 9cqw 10cqw}
+ .modal[data-kind="settings"] .settings-mascot{width:23cqw;top:-13.7cqw}
+ .modal[data-kind="settings"] h2{font-size:29px}
+ .modal[data-kind="settings"] .settings-description{font-size:14px;margin-top:1cqw}
+ .settings-level{margin-top:2.5cqw}.settings-level h3{font-size:19px}
+ .modal[data-kind="settings"] .level-options{margin-top:2cqw}
+ .modal[data-kind="settings"] .level-options button{min-height:60px;gap:2px;font-size:17px}
+ .settings-level-stars{height:18px}.settings-level-stars .game-inline-icon{width:15px;height:15px}
+ .modal[data-kind="settings"] .settings-level-hint{font-size:13px;min-height:2.4em;margin-top:1.5cqw}
+ .modal[data-kind="settings"] .settings-sound{margin-top:1.5cqw;padding-top:2cqw;font-size:17px}
+ .settings-ready{height:44px;min-height:44px;margin-top:2.5cqw;font-size:19px}
+}
+@media(max-height:430px) and (min-width:601px){.modal[data-kind="settings"]{translate:0 0}.modal[data-kind="settings"] .settings-mascot,.modal[data-kind="settings"] .settings-description{display:none}.settings-content{padding-top:5cqw;padding-bottom:8cqw}}
+@media(prefers-reduced-motion:reduce){.modal[data-kind="settings"] .level-options button:hover,.modal[data-kind="settings"] .level-options button:active,.modal[data-kind="settings"] .sound-button:hover{transform:none}}
