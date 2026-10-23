@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ command, isPreview }) => ({
-  base: command === 'build' || isPreview ? process.env.APP_BASE_PATH || '/comind-arena/' : '/',
+  base: command === 'build' || isPreview ? process.env.APP_BASE_PATH || '/' : '/',
   plugins: [{
     name: 'deployment-metadata',
     generateBundle() {

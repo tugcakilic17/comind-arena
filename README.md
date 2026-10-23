@@ -42,21 +42,21 @@ npm run build
 npm run preview
 ```
 
-## GitHub Pages
+## Sunucuda yayın
 
-Site adresi: https://tugcakilic17.github.io/comind-arena/
+Yayın adresi: https://comindarena.com/
 
-İlk kurulumda depoda **Settings → Pages → Build and deployment → Source → GitHub Actions** seçin. İş akışı zaten `.github/workflows/deploy-pages.yml` dosyasında bulunur; yeni bir şablon oluşturmanız gerekmez. **Actions → Deploy to GitHub Pages → Run workflow → main → Run workflow** ile ilk yayını başlatabilirsiniz. Sonraki `main` push işlemleri otomatik test, derleme ve yayın yapar.
+`npm run release` güncel frontend, backend ve veritabanı migration dosyalarını `release/comind-arena` klasöründe hazırlar. Sunucuda Node.js, PostgreSQL ve HTTPS gerekir; kurulum: [deploy/README.md](deploy/README.md).
 
-Üretim derlemesi `/comind-arena/` altında çalışır. Yerelde `npm run dev` adresi değişmez; `npm run build` ardından `npm run preview` için http://127.0.0.1:4174/comind-arena/ kullanın. `dist/` ve `node_modules/` Git'e eklenmez; Actions bağımlılıkları kilit dosyasından kurar ve `dist/` çıktısını yayımlar.
+Üretim derlemesi varsayılan olarak `/` altında çalışır. Yerelde `npm run dev` adresi değişmez; `npm run build` ardından `npm run preview` için http://127.0.0.1:4174/ kullanın. `dist/`, `release/` ve `node_modules/` Git'e eklenmez.
 
-Pages mevcut statik oyunu sunar. Hesap, çevrim içi oda ve ortak sıralama için ayrıca backend gerekir.
+GitHub Actions yalnızca test ve derleme kontrolü yapar; otomatik yayın göndermez. Canlıya kurulum sunucuda ayrıca yapılır.
 
 ## Ekran uyumu kontrolü
 
 Ana sayfa, giriş, Google giriş bildirimi, yardım, ayarlar, sıralama, davet, yükleme hatası, oyun, mola, geri dönme ve iki sonuç durumu 320–2560 piksel genişlikte, dikey/yatay 24 pencere boyutunda kontrol edilir. Kontrol, açık ekranı yeniden boyutlandırır; taşan yazıları, örtülen düğmeleri, skor yerleşimini ve kaydırma sonrası düğmelere erişimi denetler. Çok kısa pencerelerde paneller ve sonuç sayfası gerektiğinde kaydırılır.
 
-Geliştirme sunucusu açıkken, kurulu Playwright paketinin dizinini `COMIND_PLAYWRIGHT_DIR` ile belirtip `npm run test:responsive` çalıştırın. Üretim önizlemesi için `COMIND_TEST_URL=http://127.0.0.1:4174/comind-arena/` kullanılabilir. Rapor ve ekran görüntüleri Git'e eklenmeyen `test-results/responsive/` klasörüne yazılır.
+Geliştirme sunucusu açıkken, kurulu Playwright paketinin dizinini `COMIND_PLAYWRIGHT_DIR` ile belirtip `npm run test:responsive` çalıştırın. Üretim önizlemesi için `COMIND_TEST_URL=http://127.0.0.1:4174/` kullanılabilir. Rapor ve ekran görüntüleri Git'e eklenmeyen `test-results/responsive/` klasörüne yazılır.
 
 ## İlk taslakta çalışanlar
 
@@ -72,7 +72,7 @@ Geliştirme sunucusu açıkken, kurulu Playwright paketinin dizinini `COMIND_PLA
 
 Güncel hesap/maç kuralları: [design/ONLINE-ACCOUNTS.md](design/ONLINE-ACCOUNTS.md). Liderlik tablosu PostgreSQL'deki tamamlanmış maçlardan okunur. İlk/önceki/sonraki/son sıra ve kendi sırana dönüş çalışır. Henüz maç yoksa gerçek boş durum, ağ hatasında yeniden deneme gösterilir; örnek oyuncu yoktur.
 
-**Google hesabı, gerçek arkadaş odaları, sunucu puanı, liderlik ve Keşif Dünyası ortak hesap bağlantısı yerelde çalışır.** GitHub Pages yalnızca statik dosya sunduğu için mevcut Pages yayını bu backend'i çalıştıramaz; canlı kullanım firmanın sunucusunda yayın gerektirir.
+**Google hesabı, gerçek arkadaş odaları, sunucu puanı, liderlik ve Keşif Dünyası ortak hesap bağlantısı yerelde çalışır.** Canlı kullanım firmanın sunucusunda backend ve PostgreSQL kurulumu gerektirir.
 
 Ortak hesaplar `accounts.users` içinde tutulur; Google'ın sabit `sub` kimliği eşsizdir. Keşif Dünyası aynı backend'e bağlanır; hesap adı, Arena puanı ve hesaba özel keşif kayıtları kullanılır. Bu kurulum ortak çerez için aynı site adını kullanır: yerelde localhost'un iki portu, üretimde aynı HTTPS alan adının iki yolu.
 
