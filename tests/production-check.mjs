@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {readFile,readdir,stat} from 'node:fs/promises';
+import {readFile,readdir} from 'node:fs/promises';
 import {buildApp,readConfig} from '../server/app.js';
 
 test('production config validates HTTPS, port and explicitly trusted proxy addresses',()=>{
@@ -37,9 +37,7 @@ test('production serves real built files and reports database readiness without 
 });
 
 test('release folder includes backend shared imports, migrations and excludes local credentials',async()=>{
- const dirs=await readdir(new URL('../release/',import.meta.url),{withFileTypes:true});
- const ordered=await Promise.all(dirs.filter(d=>d.isDirectory()&&d.name.startsWith('comind-arena-')).map(async ({name})=>({name,mtime:(await stat(new URL(`../release/${name}`,import.meta.url))).mtimeMs})));
- const release=new URL(`../release/${ordered.sort((a,b)=>b.mtime-a.mtime)[0].name}/`,import.meta.url);
+ const release=new URL('../release/comind-arena/',import.meta.url);
  for(const file of ['server/index.js','server/migrations/005-ranking-losses.sql','src/game.js','src/match-rules.js','src/game-worlds.js','dist/deployment.json','package-lock.json','Dockerfile','deploy/compose.yaml'])await readFile(new URL(file,release));
  const entries=await readdir(release);
  for(const name of ['.env','.local','node_modules','design','tests'])assert.ok(!entries.includes(name),`${name} must not be shipped`);

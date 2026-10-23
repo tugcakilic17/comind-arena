@@ -4,7 +4,7 @@ Bu paket arayüzü, Node.js backend'ini ve PostgreSQL migration dosyalarını i�
 
 ## Paylaşılacak dosyalar
 
-Geliştirme bilgisayarında `npm run release` çalıştırın. Arena ana alan adında açılacaksa `npm run release -- --base=/` kullanın. Varsayılan `/comind-arena/` yoludur. Oluşan **release/comind-arena-... klasörünün tamamını** sunucu sorumlusuna gönderin; yalnızca `dist/` yetmez. Bu klasörde yalnızca çalışma dosyaları, bağımlılık kilidi ve kurulum örnekleri bulunur. Backend'in kullandığı üç ortak `src/` modülü de gereklidir.
+Geliştirme bilgisayarında `npm run release` çalıştırın. Varsayılan yayın yolu `/`, site adresi `https://comindarena.com/` şeklindedir. Alt yola yayın için `node scripts/prepare-release.mjs --base=/comind-arena/` kullanın ve APP_URL yolunu da aynı yapın. Oluşan **release/comind-arena klasörünün tamamını** sunucu sorumlusuna gönderin; yalnızca `dist/` yetmez. Bu klasörde yalnızca çalışma dosyaları, bağımlılık kilidi ve kurulum örnekleri bulunur. Backend'in kullandığı üç ortak `src/` modülü de gereklidir.
 
 `.env`, `.local/`, geliştirme veritabanı, `node_modules/`, testler ve tasarım kaynakları pakete dahil edilmez. Gerçek Google gizli anahtarı ve veritabanı bağlantısı sunucunun gizli ortam değişkenlerine ayrı girilir. `VITE_` önekiyle gizli bilgi tanımlamayın.
 

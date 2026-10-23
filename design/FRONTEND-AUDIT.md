@@ -2,6 +2,8 @@
 
 22 Ekim güncellemesi: hesap, çevrim içi arkadaş maçı, gerçek liderlik ve Keşif Dünyası ortak hesap bağlantısı yerelde tamamlandı. Bu belgenin aşağısı önceki frontend denetiminin tarihsel kaydıdır. Güncel kurallar ve doğrulama: [ONLINE-ACCOUNTS.md](ONLINE-ACCOUNTS.md); Google kurulumu: [AUTH-SETUP.md](AUTH-SETUP.md).
 
+23 Ekim temizlik notu: Aktif olmayan görseller ve PNG kopyaları kaldırıldı; aktif WebP dosyaları korunuyor. Eski `optimize-assets.mjs` kaldırıldı. Üretim kayıtları `design/generation/`, güncel simge kaynakları `design/symbols-v2/` altındadır.
+
 ## Düzeltilenler
 
 - **Soğuk oyun açılışı:** Önceden kart görselleri henüz yüklenmeden sayaç başlıyordu. 2,2 saniye geciktirilmiş kart isteğinde eksik kartla süre 89'a düşüyordu. Artık `assets.js` gerekli görselleri (CSS fonu ve simge atlası dahil) yükleyip decode eder. Ekran ve animasyon katmanı hazır olmadan sayaç/giriş açılmaz.
