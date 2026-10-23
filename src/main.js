@@ -9,6 +9,7 @@ import './leaderboard-ui.css';
 import './responsive.css';
 import { baseUrl, prepareImages, markupImages } from './assets.js';
 import { readPreferences, savePreferences } from './preferences.js';
+import { createGameAudio } from './game-audio.js';
 import { inviteView } from './community-ui.js';
 import { leaderboardView, updateLeaderboard } from './leaderboard-ui.js';
 import { settingsView, settingsProfileView, profileView } from './settings-ui.js';
@@ -51,11 +52,11 @@ let difficulty = preferences.difficulty;
 let setup = preferences.setup;
 let screen = 'home';
 let sound = preferences.sound;
+const gameAudio = createGameAudio(sound);
 let game = null;
 let ticker;
 let motion;
 let lastTick = 0;
-let audioContext;
 let modalAutoPaused = false;
 const modalCloseTasks = new WeakMap();
 const wrongFeedbackTimers = new WeakMap();
@@ -258,23 +259,6 @@ function resultView() {
   </section>`;
 }
 
-function beep(correct = true) {
-  if (!sound) return;
-  try {
-    audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
-    if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(correct ? 660 : 220, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(correct ? 880 : 180, audioContext.currentTime + .12);
-    gain.gain.setValueAtTime(.07, audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(.001, audioContext.currentTime + .2);
-    oscillator.connect(gain).connect(audioContext.destination);
-    oscillator.start(); oscillator.stop(audioContext.currentTime + .2);
-  } catch { /* Sound is optional when the browser does not support it. */ }
-}
-
 async function startGame() {
   if (mode === 'online' || starting) return;
   if (!getAuthState().user) { chooseMode(mode); return; }
@@ -372,7 +356,7 @@ function match(target) {
   if (correct) {
     award(target.dataset.side === 'right' ? 1 : 0);
   } else {
-    beep(false);
+    gameAudio.answer(false);
     clearTimeout(wrongFeedbackTimers.get(target));
     target.classList.add('wrong');
     wrongFeedbackTimers.set(target, setTimeout(() => {
@@ -390,7 +374,7 @@ function award(player) {
   game.lock = MATCH_HOLD_MS;
   game.phase = 'match';
   document.querySelectorAll('.avatar-slot').forEach(slot => slot.classList.toggle('is-cheering', Number(slot.dataset.player) === player));
-  beep(true);
+  gameAudio.answer(true);
   const shared = sharedSymbol(game.pair);
   const matched = [...document.querySelectorAll(`#board [data-symbol="${shared}"]`)];
   matched.forEach(element => element.classList.add('matched'));
@@ -616,7 +600,7 @@ async function beginOnline() {
   clearInterval(ticker); hideLoading();
   await navigateOnline(() => {
     mode = 'online'; screen = 'online';
-    enterOnline(syncOnline); onlineMarkup = ''; render(); syncOnline();
+    enterOnline(syncOnline, correct => gameAudio.answer(correct)); onlineMarkup = ''; render(); syncOnline();
   });
   const code = new URL(location.href).searchParams.get('room');
   if (code && getAuthState().user) onlineAction('open', code);
@@ -779,6 +763,14 @@ function closeModal({ resumeGame = true } = {}) {
   return Promise.resolve();
 }
 
+// Capture before actions replace or disable their buttons, including submit buttons.
+document.addEventListener('click', event => {
+  const button = event.target.closest('button, summary, [role="button"]');
+  if (!button || button.disabled || button.getAttribute('aria-disabled') === 'true' || button.closest('[inert]')) return;
+  if (['match', 'online-answer', 'sound'].includes(button.dataset.action)) return;
+  gameAudio.click();
+}, { capture: true });
+
 app.addEventListener('click', event => {
   const worldPicker = app.querySelector('.online-world-picker[open]');
   if (worldPicker && !worldPicker.contains(event.target)) worldPicker.open = false;
@@ -809,14 +801,14 @@ app.addEventListener('click', event => {
   }
   else if (action === 'setup-option') {
     const key = target.dataset.option;
-    if (!['parrot', 'symbolCount', 'winTarget', 'rule', 'rotating'].includes(key)) return;
-    setup = normalizeSetup({ ...setup, [key]: key === 'rotating' ? !setup.rotating : ['symbolCount', 'winTarget'].includes(key) ? Number(target.dataset.value) : target.dataset.value });
+    if (!['parrot', 'symbolCount', 'winTarget', 'rule'].includes(key)) return;
+    setup = normalizeSetup({ ...setup, [key]: ['symbolCount', 'winTarget'].includes(key) ? Number(target.dataset.value) : target.dataset.value });
     savePreferences(difficulty, sound, setup); updateSetup(target.closest('dialog'), setup); animateSetupChoice(target);
   }
   else if (action === 'start') startGame();
   else if (action === 'match') match(target);
   else if (action === 'pause') togglePause();
-  else if (action === 'sound') { sound = !sound; savePreferences(difficulty, sound, setup); document.querySelectorAll('.sound-button').forEach(button => { button.innerHTML = soundContents(button.classList.contains('game-sound')); button.setAttribute('aria-label', `Sesi ${sound ? 'kapat' : 'aç'}`); button.setAttribute('aria-pressed', sound); button.title = `Sesi ${sound ? 'kapat' : 'aç'}`; }); beep(); }
+  else if (action === 'sound') { sound = !sound; gameAudio.setEnabled(sound); savePreferences(difficulty, sound, setup); document.querySelectorAll('.sound-button').forEach(button => { button.innerHTML = soundContents(button.classList.contains('game-sound')); button.setAttribute('aria-label', `Sesi ${sound ? 'kapat' : 'aç'}`); button.setAttribute('aria-pressed', sound); button.title = `Sesi ${sound ? 'kapat' : 'aç'}`; }); gameAudio.click(); }
   else if (action === 'settings-tab') {
     const content = target.closest('.settings-content');
     content.dataset.tab = target.dataset.tab;

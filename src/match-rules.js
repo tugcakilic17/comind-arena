@@ -19,7 +19,7 @@ export function normalizeSetup(value) {
     symbolCount: Number.isInteger(value?.symbolCount ?? value?.cardCount) && (value.symbolCount ?? value.cardCount) >= 3 && (value.symbolCount ?? value.cardCount) <= 8 ? (value.symbolCount ?? value.cardCount) : defaultSetup.symbolCount,
     winTarget: winTargets.includes(value?.winTarget) ? value.winTarget : defaultSetup.winTarget,
     rule: Object.hasOwn(rules, value?.rule) ? value.rule : defaultSetup.rule,
-    rotating: typeof value?.rotating === 'boolean' ? value.rotating : false,
+    rotating: false,
   };
 }
 

@@ -15,6 +15,7 @@
     "test:production": "node --test tests/production-check.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 4174",
     "test": "node --test tests/*.test.js",
+    "test:audio": "node tests/audio-browser-check.mjs",
     "test:responsive": "node tests/responsive-check.mjs",
     "test:setup": "node tests/setup-browser-check.mjs",
     "test:setup-motion": "node tests/setup-motion-check.mjs",

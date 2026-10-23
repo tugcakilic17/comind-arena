@@ -40,6 +40,8 @@
 .setup-content .setup-field legend{font-size:17px;margin-bottom:8px;color:#62744c}
 .setup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;margin-top:12px;align-items:end}
 .setup-grid .setup-field{margin:0}
+/* Reserve the removed option's space so the other controls stay in place. */
+.setup-rotation-space{visibility:hidden;pointer-events:none}
 .setup-content .setup-field button,.setup-content .rotation-toggle{position:relative;border:1.25px solid #e8e1d3;border-bottom-width:2px;box-shadow:0 2px 0 #84794212;background:#fffdf7;transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
 .setup-content .setup-field button{min-height:44px;padding:7px 6px;border-radius:14px;gap:0;color:#7b7158;font-size:17px}
 .setup-content .setup-field button[aria-pressed="true"]{color:var(--choice-color);background:var(--choice-wash);border-color:color-mix(in srgb,var(--choice-color) 40%,#e5ddc9);box-shadow:0 2px 0 #74885613}
@@ -87,9 +89,7 @@
 .hex-turntable{position:absolute;inset:0;transform-origin:center}
 .illustrated-game .symbol.scattered-symbol{width:24%;height:25%;min-width:0;min-height:0}
 .scattered-symbol .game-symbol{height:100%;aspect-ratio:auto}
-.play-panel[data-rotating="true"] .hex-turntable{animation:hex-clockwise 32s linear infinite}
 .is-paused .hex-turntable{animation-play-state:paused!important}
-@keyframes hex-clockwise{to{transform:rotate(360deg)}}
 .illustrated-game .player-score small{font-size:12px;line-height:1;color:#82916f}
 .illustrated-game .play-panel{padding-top:80px;padding-bottom:80px}
 .illustrated-game .card-progress{height:auto;min-height:54px;width:min(520px,calc(100% - 24px));padding:9px 16px;background:#fffaf0eb;border:1px solid #dfd5b6;border-radius:18px;gap:3px;justify-content:center}

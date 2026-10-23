@@ -24,6 +24,10 @@
  .illustrated-game .timer-block .game-inline-icon{width:1.8vw;height:1.8vw}
  .illustrated-game .board-title{width:20vw;height:3.47vw}
  .illustrated-game .play-panel{padding:6.5dvh 0 14dvh;justify-content:center}
+ .illustrated-game .play-panel{--pile-width-ratio:.18}
+ .illustrated-game .pile-cards img{transform:translateY(calc(var(--pile-index) * -.105vw)) rotate(-3deg)}
+ .illustrated-game .card-pile{filter:drop-shadow(0 .156vw .104vw #44311b38)}
+ .illustrated-game .card-pile b{right:-.156vw;min-width:1.3vw;height:1.3vw;padding-inline:.21vw;border-width:.104vw;font-size:.73vw}
  .illustrated-game #board{flex:none;width:100%;height:64dvh}
  .illustrated-game .game-cards{width:76vw;gap:1.6vw}
  .illustrated-game .card-owner{font-size:1.4vw}

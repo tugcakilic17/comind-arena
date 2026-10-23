@@ -15,6 +15,7 @@ let friends={friends:[],incoming:[],outgoing:[],invites:[]}, friendsLoaded=false
 let draft={capacity:2,symbolCount:6,winTarget:10,theme:'kofen',roomCode:'',friendCode:''};
 let poseKey='', poses=[];
 let actionDone=Promise.resolve();
+let answerCallback=()=>{};
 export const getOnlineRoom=()=>room;
 export const waitOnlineIdle=()=>actionDone;
 function remember(code) {
@@ -74,7 +75,8 @@ async function watch() {
   }
   if (alive && version===generation) poll=setTimeout(watch,room?.status==='playing'?450:1500);
 }
-export function enterOnline(onChange) {
+export function enterOnline(onChange,onAnswer=()=>{}) {
+  answerCallback=onAnswer;
   stopOnline();alive=true;renderCallback=onChange;room=null;message='';pending=false;tab='create';poseKey='';actionDone=Promise.resolve();
   accountId=getAuthState().user?.id || null;friendsLoaded=false;friendsFetched=0;
   friends={friends:[],incoming:[],outgoing:[],invites:[]};
@@ -140,7 +142,14 @@ export async function onlineAction(action,value) {
       await prepareImages([...gameAssets,...worldAssets]);
       data=await api(`arena/rooms/${room.code}/ready`,{method:'POST'});
     }
-    else if (action==='answer') data=await api(`arena/rooms/${room.code}/answer`,{method:'POST',body:{round:room.round,symbol:Number(value)}});
+    else if (action==='answer') {
+      const previousScore=room.scores[room.you];
+      data=await api(`arena/rooms/${room.code}/answer`,{method:'POST',body:{round:room.round,symbol:Number(value)}});
+      if (version===generation) {
+        if (data.scores[data.you]>previousScore) answerCallback(true);
+        else if (data.notice==='Tekrar dene!') answerCallback(false);
+      }
+    }
     else if (action==='leave') {
       if (room) await api(`arena/rooms/${room.code}/leave`,{method:'POST'});
       if (version!==generation) return;

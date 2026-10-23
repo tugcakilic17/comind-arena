@@ -88,12 +88,12 @@ try {
   await page.locator('.result-home').click();
   await page.locator('[data-mode="solo"]').click();
   await page.locator('[data-option="rule"][data-value="collect"]').click();
-  await page.locator('[data-option="rotating"]').click();
+  check(await page.locator('[data-option="rotating"]').count() === 0, 'rotation option removed');
   await page.locator('[data-level="easy"]').click();
   await page.locator('.setup-start').click();
   await page.locator('.screen-game:not(.is-preparing)').waitFor();
   check(await page.locator('[data-owner="1"] .symbol:enabled').count() === 3 && await page.locator('[data-owner="0"] .symbol:enabled').count() === 0, 'collect mode selects opposing card');
-  check(await page.locator('.play-panel').getAttribute('data-rotating') === 'true', 'rotation selection carried into game');
+  check(await page.locator('.play-panel').getAttribute('data-rotating') === 'false', 'cards remain stationary');
   await answer(1);
   check(await page.locator('#score-left').textContent() === '1' && await page.locator('#score-right').textContent() === '0', 'collect mode also awards one correct answer');
   await page.locator('[data-action="pause"]').click();
@@ -123,7 +123,7 @@ try {
   await page.locator('[data-mode="local"]').click();
   await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
   check(await page.locator('.parrot-options').count() === 0, 'local setup keeps human opponents');
-  await page.locator('[data-option="rotating"]').click();
+  check(await page.locator('[data-option="rotating"]').count() === 0, 'local rotation option removed');
   await page.locator('.setup-start').click();
   await page.locator('.screen-game:not(.is-preparing)').waitFor();
   check(await page.locator('#board .symbol:enabled').count() === 6, 'both players can select in local mode');

@@ -5,10 +5,10 @@ export function readPreferences() {
     const value = JSON.parse(localStorage.getItem(key));
     return {
       difficulty: ['easy', 'normal', 'fast'].includes(value?.difficulty) ? value.difficulty : 'easy',
-      sound: typeof value?.sound === 'boolean' ? value.sound : false,
+      sound: typeof value?.sound === 'boolean' ? value.sound : true,
       setup: normalizeSetup(value?.setup),
     };
-  } catch { return { difficulty: 'easy', sound: false, setup: normalizeSetup() }; }
+  } catch { return { difficulty: 'easy', sound: true, setup: normalizeSetup() }; }
 }
 export function savePreferences(difficulty, sound, setup) {
   try { localStorage.setItem(key, JSON.stringify({ difficulty, sound, setup: normalizeSetup(setup) })); }

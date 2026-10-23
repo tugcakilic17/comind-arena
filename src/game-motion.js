@@ -115,12 +115,13 @@ export function createGameMotion(panel) {
   }
 
   function positionCardPiles() {
+    const pileRatio = Number(getComputedStyle(panel).getPropertyValue('--pile-width-ratio')) || 0;
     panel.querySelectorAll('#board .player-card').forEach(player => {
       const pile = player.querySelector('.card-pile');
       const card = player.querySelector('.hex-card');
       if (!pile || !card) return;
       const parent = player.getBoundingClientRect(), box = card.getBoundingClientRect();
-      const size = Math.min(76, box.width * .2);
+      const size = pileRatio ? box.width * pileRatio : Math.min(76, box.width * .2);
       const left = player.dataset.owner === '0' ? box.left - parent.left + box.width * .08 - size * .35 : box.right - parent.left - box.width * .08 - size * .65;
       pile.style.cssText = `left:${Math.max(0, Math.min(parent.width - size, left))}px;top:${box.bottom - parent.top - box.height * .044 - size * .82}px;width:${size}px;height:${size * 1.04}px`;
     });
