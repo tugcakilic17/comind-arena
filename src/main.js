@@ -31,7 +31,7 @@ import './settings-ui.css';
 import './home-ui.css';
 import './online.css';
 import './large-screen.css';
-import { playerPortraitUrl, playerFace, syncPlayerAvatar, saveGuestAvatar, playerAvatars } from './player-avatar.js';
+import { playerPortraitUrl, playerFace, syncPlayerAvatar, saveGuestAvatar, playerAvatars, currentPlayerAvatar } from './player-avatar.js';
 
 const app = document.querySelector('#app');
 const modes = {
@@ -175,13 +175,13 @@ function homeView() {
 
 function parrotFile(player, pose = 'idle') {
   if (player === 1 && mode === 'solo') return `${baseUrl}assets/${parrots[game?.parrot || setup.parrot][pose]}`;
-  if (player === 0) return playerPortraitUrl(pose);
-  return `${baseUrl}assets/game-ui/${player === 1 ? `kofen-${pose}-v26` : `player-${pose}-v27`}.webp`;
+  if (player === 1 && mode === 'local') return playerPortraitUrl(pose, currentPlayerAvatar() === 'white' ? 'lilac' : 'white');
+  return playerPortraitUrl(pose);
 }
 
 function avatar(player, isKofen = false) {
   const label = isKofen ? parrots[game?.parrot || setup.parrot].name : `${player + 1}. oyuncu papağanı`;
-  return `<div class="avatar-slot" data-player="${player}"><img ${player === 0 ? 'data-player-avatar="idle"' : ''} class="game-avatar avatar-idle ${player === 1 ? 'kofen-avatar' : 'player-parrot'}" src="${parrotFile(player)}" alt="${label}" /><img ${player === 0 ? 'data-player-avatar="cheer"' : ''} class="game-avatar avatar-cheer" src="${parrotFile(player, 'cheer')}" alt="" aria-hidden="true" /></div>`;
+  return `<div class="avatar-slot" data-player="${player}"><img ${player === 0 ? 'data-player-avatar="idle"' : mode === 'local' ? 'data-local-avatar="idle"' : ''} class="game-avatar avatar-idle ${isKofen ? 'kofen-avatar' : 'player-parrot'}" src="${parrotFile(player)}" alt="${label}" /><img ${player === 0 ? 'data-player-avatar="cheer"' : mode === 'local' ? 'data-local-avatar="cheer"' : ''} class="game-avatar avatar-cheer" src="${parrotFile(player, 'cheer')}" alt="" aria-hidden="true" /></div>`;
 }
 
 function playerNames() {
@@ -231,7 +231,7 @@ function resultView() {
   const names = playerNames();
   const subtitle = tied ? 'Birlikte harika oynadınız!' : winnerIndex === 0 ? 'Harika eşleştirdin!' : 'Bir daha deneyelim mi?';
   return `<section class="result-panel illustrated-result" aria-labelledby="result-title">
-    <div class="result-mascots${tied ? ' is-tied' : ''}" aria-hidden="true">${mascots.map(player => `<img ${player === 0 ? 'data-player-avatar="cheer"' : ''} src="${parrotFile(player, 'cheer')}" alt="" draggable="false" />`).join('')}</div>
+    <div class="result-mascots${tied ? ' is-tied' : ''}" aria-hidden="true">${mascots.map(player => `<img ${player === 0 ? 'data-player-avatar="cheer"' : mode === 'local' ? 'data-local-avatar="cheer"' : ''} src="${parrotFile(player, 'cheer')}" alt="" draggable="false" />`).join('')}</div>
     ${gameSurface('resultPanel')}
     <div class="result-content">
     <div class="result-heading">
@@ -241,7 +241,7 @@ function resultView() {
     <div class="result-score" aria-label="Oyun skoru">
       <span class="result-player"><span class="result-portrait"><img class="result-score-avatar" data-player-avatar="idle" src="${parrotFile(0)}" alt="" draggable="false" /></span><span class="result-score-copy"><small>${names[0]} · doğru</small><strong>${game.scores[0]}</strong></span></span>
       <span class="result-dash" aria-hidden="true">:</span>
-      <span class="result-player result-opponent"><span class="result-score-copy"><small>${names[1]} · doğru</small><strong>${game.scores[1]}</strong></span><span class="result-portrait"><img class="result-score-avatar" src="${parrotFile(1)}" alt="" draggable="false" /></span></span>
+      <span class="result-player result-opponent"><span class="result-score-copy"><small>${names[1]} · doğru</small><strong>${game.scores[1]}</strong></span><span class="result-portrait"><img class="result-score-avatar" ${mode === 'local' ? 'data-local-avatar="idle"' : ''} src="${parrotFile(1)}" alt="" draggable="false" /></span></span>
     </div>
     <div class="result-stats"><span>${gameIcon('check')} ${game.scores.reduce((a,b) => a+b,0)} eşleşme</span><span>${gameIcon('time')} ${Math.floor(game.elapsed/1000)} saniye</span></div>
     <div class="result-actions">
@@ -266,10 +266,9 @@ async function startGame() {
   app.inert = true;
   try {
     preloadGameMotion().catch(() => {});
-    const opponent = parrots[setup.parrot];
     const theme = mode === 'solo' ? setup.parrot : setup.theme;
     const symbolSet = getSymbolSet(theme);
-    const selectedPoses = [playerPortraitUrl(), playerPortraitUrl('cheer'), ...(mode === 'solo' ? [opponent.idle, opponent.cheer].map(file => `${baseUrl}assets/${file}`) : [])];
+    const selectedPoses = [0, 1].flatMap(player => ['idle', 'cheer'].map(pose => parrotFile(player, pose)));
     await Promise.all([prepareImages([...gameAssets, ...selectedPoses, `${baseUrl}assets/game-ui/${symbolSet.file}`, ...(theme === 'koak' ? seaPierAssets : []), matchBackgroundUrl(), matchBackgroundUrl(true)]), document.fonts.ready]);
     if (request !== navigationId) return;
     // Preserve the complete previous view while the connected game lays out
@@ -643,6 +642,7 @@ function updateAccount() {
   syncOnlineAuth();
   updateAccountHeader();
   app.querySelectorAll('[data-player-avatar]').forEach(image => { image.src = playerPortraitUrl(image.dataset.playerAvatar); });
+  if (mode === 'local') app.querySelectorAll('[data-local-avatar]').forEach(image => { image.src = parrotFile(1, image.dataset.localAvatar); });
   const profileDialog = app.querySelector('dialog:is([data-kind="settings"],[data-kind="profile"])[open]');
   if (profileDialog) {
     const state = getAuthState();

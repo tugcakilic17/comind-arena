@@ -26,6 +26,7 @@
 .illustrated-game .scoreboard{position:relative;isolation:isolate;gap:16px;padding:0 22px;min-height:74px;height:74px;border:0;border-radius:0;background:none;box-shadow:none}
 .illustrated-game .player-score{gap:8px;min-width:0;align-items:center;color:#7951a5}
 .illustrated-game .player-score strong{font-size:22px;line-height:1.2;font-weight:800}
+.illustrated-game:has(.local-cards) .player-score strong{font-size:16px;font-weight:700}
 .illustrated-game .player-score>b{font-size:40px;line-height:1;color:#7951a5;text-shadow:none}
 .illustrated-game .player-score.opponent,.illustrated-game .player-score.opponent>b{color:#347e45}
 .avatar-slot{position:relative;display:grid;place-items:center;width:78px;height:78px;flex-shrink:0;align-self:center}

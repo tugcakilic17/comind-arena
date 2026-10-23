@@ -18,6 +18,7 @@
  .illustrated-game .avatar-slot{width:5vw;height:5vw}
  .illustrated-game .player-score{gap:.4vw}
  .illustrated-game .player-score strong{font-size:1.15vw}
+ .illustrated-game:has(.local-cards) .player-score strong{font-size:.85vw}
  .illustrated-game .player-score>b{font-size:2.1vw}
  .illustrated-game .timer-block{width:4.6vw;gap:.2vw}
  .illustrated-game .timer-block strong{font-size:1.9vw}

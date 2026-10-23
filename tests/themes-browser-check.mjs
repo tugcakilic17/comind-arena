@@ -158,6 +158,8 @@ try {
     await page.locator('.screen-game:not(.is-preparing):not([inert])').waitFor();
     assert.ok((await page.locator('#app > .forest-background').evaluate(el => getComputedStyle(el).backgroundImage)).includes(file), `${theme}: local game uses selected background`);
     assert.equal(await page.locator('#board .symbol:enabled').count(), 16, 'both human players can select all eight symbols');
+    assert.match(await page.locator('.avatar-slot[data-player="0"] .avatar-idle').getAttribute('src'), /player-rose-idle-v1\.webp$/, 'first local player keeps their profile color');
+    assert.match(await page.locator('.avatar-slot[data-player="1"] .avatar-idle').getAttribute('src'), /player-white-idle-v1\.webp$/, 'second local player uses a different neutral color in every world');
     assert.ok(await page.locator('#board').evaluate((board, theme) => [...board.querySelectorAll('.game-symbol-art')].every(el => el.getAttribute('style').includes(`${theme}-symbols-atlas`)), theme), 'both cards use selected themed symbols');
     const common = await page.locator('#board').evaluate(board => {
       const cards = [...board.querySelectorAll('.hex-card')].map(card => [...card.querySelectorAll('.symbol')].map(el => el.dataset.symbol));
