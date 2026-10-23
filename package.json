@@ -13,6 +13,7 @@
     "build": "vite build",
     "release": "node scripts/prepare-release.mjs",
     "test:production": "node --test tests/production-check.mjs",
+    "test:browser": "node scripts/run-browser-checks.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 4174",
     "test": "node --test tests/*.test.js",
     "test:audio": "node tests/audio-browser-check.mjs",

@@ -67,4 +67,5 @@ try{
   }
  }
  console.log(`PASS ${count} friend hub, lobby, friends, match and result layouts; essential controls visible without scrolling`);
-}finally{await browser.close();}
+}catch(error){await page.screenshot({path:'test-results/online/fit-failure.png'});throw error;}
+finally{await browser.close();}

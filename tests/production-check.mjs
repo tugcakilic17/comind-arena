@@ -2,6 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
 import {buildApp,readConfig} from '../server/app.js';
+import {requiredSchemaVersion} from '../server/database.js';
 
 test('production config validates HTTPS, port and explicitly trusted proxy addresses',()=>{
  assert.throws(()=>readConfig({NODE_ENV:'production',APP_URL:'http://example.com/'}));
@@ -15,8 +16,8 @@ test('production config validates HTTPS, port and explicitly trusted proxy addre
 
 test('production serves real built files and reports database readiness without exposing failures',async()=>{
  const {base}=JSON.parse(await readFile(new URL('../dist/deployment.json',import.meta.url),'utf8'));
- let available=true;
- const db={pool:{query:async()=>{if(!available)throw new Error('postgres://secret');return {rows:[]};}}};
+ let available=true, migrated=true;
+ const db={pool:{query:async()=>{if(!available)throw new Error('postgres://secret');return {rows:migrated?[{version:requiredSchemaVersion}]:[]};}}};
  const config=readConfig({NODE_ENV:'production',APP_URL:`https://game.example${base}`,TRUST_PROXY:'127.0.0.1'});
  const app=await buildApp({db,config});
  try {
@@ -27,6 +28,10 @@ test('production serves real built files and reports database readiness without 
   assert.equal((await app.inject(js)).statusCode,200);
   assert.equal((await app.inject(`${base}assets/game-ui/koak-symbols-atlas-v2.webp`)).statusCode,200);
   assert.equal((await app.inject('/api/ready')).statusCode,200);
+  migrated=false;
+  const missingSchema=await app.inject('/api/ready');
+  assert.equal(missingSchema.statusCode,503);assert.deepEqual(missingSchema.json(),{ok:false});
+  migrated=true;
   available=false;
   const failed=await app.inject('/api/ready');assert.equal(failed.statusCode,503);
   assert.deepEqual(failed.json(),{ok:false});assert.equal(failed.headers['cache-control'],'no-store');
@@ -41,6 +46,16 @@ test('release folder includes backend shared imports, migrations and excludes lo
  for(const file of ['server/index.js','server/migrations/005-ranking-losses.sql','src/game.js','src/match-rules.js','src/game-worlds.js','dist/deployment.json','package-lock.json','Dockerfile','deploy/compose.yaml'])await readFile(new URL(file,release));
  const entries=await readdir(release);
  for(const name of ['.env','.local','node_modules','design','tests'])assert.ok(!entries.includes(name),`${name} must not be shipped`);
+ const source=new URL('../',import.meta.url);
+ async function compare(folder){
+  for(const entry of await readdir(new URL(folder,source),{withFileTypes:true})){
+   const file=`${folder}${entry.name}`;
+   if(entry.isDirectory())await compare(`${file}/`);
+   else if(!file.startsWith('dist/')||!file.endsWith('.md'))assert.deepEqual(await readFile(new URL(file,release)),await readFile(new URL(file,source)),`Stale release file: ${file}; run npm run release`);
+  }
+ }
+ for(const folder of ['dist/','server/','deploy/'])await compare(folder);
+ for(const file of ['package.json','package-lock.json','Dockerfile','.dockerignore','src/game.js','src/match-rules.js','src/game-worlds.js'])assert.deepEqual(await readFile(new URL(file,release)),await readFile(new URL(file,source)),`Stale release file: ${file}`);
  const {buildApp:buildReleased,readConfig:configReleased}=await import(new URL('server/app.js',release));
  const {base}=JSON.parse(await readFile(new URL('dist/deployment.json',release),'utf8'));
  const app=await buildReleased({db:{pool:{query:async()=>({rows:[]})}},config:configReleased({NODE_ENV:'production',APP_URL:`https://game.example${base}`})});

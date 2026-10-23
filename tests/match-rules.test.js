@@ -67,7 +67,7 @@ test('20-point matches recover when reused deck cards meet at the top', () => {
 
 test('invalid saved options fall back safely and independent symbol poses span all orientations', () => {
   assert.deepEqual(normalizeSetup({ parrot: '__proto__', rule: 'constructor', symbolCount: 9, rotating: 'true' }),
-    { parrot: 'kofen', rule: 'empty', symbolCount: 6, winTarget: 10, rotating: false });
+    { parrot: 'kofen', theme: 'kofen', rule: 'empty', symbolCount: 6, winTarget: 10, rotating: false });
   assert.equal(normalizeSetup({ symbolCount: 3.2 }).symbolCount, 6);
   for (const winTarget of [0,6,'5',null]) assert.equal(normalizeSetup({winTarget}).winTarget,10);
   for (const winTarget of [5,10,15,20]) assert.equal(normalizeSetup({winTarget}).winTarget,winTarget);

@@ -11,11 +11,12 @@ export const rules = {
   collect: { name: 'Kart Topla', hint: 'Rakibinin kartındaki ortak simgeyi bul, kartı kendine al.' },
 };
 export const winTargets = [5, 10, 15, 20];
-export const defaultSetup = { parrot: 'kofen', symbolCount: 6, winTarget: 10, rule: 'empty', rotating: false };
+export const defaultSetup = { parrot: 'kofen', theme: 'kofen', symbolCount: 6, winTarget: 10, rule: 'empty', rotating: false };
 
 export function normalizeSetup(value) {
   return {
     parrot: Object.hasOwn(parrots, value?.parrot) ? value.parrot : defaultSetup.parrot,
+    theme: Object.hasOwn(parrots, value?.theme) ? value.theme : defaultSetup.theme,
     symbolCount: Number.isInteger(value?.symbolCount ?? value?.cardCount) && (value.symbolCount ?? value.cardCount) >= 3 && (value.symbolCount ?? value.cardCount) <= 8 ? (value.symbolCount ?? value.cardCount) : defaultSetup.symbolCount,
     winTarget: winTargets.includes(value?.winTarget) ? value.winTarget : defaultSetup.winTarget,
     rule: Object.hasOwn(rules, value?.rule) ? value.rule : defaultSetup.rule,

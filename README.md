@@ -50,7 +50,9 @@ Yayın adresi: https://comindarena.com/
 
 Üretim derlemesi varsayılan olarak `/` altında çalışır. Yerelde `npm run dev` adresi değişmez; `npm run build` ardından `npm run preview` için http://127.0.0.1:4174/ kullanın. `dist/`, `release/` ve `node_modules/` Git'e eklenmez.
 
-GitHub Actions yalnızca test ve derleme kontrolü yapar; otomatik yayın göndermez. Canlıya kurulum sunucuda ayrıca yapılır.
+Yayın öncesi sıra: `npm test`, `npm run test:browser`, `npm run release`, `npm run test:production`. `test:browser` yerel Vite'ı açıp kapatır; zaten çalışan 5174 sunucusunu kullanmak için `COMIND_BROWSER_USE_RUNNING=true` tanımlayın. Tam ortak hesap testi için Keşif projesi aynı bilgisayarda bulunmalıdır. Yalnız Arena deposunu alan CI, `COMIND_TEST_KESIF=false` ile yalnız diğer deponun arayüz kontrolünü atlar; gerçek veritabanıyla Arena odaları, QR, puan ve çıkış kontrollerini çalıştırır. Üretim kontrolü teslim klasörünün kaynaklarla ve güncel derlemeyle birebir eşleşmesini de doğrular.
+
+GitHub Actions birim/veritabanı testlerini, güncel teslim paketi üretimini, paket karşılaştırmasını ve Windows/Edge tarayıcı kontrollerini çalıştırır; otomatik yayın göndermez. Canlıya kurulum sunucuda ayrıca yapılır.
 
 ## Ekran uyumu kontrolü
 
@@ -81,7 +83,7 @@ Sonraki geliştirmeler:
 1. Firmanın sunucusunda iki oyunu, API'yi, PostgreSQL'i ve HTTPS'i yayınlama; üretim Google dönüş adresini tanımlama.
 2. Gerçek trafik ölçümlerine göre yoklama sıklığı, eşzamanlı kapasite ve bakım ayarlarını değerlendirme.
 3. Firma için yedekleme, izleme ve hesap sahipliğini tamamlama.
-4. İlgili bilgilendirme metinleri, onay kayıtları ve yaş/veli onayı akışının kesinleştirilmesi. Hukuki metinler bu prototipte oluşturulmadı.
+4. Gizlilik ve kullanım koşulları sayfaları mevcut; firma bilgileri, onay kayıtları ve yaş/veli onayı akışının kesinleştirilmesi.
 
 ## Tasarım
 
@@ -159,5 +161,7 @@ Giriş yapılmışken sağ üstteki isim **Profilim** penceresini açar. Aynı p
 
 
 ### Arkadaş odaları
+
+Yan Yana Oynayalım hazırlık panelinde Deniz, Orman, Matematik ve Hikâye dünyaları seçilebilir. Seçim `setup.theme` içinde tek kişilik oyunun `setup.parrot` tercihinden bağımsız saklanır; aynı cihazdaki maçın simgeleri, arka planı ve Deniz dünyasında iskelesi seçilen temayı kullanır. Tema sonuç ve tekrar oyununda da korunur. `npm run test:themes`, dört temanın masaüstü/mobil görünümünü, seçimin saklanmasını ve iki oyunculu simge eşleştirmeyi doğrular.
 
 Arkadaşını Çağır panelinde Oda oluştur / Arkadaşlarım sekmeleri bulunur; davet bağlantısı/kodu aynı ekrandaki Davetin mi var? kartından girilir. Panel dışına tıklamak açık bekleme odasından ayrılarak ana ekrana döner. Oda sahibi 2–4 kişi, 5/10/15/20 doğru ve 3–8 simge seçer. Bağlantı veya kodla katılım, kopyalama, WhatsApp paylaşımı, kullanıcı ID’siyle onaylı arkadaşlık ve uygulama içi oda daveti desteklenir. Herkes aynı iki kartta yarışır; doğru hedefine ilk ulaşan kazanır. Bu maçlar sıralamaya göre liderlik puanı üretir; aynı cihazdaki iki kişilik maçlar ve bilgisayara karşı maçlar üretmez. `005-ranking-losses.sql` imzalı puan değişimlerini destekler, mevcut kayıtları korur. Her sonuç tek kez işlenir ve kesinti mevcut toplam puanla sınırlanır. Yeni kontroller: `npm run test:online`, `node tests/friends-fit-check.mjs` (Vite açıkken).

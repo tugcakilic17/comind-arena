@@ -52,6 +52,7 @@
 .parrot-art::before{content:'';position:absolute;bottom:5px;width:66px;height:48px;background:var(--choice-wash);border-radius:50%;opacity:.8}
 .setup-content .parrot-options img{position:relative;display:block;width:86px;height:86px;max-width:100%;object-fit:contain;filter:drop-shadow(0 3px 2px #67512b17);pointer-events:none;transform-origin:50% 85%;transition:transform .32s cubic-bezier(.2,.7,.25,1)}
 .parrot-name{font-size:18px;font-weight:800;line-height:1.25}
+.theme-copy{display:flex;flex-direction:column;gap:2px;text-align:center}
 .choice-check{position:absolute;right:7px;top:7px;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--choice-color);color:#fff;opacity:0;transform:scale(.5);transition:opacity .18s ease,transform .22s cubic-bezier(.2,1.6,.4,1)}
 .choice-check .icon{width:14px;height:14px;stroke-width:2.8}
 [aria-pressed="true"]>.choice-check{opacity:1;transform:scale(1)}
@@ -199,4 +200,16 @@
  .parrot-art{width:52px}
  .setup-content .parrot-options img{width:52px;height:52px}
  .parrot-name{font-size:16px}
+}
+@media(max-width:600px){
+ .setup-content .theme-options button{gap:4px;padding-inline:5px}
+ .theme-options .parrot-art{width:48px}
+ .setup-content .theme-options img{width:48px;height:54px}
+ .theme-copy{text-align:left}
+ .theme-copy .parrot-name{font-size:16px}
+}
+@media(max-width:380px){
+ .theme-options .parrot-art{width:36px}
+ .setup-content .theme-options img{width:40px;height:48px}
+ .theme-copy .parrot-name{font-size:14px}
 }

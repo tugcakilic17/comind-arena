@@ -16,6 +16,7 @@
 .account-initial.player-face{position:relative;width:72px;height:72px;flex:none;border:4px solid #f4ce83;outline:1px solid #c99650;border-radius:50%;background:#eee4f3;overflow:hidden;box-shadow:0 2px 3px #6c4e2c33,inset 0 0 0 2px #fff8e7}
 .account-button.is-signed-in .player-face img{position:absolute;left:-12.5%;top:0;bottom:auto;width:125%;height:125%;object-fit:contain;animation:none;transform:none}
 .account-button.is-signed-in .account-header-name{display:block;flex:1;min-width:0;max-width:none;padding:0;text-align:center;font-family:Baloo,'Trebuchet MS',sans-serif;font-size:25px;font-weight:500;letter-spacing:.2px;line-height:1.2;color:#745338;-webkit-text-stroke:0;text-shadow:none}
+.account-button.is-signed-in .account-header-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .screen-home .mode-art{width:min(96cqw,96cqh);height:min(96cqw,96cqh)}
 @media(hover:hover) and (pointer:fine){.site-header nav>.account-button.is-signed-in:hover{transform:translateY(-2px) scale(1.015);background:none;filter:drop-shadow(0 4px 4px #23482e38)}}
 .site-header nav>.account-button.is-signed-in:active{transform:translateY(1px) scale(.98);filter:drop-shadow(0 1px 2px #23482e30)}

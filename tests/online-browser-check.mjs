@@ -16,6 +16,7 @@ import { getSymbolSet } from '../src/symbol-sets.js';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const kesif=process.env.KESIF_PROJECT_DIR || path.resolve(root,'../guncel_projeler/kesif-dunyasi');
+const withKesif=process.env.COMIND_TEST_KESIF!=='false';
 let directory, postgres, db, app, front, world, browser;
 try {
   directory=await mkdtemp(path.join(tmpdir(),'kesif-browser-'));
@@ -26,7 +27,7 @@ try {
   await app.listen({host:'127.0.0.1',port:3011});
   const proxy={'/api':{target:'http://127.0.0.1:3011',changeOrigin:false}};
   front=await createServer({root,configFile:path.join(root,'vite.config.js'),server:{host:'127.0.0.1',port:5176,strictPort:true,proxy},logLevel:'error'});await front.listen();
-  world=await createServer({root:path.join(kesif,'apps/web'),configFile:path.join(kesif,'apps/web/vite.config.ts'),server:{host:'127.0.0.1',port:5177,strictPort:true,proxy},logLevel:'error'});await world.listen();
+  if(withKesif){world=await createServer({root:path.join(kesif,'apps/web'),configFile:path.join(kesif,'apps/web/vite.config.ts'),server:{host:'127.0.0.1',port:5177,strictPort:true,proxy},logLevel:'error'});await world.listen();}
   browser=await chromium.launch({channel:'msedge',headless:true});
   const contexts=[],accounts=[];
   for(const [index,name] of ['Ada','Bora','Cem','Deniz'].entries()){
@@ -246,6 +247,7 @@ try {
   assert.deepEqual(await a.locator('.online-ranking-points').allTextContents(),['Liderlik puanı: +30','Liderlik puanı: -10']);
   await a.screenshot({path:path.join(root,'test-results/online/two-player-result-ranking.png')});
   // The real earned total, without fixture awards, flows across the shared account.
+  if(withKesif){
   const k=await contexts[0].newPage();k.on('pageerror',e=>errors.push(e.message));
   await k.goto('http://localhost:5177/');await k.getByRole('button',{name:'Ada, hesabım',exact:true}).waitFor();
   await k.getByRole('button',{name:'Ada, hesabım',exact:true}).click();
@@ -264,9 +266,13 @@ try {
   assert.equal((await restored.json()).data.lastRealm,stored.data.lastRealm);
   await newDevice.getByRole('button',{name:'Ada, hesabım',exact:true}).click();await newDevice.getByRole('button',{name:'Çıkış yap',exact:true}).click();
   await newDevice.getByRole('button',{name:'Google ile devam et',exact:true}).waitFor();
+  }else{
+    console.log('SKIP sibling Keşif frontend integration (COMIND_TEST_KESIF=false); all Arena room and ranking checks ran.');
+    assert.equal((await a.request.post('http://localhost:5176/api/auth/logout',{headers:{origin:'http://localhost:5176'}})).status(),200);
+  }
   await a.goto('http://localhost:5176/');await a.getByRole('button',{name:'Google ile giriş yap',exact:true}).waitFor();
   assert.deepEqual(errors,[]);
-  console.log('PASS friend requests/invitations, links/copy/WhatsApp, 2–4 player games, signed ranking awards, leaderboard and shared Keşif total, exact symbols, responsive results, transitions, reload recovery, progress/logout');
+  console.log(`PASS friend requests/invitations, links/QR/copy/WhatsApp, 2–4 player games, signed ranking awards, leaderboard, exact symbols, responsive results, transitions, reload recovery, logout${withKesif?', shared Keşif total/progress':''}`);
 } catch(error) {
   const page=browser?.contexts()[0]?.pages()[0];
   if(page) { await mkdir(path.join(root,'test-results/online'),{recursive:true}); await page.screenshot({path:path.join(root,'test-results/online/failure.png'),fullPage:true}); console.error((await page.locator('body').innerText()).slice(0,1500)); }

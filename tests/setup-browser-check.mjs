@@ -122,7 +122,8 @@ try {
   await page.keyboard.press('Escape');
   await page.locator('[data-mode="local"]').click();
   await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
-  check(await page.locator('.parrot-options').count() === 0, 'local setup keeps human opponents');
+  check(await page.locator('[data-option="parrot"]').count() === 0, 'local setup keeps human opponents');
+  check(await page.locator('[data-option="theme"]').count() === 4, 'local setup offers four game worlds');
   check(await page.locator('[data-option="rotating"]').count() === 0, 'local rotation option removed');
   await page.locator('.setup-start').click();
   await page.locator('.screen-game:not(.is-preparing)').waitFor();

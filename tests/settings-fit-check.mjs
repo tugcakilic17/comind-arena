@@ -8,7 +8,9 @@ let checks=0;
 try{
  const page=await browser.newPage({viewport:{width:1366,height:768},reducedMotion:'reduce',permissions:['clipboard-read','clipboard-write']});
  page.on('pageerror',error=>errors.push(error.message));
- await page.route('**/api/auth/me',route=>route.fulfill({json:{configured:true,user:{id:'00000000-0000-4000-8000-000000000001',name:'Tuğça',publicCode:'ADMA9230',avatar:'white'}}}));
+ const user={id:'00000000-0000-4000-8000-000000000001',name:'Tuğça',publicCode:'ADMA9230',avatar:'white'};
+ await page.route('**/api/auth/me',route=>route.fulfill({json:{configured:true,user}}));
+ await page.route('**/api/arena/leaderboard**',route=>route.fulfill({json:{players:[],total:0,self:null,start:0}}));
  await page.route('**/api/gifts/redeem',route=>route.fulfill({json:{status:'inactive',message:'Hediye kodları henüz kullanıma açılmadı. Şu an aktif bir kampanya yok.'}}));
  await page.goto('http://localhost:5174/');
  await page.locator('.account-button.is-signed-in').waitFor();
@@ -66,6 +68,22 @@ try{
   await page.locator('[data-action="profile-edit"]').click();
   await inspect('account-editor',width,height);
   await page.locator('[data-action="profile-cancel"]').click();
+ }
+ await page.keyboard.press('Escape');
+ user.name='Çok uzun bir oyuncu adı ve soyadı '.repeat(4).slice(0,100);
+ await page.reload();await page.locator('.account-button.is-signed-in').waitFor();
+ for(const kind of ['settings','profile']){
+  await page.locator(kind==='settings'?'[data-action="settings"]':'.account-button.is-signed-in').click();
+  await page.locator('dialog[open]:not(.is-preparing)').waitFor();
+  for(const [width,height]of [[320,480],[480,320],[932,604],[1366,768]]){
+   await page.setViewportSize({width,height});
+   // The async score can show longer loading/error copy before the final value.
+   for(const text of ['Puan yükleniyor…','Puan yüklenemedi','999.999.999 puan']){
+    await page.locator('[data-profile-points]').evaluate((el,text)=>{el.textContent=text;},text);
+    await inspect(`${kind}-long-name-${text}`,width,height);
+   }
+  }
+  await page.keyboard.press('Escape');
  }
  await writeFile('test-results/settings-fit/report.json',JSON.stringify({checks,failures,errors},null,2));
  console.log(`${checks} settings fit checks; ${failures.length} failures; ${errors.length} browser errors`);

@@ -8,6 +8,7 @@ import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { OAuth2Client } from 'google-auth-library';
 import { arenaRoutes } from './arena.js';
+import { readinessQuery } from './database.js';
 
 export const hashToken = value => createHash('sha256').update(value).digest('hex');
 const token = () => randomBytes(32).toString('base64url');
@@ -79,7 +80,8 @@ export async function buildApp({ db, config = readConfig(), googleClient, logger
   app.get('/api/health', async () => ({ ok: true }));
   app.get('/api/ready', async (request, reply) => {
     try {
-      await db.pool.query({ text: 'SELECT 1', query_timeout: 3000 });
+      const result = await db.pool.query(readinessQuery);
+      if (!result.rows.length) return reply.code(503).send({ ok: false });
       return { ok: true };
     } catch {
       return reply.code(503).send({ ok: false });

@@ -16,6 +16,7 @@ let checks = 0;
 try {
   const page = await browser.newPage({ reducedMotion: 'reduce' });
   await page.route('**/api/auth/me', route => route.fulfill({ json: { user: null, configured: false } }));
+  await page.route('**/api/arena/leaderboard**', route => route.fulfill({ json: { players: [], total: 0, self: null, start: 0 } }));
   page.on('pageerror', error => errors.push(error.message));
   await page.clock.install();
   await page.goto(process.env.COMIND_TEST_URL || 'http://127.0.0.1:5174/');
@@ -49,7 +50,8 @@ try {
             const target = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2);
             if (target !== el && !el.contains(target)) problems.push(`${name}: covered control (${target?.tagName}.${target?.className})`);
           }
-          if (!el.matches('.board-title') && el.matches('h1,h2,p,button:not(.close-modal)') && el.scrollWidth > el.clientWidth + 2) problems.push(`${name}: clipped text`);
+          const text = el.matches('.account-button.is-signed-in') ? el.querySelector('.account-header-name') : el;
+          if (!el.matches('.board-title') && el.matches('h1,h2,p,button:not(.close-modal)') && text.scrollWidth > text.clientWidth + 2) problems.push(`${name}: clipped text`);
         }
         for (const control of document.querySelectorAll(modal ? 'dialog[open] button:not(:disabled)' : screen.startsWith('result') ? '.result-actions button' : '.screen-game .symbol:not(:disabled)')) {
           if (!control.checkVisibility()) continue;
@@ -93,6 +95,7 @@ try {
     }
     await page.keyboard.press('Escape');
   }
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { id: 'responsive-player', name: 'Ada', avatar: 'white', publicCode: 'ABCD1234' }, configured: true } }));
   await page.route('**/card-lavender-leafy-v21.webp', route => route.abort());
   await page.reload();
   await page.locator('.illustrated-mode[data-mode="solo"]').click();

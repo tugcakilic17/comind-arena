@@ -13,6 +13,11 @@ await mkdir('test-results/themes', { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true });
 const errors = [];
 async function verifyPier(page) {
+  const hiddenForTouchLayout = await page.evaluate(() => matchMedia('(max-width:900px) and (pointer:coarse),(max-width:700px),(max-height:500px) and (max-width:1000px)').matches);
+  if (hiddenForTouchLayout) {
+    assert.equal(await page.locator('.sea-pier-cards .surface-seaPierWide:visible, .sea-pier-cards .surface-seaPierCompact:visible').count(), 0, 'compact touch layouts hide the decorative pier');
+    return;
+  }
   const placements = await page.locator('.sea-pier-cards').evaluate(cards => [...cards.querySelectorAll('.player-card')].map(player => {
     const hex = player.querySelector('.hex-card');
     const card = hex.getBoundingClientRect();
@@ -35,7 +40,7 @@ try {
   for (const [parrot, file] of Object.entries(themes)) {
     const page = await browser.newPage({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
     page.on('pageerror', error => errors.push(error.message));
-    await page.route('**/api/auth/me', route => route.fulfill({ json: { user: null, configured: false } }));
+    await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { id: 'theme-test-player', name: 'Ada', avatar: 'rose' }, configured: true } }));
     await page.clock.install();
     await page.goto(url);
     const background = () => page.locator('#app > .forest-background').evaluate(element => {
@@ -120,7 +125,7 @@ try {
   }
   const page = await browser.newPage({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
   page.on('pageerror', error => errors.push(error.message));
-  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: null, configured: false } }));
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: { id: 'theme-test-player', name: 'Ada', avatar: 'rose' }, configured: true } }));
   await page.goto(url);
   await page.locator('[data-mode="solo"]').click();
   await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
@@ -128,12 +133,52 @@ try {
   await page.keyboard.press('Escape');
   await page.locator('[data-mode="local"]').click();
   await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
-  await page.locator('.setup-start').click();
-  await page.locator('.screen-game:not(.is-preparing):not([inert])').waitFor();
-  assert.ok((await page.locator('#app > .forest-background').evaluate(element => getComputedStyle(element).backgroundImage)).includes('/forest-calm-warm-v23.webp'), 'same-device mode keeps forest despite saved solo opponent');
-  assert.equal(await page.locator('.sea-pier-cards').count(), 0, 'same-device mode keeps its existing stage');
+  assert.equal(await page.locator('[data-option="theme"]').count(), 4, 'same-device mode offers all four themes');
+  assert.equal(await page.locator('[data-option="parrot"], [data-level]').count(), 0, 'same-device setup keeps two human players');
+  assert.equal(await page.locator('[data-option="theme"][data-value="kofen"]').getAttribute('aria-pressed'), 'true', 'local theme starts with forest independently of solo opponent');
+  await page.screenshot({ path: 'test-results/themes/local-setup-desktop.png' });
+  for (const [width, height] of [[320,480], [390,844], [844,390], [1366,768]]) {
+    await page.setViewportSize({ width, height });
+    assert.ok(await page.evaluate(() => {
+      const dialog = document.querySelector('dialog[open]');
+      return document.documentElement.scrollWidth <= innerWidth && dialog.scrollWidth <= dialog.clientWidth + 1 && [...dialog.querySelectorAll('.theme-copy')].every(el => el.scrollWidth <= el.clientWidth + 1);
+    }), `theme choices fit without horizontal overflow at ${width}x${height}`);
+    if (width === 390) await page.screenshot({ path: 'test-results/themes/local-setup-mobile.png' });
+  }
+  for (const [theme, file] of Object.entries(themes)) {
+    await page.setViewportSize({ width: 1366, height: 768 });
+    await page.locator(`[data-option="theme"][data-value="${theme}"]`).click();
+    await page.locator('[data-option="symbolCount"][data-value="8"]').click();
+    await page.reload();
+    await page.locator('[data-mode="local"]').click();
+    await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
+    assert.equal(await page.locator(`[data-option="theme"][data-value="${theme}"]`).getAttribute('aria-pressed'), 'true', 'local theme survives reload');
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('comind.preferences.v1')).setup.parrot), 'komat', 'local theme does not change solo opponent');
+    await page.locator('.setup-start').click();
+    await page.locator('.screen-game:not(.is-preparing):not([inert])').waitFor();
+    assert.ok((await page.locator('#app > .forest-background').evaluate(el => getComputedStyle(el).backgroundImage)).includes(file), `${theme}: local game uses selected background`);
+    assert.equal(await page.locator('#board .symbol:enabled').count(), 16, 'both human players can select all eight symbols');
+    assert.ok(await page.locator('#board').evaluate((board, theme) => [...board.querySelectorAll('.game-symbol-art')].every(el => el.getAttribute('style').includes(`${theme}-symbols-atlas`)), theme), 'both cards use selected themed symbols');
+    const common = await page.locator('#board').evaluate(board => {
+      const cards = [...board.querySelectorAll('.hex-card')].map(card => [...card.querySelectorAll('.symbol')].map(el => el.dataset.symbol));
+      return cards[0].filter(id => cards[1].includes(id));
+    });
+    assert.equal(common.length, 1, 'eight themed symbols retain exactly one common symbol');
+    if (theme === 'koak') await verifyPier(page);
+    await page.setViewportSize({ width: 390, height: 844 });
+    assert.ok((await page.locator('#app > .forest-background').evaluate(el => getComputedStyle(el).backgroundImage)).includes(theme === 'kofen' ? file : file.replace('.webp', '-portrait.webp')), 'local game uses mobile theme composition');
+    if (theme === 'koak') await verifyPier(page);
+    await page.locator(`[data-owner="1"] [data-symbol="${common[0]}"]`).click();
+    await page.waitForFunction(() => document.querySelector('#score-right').textContent === '1');
+    await page.locator('[data-action="leave"]').click();
+    await page.locator('dialog[open]:not(.is-preparing)').waitFor();
+    await page.locator('[data-action="confirm-home"]').click();
+    await page.locator('[data-mode="local"]').click();
+    await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
+    console.log(`PASS local ${theme}: persisted selection, themed pair, desktop/mobile background, human scoring`);
+  }
   assert.deepEqual(errors, [], 'no browser runtime errors');
-  console.log('PASS same-device forest fallback; no runtime errors');
+  console.log('PASS same-device themes; no runtime errors');
 } finally {
   await browser.close();
 }

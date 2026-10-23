@@ -2,6 +2,13 @@ import { readFile, readdir } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import pg from 'pg';
 
+export const requiredSchemaVersion = 6;
+export const readinessQuery = {
+  text: 'SELECT version FROM accounts.schema_version WHERE singleton=true AND version >= $1',
+  values: [requiredSchemaVersion],
+  query_timeout: 3000,
+};
+
 export function createDatabase(connectionString) {
   if (!connectionString) throw new Error('DATABASE_URL gerekli. Yerel geliştirme için npm run dev:full kullanın.');
   const pool = new pg.Pool({ connectionString, max: 10, connectionTimeoutMillis: 5000 });

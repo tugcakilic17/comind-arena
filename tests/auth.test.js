@@ -6,7 +6,7 @@ import path from 'node:path';
 import EmbeddedPostgres from 'embedded-postgres';
 import { OAuth2Client } from 'google-auth-library';
 import { buildApp, readConfig, hashToken } from '../server/app.js';
-import { createDatabase } from '../server/database.js';
+import { createDatabase, requiredSchemaVersion } from '../server/database.js';
 
 let postgres, db, directory, app, nonce, identity, invalidSignature;
 const config = readConfig({ APP_URL: 'http://localhost:5174/', GOOGLE_CLIENT_ID: 'test-client', GOOGLE_CLIENT_SECRET: 'test-secret' });
@@ -42,6 +42,20 @@ after(async () => {
     await rm(resolved, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
   }
 });
+test('readiness rejects missing and outdated schema markers, and migration restores readiness', async () => {
+  assert.equal((await app.inject('/api/ready')).statusCode, 200);
+  try {
+    await db.pool.query('ALTER TABLE accounts.schema_version RENAME TO schema_version_audit');
+    const missing = await app.inject('/api/ready');
+    assert.equal(missing.statusCode, 503);assert.deepEqual(missing.json(), { ok: false });
+  } finally { await db.pool.query('ALTER TABLE accounts.schema_version_audit RENAME TO schema_version'); }
+  await db.pool.query('UPDATE accounts.schema_version SET version=$1', [requiredSchemaVersion - 1]);
+  try {
+    assert.equal((await app.inject('/api/ready')).statusCode, 503);
+  } finally { await db.migrate(); }
+  assert.equal((await app.inject('/api/ready')).statusCode, 200);
+});
+
 async function start(query = '', remoteAddress = '127.0.0.1') {
   const response = await app.inject({ url: `/api/auth/google${query}`, remoteAddress, headers: { host: 'localhost:5174' } });
   assert.equal(response.statusCode, 302);

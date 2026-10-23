@@ -35,7 +35,7 @@ Caddy 80/443 üzerinden sertifikayı yönetir; yalnız bu iki port dışarı aç
 
 ## Kontrol, yedekleme ve güncelleme
 
-- `/api/health`: süreç çalışıyor. `/api/ready`: PostgreSQL sorgusu da başarılı; bağlantı yoksa 503 döner. İzleme için ready kullanılır.
+- `/api/health`: süreç çalışıyor. `/api/ready`: PostgreSQL bağlantısı ve gerekli şema sürümü hazır; bağlantı yoksa veya migration eksikse 503 döner. `006-schema-version.sql` dahil migration'ları servis güncellenmeden önce uygulayın. Runtime hesabının `accounts.schema_version` tablosunu okuma yetkisi olmalıdır. İzleme için ready kullanılır.
 - Canlı HTTPS adresinde Google giriş/çıkış, sayfa yenilemede oturum, iki ayrı hesapla arkadaş daveti/maç ve maç sonu puanı kontrol edin. Bunlar gerçek alan adı/Google yapılandırması gelmeden canlıda doğrulanamaz.
 - PostgreSQL için otomatik günlük yedek ve geri yükleme denemesi sağlayıcı tarafından ayarlanmalı. Mevcut yerel kullanıcı/puanlar taşınacaksa PostgreSQL `pg_dump` / `pg_restore` ile ayrıca aktarılır; `.local/postgres` klasörü doğrudan kopyalanmaz. Boş üretim veritabanı yerel kullanıcıları otomatik içermez.
 - Güncellemeden önce DB yedeği alın, yeni paketi hazırlayın, migration'ı çalıştırın, servisi yeniden başlatın. Geri dönüş için önceki yayın paketini saklayın; veritabanı değişiklikleri için ayrıca geri yükleme planı gerekir.

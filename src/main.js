@@ -40,12 +40,6 @@ const modes = {
   online: { title: 'Arkadaşını Çağır', description: 'Arkadaşlarınla farklı cihazlardan birlikte oyna.', image: 'mode-friend-soft-v6.webp', play: 'play-friend-sky-v9.webp' },
 };
 const levels = { easy: 'Kolay', normal: 'Orta', fast: 'Zor' };
-const matchBackgrounds = {
-  koak: 'sea-calm-v1.webp',
-  komat: 'numbers-city-calm-v1.webp',
-  kofen: 'forest-calm-warm-v23.webp',
-  kuik: 'beach-calm-v1.webp',
-};
 let mode = 'solo';
 const preferences = readPreferences();
 let difficulty = preferences.difficulty;
@@ -127,9 +121,8 @@ function homePollen() {
 }
 
 function matchBackgroundUrl(portrait = false) {
-  const parrot = mode === 'solo' ? (game?.parrot ?? setup.parrot) : 'kofen';
-  const file = matchBackgrounds[parrot];
-  return `${baseUrl}assets/game-ui/${portrait && parrot !== 'kofen' ? file.replace('.webp', '-portrait.webp') : file}`;
+  const theme = mode === 'solo' ? (game?.parrot ?? setup.parrot) : (game?.theme ?? setup.theme);
+  return `${baseUrl}assets/game-ui/${worldBackground(theme, portrait)}`;
 }
 
 function render() {
@@ -225,8 +218,8 @@ function updateCardPiles() {
 function boardView() {
   const names = playerNames();
   const collect = game.rule === 'collect';
-  const seaPier = mode === 'solo' && game.parrot === 'koak';
-  return `<div class="game-cards ${mode === 'local' ? 'local-cards' : seaPier ? 'sea-pier-cards' : ''}">${gameSurface(seaPier ? 'seaPierWide' : 'woodenStage')}<div class="player-card" data-owner="0">${gameSurface(seaPier ? 'seaPierCompact' : 'woodenStage')}${card(game.pair[0], collect ? 'right' : 'left', 'player-hex', !collect || mode === 'local', names[0])}${cardPileView(0)}</div><div class="player-card" data-owner="1">${gameSurface(seaPier ? 'seaPierCompact' : 'woodenStage')}${card(game.pair[1], collect ? 'left' : 'right', 'opponent-hex', collect || mode === 'local', names[1])}${cardPileView(1)}</div></div>`;
+  const seaPier = (mode === 'solo' ? game.parrot : game.theme) === 'koak';
+  return `<div class="game-cards ${mode === 'local' ? 'local-cards' : ''} ${seaPier ? 'sea-pier-cards' : ''}">${gameSurface(seaPier ? 'seaPierWide' : 'woodenStage')}<div class="player-card" data-owner="0">${gameSurface(seaPier ? 'seaPierCompact' : 'woodenStage')}${card(game.pair[0], collect ? 'right' : 'left', 'player-hex', !collect || mode === 'local', names[0])}${cardPileView(0)}</div><div class="player-card" data-owner="1">${gameSurface(seaPier ? 'seaPierCompact' : 'woodenStage')}${card(game.pair[1], collect ? 'left' : 'right', 'opponent-hex', collect || mode === 'local', names[1])}${cardPileView(1)}</div></div>`;
 }
 
 function resultView() {
@@ -274,9 +267,10 @@ async function startGame() {
   try {
     preloadGameMotion().catch(() => {});
     const opponent = parrots[setup.parrot];
-    const symbolSet = getSymbolSet(mode === 'solo' ? setup.parrot : 'classic');
+    const theme = mode === 'solo' ? setup.parrot : setup.theme;
+    const symbolSet = getSymbolSet(theme);
     const selectedPoses = [playerPortraitUrl(), playerPortraitUrl('cheer'), ...(mode === 'solo' ? [opponent.idle, opponent.cheer].map(file => `${baseUrl}assets/${file}`) : [])];
-    await Promise.all([prepareImages([...gameAssets, ...selectedPoses, `${baseUrl}assets/game-ui/${symbolSet.file}`, ...(mode === 'solo' && setup.parrot === 'koak' ? seaPierAssets : []), matchBackgroundUrl(), matchBackgroundUrl(true)]), document.fonts.ready]);
+    await Promise.all([prepareImages([...gameAssets, ...selectedPoses, `${baseUrl}assets/game-ui/${symbolSet.file}`, ...(theme === 'koak' ? seaPierAssets : []), matchBackgroundUrl(), matchBackgroundUrl(true)]), document.fonts.ready]);
     if (request !== navigationId) return;
     // Preserve the complete previous view while the connected game lays out
     // and paints its first frame. There is no loading popup or blank screen.
@@ -801,7 +795,7 @@ app.addEventListener('click', event => {
   }
   else if (action === 'setup-option') {
     const key = target.dataset.option;
-    if (!['parrot', 'symbolCount', 'winTarget', 'rule'].includes(key)) return;
+    if (!['parrot', 'theme', 'symbolCount', 'winTarget', 'rule'].includes(key)) return;
     setup = normalizeSetup({ ...setup, [key]: ['symbolCount', 'winTarget'].includes(key) ? Number(target.dataset.value) : target.dataset.value });
     savePreferences(difficulty, sound, setup); updateSetup(target.closest('dialog'), setup); animateSetupChoice(target);
   }
