@@ -31,7 +31,7 @@ export function settingsView(user, soundControl) {
         <p id="redeem-status" class="redeem-status" role="status" aria-live="polite"></p>
       </section>
       </div></div>
-      <div class="settings-footer"><button type="button" class="leave-continue settings-ready" data-action="close">${icon('check')}<span>Tamam!</span></button></div>
+      <div class="settings-footer"><button type="button" class="leave-continue settings-ready" data-action="close">${icon('check')}<span>Tamam!</span></button><nav class="settings-legal-links" aria-label="Gizlilik ve kullanım"><a href="${baseUrl}gizlilik.html" target="_blank" rel="noopener">Gizlilik Politikası<span class="sr-only"> (yeni sekmede açılır)</span></a><span aria-hidden="true">·</span><a href="${baseUrl}kullanim-kosullari.html" target="_blank" rel="noopener">Kullanım Koşulları<span class="sr-only"> (yeni sekmede açılır)</span></a></nav></div>
     </div>`;
 }
 

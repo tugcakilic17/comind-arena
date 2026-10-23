@@ -150,7 +150,7 @@ function render() {
   document.querySelector('dialog').addEventListener('keydown', event => {
     const dialog = event.currentTarget;
     if (event.key !== 'Tab' || !dialog.classList.contains('illustrated-modal')) return;
-    const buttons = [...dialog.querySelectorAll('button:not(:disabled), input:not(:disabled)')];
+    const buttons = [...dialog.querySelectorAll('button:not(:disabled), input:not(:disabled), a[href]')].filter(control => control.checkVisibility());
     const first = buttons[0], last = buttons.at(-1);
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault(); last.focus();
