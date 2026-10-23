@@ -8,6 +8,8 @@
 .ranking-demo{font-size:12px;font-weight:600;color:#8b936e;white-space:nowrap}
 .ranking-self-link{display:flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:6px 13px;border-radius:12px;background:#eee5f4;color:#8459a2;font-size:14px;font-weight:700;line-height:1.2}
 .ranking-self-link .icon{width:17px;height:17px}.ranking-self-hint{border-left:1px solid #cdbbda;padding-left:9px;font-size:12px;font-weight:500}
+.ranking-points-label{position:relative;display:inline-block;padding-left:20px}
+.ranking-points-label .ranking-point-art{position:absolute;left:-2px;top:50%;translate:0 -50%;width:20px;height:20px;object-fit:contain}
 .ranking-navigation{display:flex;align-items:center;gap:8px;flex:none;width:100%}
 .ranking-nav-button{display:flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:4px 14px 4px 5px;border:1px solid #ded3ad;border-bottom:3px solid #c3b58a;border-radius:20px;background:linear-gradient(#fff9e7,#f0e7cb);color:#77825b;font-size:14px;font-weight:700;line-height:1.2;box-shadow:inset 0 1px 0 #fffdf1,0 2px 3px #8e794114;transition:transform .22s ease,background .2s,box-shadow .2s}
 .ranking-nav-icon{display:grid;place-items:center;flex:none;width:24px;height:24px;border-radius:50%;background:#e2e9cc;color:#7b9360;box-shadow:inset 0 1px 1px #9cac6c14}

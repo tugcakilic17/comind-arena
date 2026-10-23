@@ -1,0 +1,61 @@
+/* The three game cards take the space previously occupied by the central wordmark. */
+.screen-home main{align-items:flex-start;padding:10px 0 14px;width:calc(100% - 40px)}
+.screen-home .illustrated-home{width:min(1440px,100%);height:100cqh;max-height:1050px;grid-template-rows:minmax(0,1fr) clamp(78px,18cqh,132px);gap:clamp(6px,1.5cqh,18px);align-content:start}
+.screen-home .illustrated-modes{width:min(1160px,100%);height:100%;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(0,1fr);gap:clamp(0px,1vw,16px)}
+.screen-home .illustrated-mode:last-child{grid-column:auto;width:100%;margin:0}
+.screen-home .wooden-menu{width:min(720px,90%);height:100%;margin:0;align-self:start}
+/* A nameplate, circular face portrait and leaves recreate the supplied UI reference. */
+.site-header nav>.account-button.is-signed-in{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:flex-start;gap:8px;width:238px;max-width:43vw;height:82px;min-height:0;padding:0 10px 0 5px;border:0;border-radius:20px;background:none;box-shadow:none;filter:drop-shadow(0 3px 3px #23482e30);line-height:1.2}
+.account-nameplate{position:absolute;z-index:-1;inset:15px 2px 13px 34px;border:2px solid #d9aa63;border-bottom-width:3px;border-radius:23px;background:linear-gradient(#fff9e6,#ffefce);box-shadow:inset 0 0 0 3px #ffda93,inset 0 5px 4px #fffdf1}
+.account-nameplate::after{content:'';position:absolute;inset:4px;border:1px solid #fffdf3;border-radius:16px;pointer-events:none}
+.account-badge-leaves{position:absolute;z-index:-2;top:50%;width:34px;height:58px;translate:0 -50%;pointer-events:none}
+.account-badge-leaves.is-left{left:-12px;rotate:-8deg}.account-badge-leaves.is-right{right:-12px;transform:scaleX(-1);rotate:8deg}
+.account-badge-leaves i{position:absolute;left:0;display:block;width:34px;height:18px;border:1px solid #6e983c;border-radius:90% 5% 85% 10%;background:linear-gradient(155deg,#bddb5b,#83b23e 65%,#5b9134);box-shadow:inset 0 1px 2px #e1ed9a88,0 2px 2px #416c2a26;transform-origin:90% 50%}
+.account-badge-leaves i::after{content:'';position:absolute;left:4px;right:3px;top:8px;height:1px;background:#658e3a80;rotate:-13deg}
+.account-badge-leaves i:nth-child(1){top:4px;rotate:29deg}.account-badge-leaves i:nth-child(2){top:20px;rotate:0deg}.account-badge-leaves i:nth-child(3){top:34px;rotate:-29deg}
+.account-initial.player-face{position:relative;width:72px;height:72px;flex:none;border:4px solid #f4ce83;outline:1px solid #c99650;border-radius:50%;background:#eee4f3;overflow:hidden;box-shadow:0 2px 3px #6c4e2c33,inset 0 0 0 2px #fff8e7}
+.account-button.is-signed-in .player-face img{position:absolute;left:-12.5%;top:0;bottom:auto;width:125%;height:125%;object-fit:contain;animation:none;transform:none}
+.account-button.is-signed-in .account-header-name{display:block;flex:1;min-width:0;max-width:none;padding:0;text-align:center;font-family:Baloo,'Trebuchet MS',sans-serif;font-size:25px;font-weight:500;letter-spacing:.2px;line-height:1.2;color:#745338;-webkit-text-stroke:0;text-shadow:none}
+.screen-home .mode-art{width:min(96cqw,96cqh);height:min(96cqw,96cqh)}
+@media(hover:hover) and (pointer:fine){.site-header nav>.account-button.is-signed-in:hover{transform:translateY(-2px) scale(1.015);background:none;filter:drop-shadow(0 4px 4px #23482e38)}}
+.site-header nav>.account-button.is-signed-in:active{transform:translateY(1px) scale(.98);filter:drop-shadow(0 1px 2px #23482e30)}
+@media(max-width:900px) and (min-height:601px){
+ .screen-home .illustrated-modes{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:0}
+ .screen-home .illustrated-mode:last-child{grid-column:1/-1;width:50%;justify-self:center}
+}
+@media(max-width:600px){
+ .screen-home main{width:calc(100% - 20px);padding:4px 0 10px}
+ .screen-home .illustrated-home{grid-template-rows:minmax(0,1fr) clamp(58px,11cqh,86px);gap:4px}
+ .screen-home .illustrated-modes{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:0}
+ .screen-home .illustrated-mode:last-child{grid-column:1/-1;width:50%;justify-self:center}
+ .screen-home .wooden-menu{width:100%}
+ .site-header nav>.account-button.is-signed-in{gap:6px;width:158px;max-width:43vw;height:60px;padding:0 6px 0 2px}
+ .account-nameplate{inset:10px 0 9px 23px;border-radius:18px;border-width:1.5px;border-bottom-width:3px;box-shadow:inset 0 0 0 2px #ffda93}
+ .account-nameplate::after{inset:3px;border-radius:12px}
+ .account-badge-leaves{width:24px;height:42px}
+ .account-badge-leaves.is-left{left:-8px}.account-badge-leaves.is-right{right:-8px}
+ .account-badge-leaves i{width:24px;height:13px}
+ .account-badge-leaves i::after{top:6px;left:3px}
+ .account-badge-leaves i:nth-child(1){top:2px}.account-badge-leaves i:nth-child(2){top:14px}.account-badge-leaves i:nth-child(3){top:25px}
+ .account-initial.player-face{width:52px;height:52px;border-width:3px}
+ .account-button.is-signed-in .account-header-name{font-size:20px;max-width:none}
+}
+@media(max-width:600px) and (min-height:800px){
+ .screen-home .illustrated-modes{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(3,minmax(0,1fr))}
+ .screen-home .illustrated-mode:last-child{grid-column:auto;width:100%}
+}
+@media(max-height:500px){
+ .screen-home .illustrated-home{grid-template-rows:minmax(0,1fr) clamp(46px,19cqh,72px)}
+ .screen-home .illustrated-modes{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:minmax(0,1fr)}
+ .screen-home .illustrated-mode:last-child{grid-column:auto;width:100%}
+ .screen-home main{padding:2px 0 6px}
+ .site-header nav>.account-button.is-signed-in{height:54px;width:180px}
+ .account-initial.player-face{height:48px;width:48px;border-width:3px}
+ .account-button.is-signed-in .account-header-name{font-size:20px}
+}
+@media(prefers-reduced-motion:reduce){.site-header nav>.account-button.is-signed-in:is(:hover,:active){transform:none}}
+
+@media(max-width:449px) and (max-height:500px) and (orientation:portrait){
+ .screen-home .illustrated-modes{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr))}
+ .screen-home .illustrated-mode:last-child{grid-column:1/-1;width:50%}
+}

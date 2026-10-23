@@ -1,0 +1,71 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+import { parrots } from '../src/match-rules.js';
+
+await mkdir('test-results/parrot-poses', { recursive: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const errors = [];
+try {
+  for (const [key, parrot] of Object.entries(parrots)) {
+    const page = await browser.newPage({ viewport: { width: 1366, height: 768 }, reducedMotion: 'no-preference' });
+    page.on('pageerror', error => errors.push(error.message));
+    await page.clock.install();
+    await page.route('**/api/auth/me', route => route.fulfill({ json: { user: null, configured: false } }));
+    await page.goto('http://127.0.0.1:5174/');
+    await page.locator('[data-mode="solo"]').click();
+    await page.locator(`[data-option="parrot"][data-value="${key}"]`).click();
+    await page.locator('[data-level="fast"]').click();
+    await page.locator('.setup-start').click();
+    await page.locator('.screen-game:not(.is-preparing)').waitFor();
+    const slot = page.locator('.avatar-slot[data-player="1"]');
+    const idle = slot.locator('.avatar-idle'), cheer = slot.locator('.avatar-cheer');
+    assert.ok((await idle.getAttribute('src')).endsWith(parrot.idle));
+    assert.ok((await cheer.getAttribute('src')).endsWith(parrot.cheer));
+    assert.notEqual(await idle.getAttribute('src'), await cheer.getAttribute('src'));
+    assert.ok(await slot.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0)), 'both poses decode before playing');
+    assert.equal(await idle.evaluate(image => getComputedStyle(image).opacity), '1');
+    assert.equal(await cheer.evaluate(image => getComputedStyle(image).opacity), '0');
+    await page.screenshot({ path: `test-results/parrot-poses/${key}-idle.png` });
+    for (let step = 0; step < 80 && !await slot.evaluate(element => element.classList.contains('is-cheering')); step++) await page.clock.runFor(100);
+    assert.equal(await page.locator('#score-right').textContent(), '1', 'a real bot answer triggers the celebration');
+    assert.equal(await idle.evaluate(image => getComputedStyle(image).opacity), '0');
+    assert.equal(await cheer.evaluate(image => getComputedStyle(image).opacity), '1');
+    await page.clock.runFor(180);
+    await page.screenshot({ path: `test-results/parrot-poses/${key}-cheer.png` });
+    await page.clock.runFor(1800);
+    assert.equal(await idle.evaluate(image => getComputedStyle(image).opacity), '1', 'next card restores the resting pose');
+    assert.equal(await cheer.evaluate(image => getComputedStyle(image).opacity), '0');
+    console.log(`PASS ${key}: distinct preloaded busts, actual correct-answer celebration, resting pose restored`);
+    await page.close();
+  }
+  const playerPage=await browser.newPage({viewport:{width:1366,height:768},reducedMotion:'no-preference'});
+  playerPage.on('pageerror',error=>errors.push(error.message));
+  await playerPage.clock.install();
+  await playerPage.route('**/api/auth/me',route=>route.fulfill({json:{user:null,configured:false}}));
+  await playerPage.goto('http://127.0.0.1:5174/');
+  await playerPage.locator('[data-mode="solo"]').click();
+  await playerPage.locator('[data-level="easy"]').click();
+  await playerPage.locator('.setup-start').click();
+  await playerPage.locator('.screen-game:not(.is-preparing)').waitFor();
+  const human=playerPage.locator('.avatar-slot[data-player="0"]');
+  assert.match(await human.locator('.avatar-idle').getAttribute('src'),/player-white-idle-v1\.webp$/);
+  assert.match(await human.locator('.avatar-cheer').getAttribute('src'),/player-white-cheer-v1\.webp$/);
+  assert.ok(await human.locator('img').evaluateAll(images=>images.every(image=>image.complete&&image.naturalWidth>0)),'white player poses both decode before the game');
+  const common=await playerPage.locator('#board').evaluate(board=>{
+    const other=[...board.querySelectorAll('[data-owner="1"] .symbol')].map(el=>el.dataset.symbol);
+    return [...board.querySelectorAll('[data-owner="0"] .symbol')].find(el=>other.includes(el.dataset.symbol)).dataset.symbol;
+  });
+  await playerPage.locator(`[data-owner="0"] [data-symbol="${common}"]`).click();
+  assert.equal(await playerPage.locator('#score-left').textContent(),'1');
+  assert.ok(await human.evaluate(el=>el.classList.contains('is-cheering')));
+  await playerPage.clock.runFor(200);
+  assert.equal(await human.locator('.avatar-cheer').evaluate(el=>getComputedStyle(el).opacity),'1');
+  await playerPage.screenshot({path:'test-results/parrot-poses/player-white-cheer.png'});
+  await playerPage.clock.runFor(1800);
+  assert.equal(await human.locator('.avatar-idle').evaluate(el=>getComputedStyle(el).opacity),'1');
+  await playerPage.screenshot({path:'test-results/parrot-poses/player-white-idle.png'});
+  await playerPage.close();
+  console.log('PASS white player: preloaded normal and raised-wing poses, real answer celebration and resting pose restored');
+  assert.deepEqual(errors, []);
+} finally { await browser.close(); }

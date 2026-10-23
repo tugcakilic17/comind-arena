@@ -1,53 +1,265 @@
-/* Reuse the common frame and mascot; all labels and controls stay crisp. */
-.modal[data-kind="settings"]{width:min(540px,calc(100vw - 32px));container-type:inline-size;max-width:none;max-height:none;margin:auto;translate:0 30px;padding:0;border:0;border-radius:32px;background:none;box-shadow:none;overflow:visible;color:#3d6042}
-.modal[data-kind="settings"] .settings-mascot{width:30cqw;top:-17.8cqw;margin-top:7px}
-.settings-content{display:flex;flex-direction:column;align-items:center;padding:11cqw 9cqw 14cqw}
-.modal[data-kind="settings"] h2{margin:0;font-size:clamp(29px,7.6cqw,40px);line-height:1.15;font-weight:800;letter-spacing:-.015em}
-.modal[data-kind="settings"] .settings-description{margin:1.5cqw 0 0;font-size:clamp(14px,3.4cqw,18px);line-height:1.45;color:#7b8c70;text-wrap:balance}
-.settings-level{width:100%;margin-top:5cqw}
-.settings-level h3{margin:0;color:#486a45;font-size:clamp(18px,4.3cqw,23px);font-weight:700;line-height:1.3}
-.modal[data-kind="settings"] .level-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2cqw;margin-top:3cqw;padding:0;background:none;border-radius:0;box-shadow:none}
-.modal[data-kind="settings"] .level-options button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1cqw;min-height:16cqw;padding:2cqw 1cqw;border:1.5px solid #dfd5b6;border-radius:3cqw;background:#fffaf0;color:#7a8867;font-size:clamp(16px,3.7cqw,20px);font-weight:700;line-height:1.3;box-shadow:0 2px 0 #b6a07116;transition:background .2s,border-color .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
-.modal[data-kind="settings"] .level-options button.active{background:#e8f0d8;color:#426d3d;border-color:#8da86c;box-shadow:inset 0 0 0 1px #a4ba8770,0 2px 0 #839f5d1a}
-.settings-level-stars{display:flex;align-items:center;justify-content:center;gap:.2cqw;height:4.5cqw;pointer-events:none}
-.settings-level-stars .game-inline-icon{width:3.6cqw;height:3.6cqw;max-width:19px;max-height:19px}
-.modal[data-kind="settings"] .settings-level-hint{display:grid;place-items:center;min-height:3em;margin:2.5cqw 0 0;color:#7b8c70;font-size:clamp(13px,3cqw,16px);line-height:1.4;text-wrap:balance}
-.modal[data-kind="settings"] .settings-sound{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:3cqw;padding:4cqw 0 0;border-top:1px solid #dccda660;font-size:clamp(17px,3.8cqw,21px);color:#486a45;font-weight:700}
-.modal[data-kind="settings"] .settings-sound>span{font-size:inherit;color:inherit}
-.modal[data-kind="settings"] .sound-button{display:flex;align-items:center;justify-content:center;gap:9px;width:120px;min-height:44px;padding:8px 12px;border:1px solid #dbd2b4;border-radius:14px;background:#f3ecd8;box-shadow:none;color:#7b8869;font-size:15px;font-weight:650;text-shadow:none;transition:background .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}
-.modal[data-kind="settings"] .sound-button[aria-pressed="true"]{background:#e8f0d8;border-color:#a4b987;color:#4b7745}
-.modal[data-kind="settings"] .sound-button .icon{width:20px;height:20px}
-.modal[data-kind="settings"] .sound-button span{white-space:nowrap}
-.settings-ready{width:75%;height:10cqw;min-height:46px;margin-top:5cqw;font-size:clamp(18px,4cqw,22px);border-radius:3.5cqw;gap:2cqw}
-.settings-ready .icon{width:4.6cqw;height:4.6cqw}
-@media(hover:hover) and (pointer:fine){.modal[data-kind="settings"] .level-options button:hover{transform:translateY(-2px);border-color:#a5b982}.modal[data-kind="settings"] .sound-button:hover{transform:translateY(-1px);filter:brightness(1.02)}}
-.modal[data-kind="settings"] .level-options button:active{transform:scale(.97)}
-@media(max-width:600px){
- .modal[data-kind="settings"]{translate:0 20px}
- .settings-content{padding:14cqw 8cqw 18cqw}
- .modal[data-kind="settings"] .settings-mascot{width:35cqw;top:-20.5cqw}
- .settings-level{margin-top:6cqw}
- .modal[data-kind="settings"] .level-options{gap:2.5cqw;margin-top:4cqw}
- .modal[data-kind="settings"] .level-options button{min-height:76px;border-radius:13px;gap:5px}
- .settings-level-stars{height:20px;gap:1px}.settings-level-stars .game-inline-icon{width:16px;height:16px}
- .modal[data-kind="settings"] .settings-level-hint{margin-top:3cqw;min-height:3.4em}
- .modal[data-kind="settings"] .settings-sound{margin-top:4cqw;padding-top:5cqw}
- .settings-ready{width:82%;margin-top:6cqw;border-radius:16px}
- .settings-ready .icon{width:22px;height:22px}
+/* Reuse the game's painted frame, with lively but soft profile, sound and gift cards. */
+.modal:is([data-kind="settings"],[data-kind="profile"]){width:min(860px,calc(100vw - 28px));max-width:none;max-height:calc(100dvh - 100px);margin:auto;translate:0 16px;padding:0;overflow:visible;border:0;border-radius:30px;background:none;box-shadow:none;color:#3d6042;container-type:inline-size}
+.modal:is([data-kind="settings"],[data-kind="profile"]) #modal-content{display:flow-root}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-frame{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%;overflow:clip;pointer-events:none;user-select:none}
+.settings-peeker{position:absolute;z-index:1;left:50%;top:-66px;translate:-50% 0;width:116px;height:78px;object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 2px 1px #48613920)}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-content{display:flex;flex-direction:column;align-items:stretch;padding:66px 48px 66px;text-align:left;min-width:0}
+.modal:is([data-kind="settings"],[data-kind="profile"]) h2{margin:0 0 4px;font-size:32px;line-height:1.15;font-weight:800;letter-spacing:-.02em;color:#3c754a;text-align:center}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-description{margin:0;font-size:14px;line-height:1.4;color:#7c8a60;text-align:center}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .close-modal{position:absolute;top:34px;right:36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;background:#f5e8bb;color:#7a8e49;border-color:#d8c78680}
+.settings-tabs{display:none}
+.settings-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:16px;margin-top:20px;align-items:stretch}
+.settings-tools{display:flex;flex-direction:column;gap:14px;min-width:0}
+.settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-redeem{position:relative;min-width:0;margin:0;padding:18px;border:1px solid #abc48270;border-radius:22px;box-shadow:0 4px 0 #8aa45b19,inset 0 1px 0 #ffffffe6}
+.settings-profile{display:flex;flex-direction:column;background:linear-gradient(145deg,#f2f9df,#e6f1d5);border-color:#b4cf8d80}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound{background:linear-gradient(135deg,#fff7d8,#fff0bd);border-color:#e3c56b75;box-shadow:0 4px 0 #c6a54617,inset 0 1px 0 #fffdf1}
+.settings-redeem{flex:1;background:linear-gradient(135deg,#fff2e6,#ffe8d1);border-color:#e9bc8a80;box-shadow:0 4px 0 #cda46e17,inset 0 1px 0 #fffdf2}
+.modal:is([data-kind="settings"],[data-kind="profile"]) h3{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-size:19px;line-height:1.3;font-weight:750;color:#507b3c}
+.modal:is([data-kind="settings"],[data-kind="profile"]) h3>.icon{width:22px;height:22px;flex:none;color:#85a34f}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound h3{color:#987128}.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound h3>.icon{color:#c49a36}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem h3{color:#a36b3a}.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem h3>.icon{color:#d29551}
+.profile-card-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .profile-card-heading h3{margin:0}
+.profile-edit{display:flex;align-items:center;justify-content:center;gap:4px;min-height:36px;padding:5px 8px;border:1px solid #b4cd8870;border-bottom:2px solid #a5bf7460;border-radius:11px;background:#fbffe9;color:#6a9046;font-size:12px;font-weight:700}
+.profile-edit .icon{width:14px;height:14px}
+.profile-summary{display:flex;align-items:center;gap:10px;min-width:0}
+.profile-summary>div{min-width:0}
+.profile-summary strong{display:block;font-size:22px;line-height:1.2;color:#3d7543;overflow-wrap:anywhere}
+.profile-summary small{display:block;margin-top:5px;font-size:13px;line-height:1.4;color:#749157}
+.player-face{position:relative;display:block;flex:none;width:40px;height:40px;overflow:hidden;border:2px solid #fffaf2;border-radius:50%;background:#eee4f3;box-shadow:0 2px 5px #4b3d3118}
+.player-face img{position:absolute;display:block;width:125%;height:125%;max-width:none;left:-12.5%;top:0;object-fit:contain;pointer-events:none}
+.profile-initial.player-face{width:86px;height:86px;filter:drop-shadow(0 3px 2px #5d7a3b1a)}
+.profile-id{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:18px 0 0;font-size:12px;font-weight:650;color:#75924d}
+.profile-code-row{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:5px 5px 5px 12px;border:1px solid #b4cc8a70;border-radius:13px;background:#faffed}
+.profile-id code{font:800 19px/1.3 'Baloo 2',sans-serif;letter-spacing:2px;color:#507a3d;user-select:all;white-space:nowrap}
+.profile-code-row button{display:grid;place-items:center;flex:none;width:38px;height:38px;padding:8px;border-radius:10px;background:#e2efc5;color:#6b963a}
+.profile-code-row button>.icon{width:19px;height:19px}
+.profile-copy-status{font-size:12px;line-height:1.3;color:#638e39}.profile-copy-status:empty{display:none}
+.profile-points{display:flex;align-items:center;gap:12px;width:100%;min-width:0;margin:14px 0 0;padding:12px;border:1px solid #d9bd6b;border-radius:16px;background:linear-gradient(135deg,#fff8dd,#f8e9b7);color:#89651f;text-align:left;box-shadow:inset 0 1px 0 #fffdf2}
+.profile-points-icon{display:grid;place-items:center;flex:none;width:42px;height:42px}
+.profile-points-icon .ranking-point-art{width:125%;height:125%;max-width:none;object-fit:contain;filter:drop-shadow(0 2px 2px #a26a2530)}
+.profile-points-copy{flex:1;min-width:0}
+.profile-points-copy strong{display:block;font-size:23px;line-height:1.2;font-weight:800;overflow-wrap:anywhere}
+.profile-points-copy small{display:block;font-size:11px;line-height:1.4;font-weight:600}
+.profile-points>.icon{flex:none;width:18px;height:18px}
+.profile-points:focus-visible{outline:3px solid #b18b30;outline-offset:3px}
+.profile-card-footer{margin-top:auto;padding-top:18px}
+.settings-profile-button{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;margin:0;padding:9px 12px;border:1px solid #91b75d;border-bottom:3px solid #7ca147;border-radius:14px;background:linear-gradient(#b5d981,#a4cb6b);box-shadow:inset 0 1px 0 #e9f8c4;color:#416925;font-size:15px;font-weight:750}
+.settings-profile-button>.icon{width:19px;height:19px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;font-weight:400}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound h3{margin-bottom:4px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound p{margin:0;font-size:13px;line-height:1.4;color:#a28b50}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .sound-button{display:flex;align-items:center;justify-content:center;gap:6px;flex:none;min-height:44px;padding:8px 10px;border:1px solid #dfbf6a99;border-bottom:3px solid #d2b06580;border-radius:13px;background:#fff9df;box-shadow:inset 0 1px 0 #fff;color:#a38538;font-size:13px;font-weight:700;text-shadow:none}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .sound-button[aria-pressed="true"]{background:#e5f1c6;border-color:#a7bf77;color:#6a8a37}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .sound-button .icon{width:19px;height:19px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem h3{margin-bottom:7px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem>p{margin:0;color:#a08765;font-size:13px;line-height:1.45}
+#redeem-form{margin-top:14px}
+#redeem-form label{display:block;margin-bottom:6px;font-size:13px;font-weight:700;color:#a37a43}
+.redeem-input-row{display:flex;gap:7px;min-width:0}
+.redeem-input-row input{width:0;flex:1;min-width:0;min-height:44px;padding:9px 10px;border:1px solid #dec29a;border-radius:12px;background:#fffaf2;color:#8b6741;font:inherit;font-size:13px;text-transform:uppercase}
+.redeem-input-row input:focus-visible{outline:3px solid #d2a658;outline-offset:2px}
+.redeem-input-row button{flex:none;min-height:44px;padding:8px 10px;border:1px solid #dca46d;border-bottom:3px solid #c78f55;border-radius:12px;background:linear-gradient(#ffcf96,#f6bd7f);color:#955b29;font-size:13px;font-weight:750}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem .redeem-status{min-height:0;margin:0;font-size:12px;overflow-wrap:anywhere}
+.redeem-status:empty{display:none}.modal:is([data-kind="settings"],[data-kind="profile"]) .redeem-status:not(:empty){margin-top:9px}
+.settings-footer{display:flex;justify-content:center;margin-top:18px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-ready{align-self:auto;width:180px;height:auto;min-height:46px;margin:0;padding:10px 16px;border:1px solid #e3b66e;border-bottom:3px solid #cc9954;border-radius:16px;background:linear-gradient(#ffdc9e,#fac77f);color:#936024;gap:10px;font-size:19px;box-shadow:inset 0 1px 0 #fff0ce}
+.settings-ready .icon{width:22px;height:22px}
+.settings-content button{transition:transform .23s cubic-bezier(.22,1,.36,1),filter .2s,box-shadow .2s}
+.settings-content button:disabled{opacity:.6;cursor:wait}
+.avatar-picker{border:0;padding:0;margin:16px 0 0;min-width:0}
+.avatar-picker legend{padding:0;margin-bottom:8px;font-size:14px;font-weight:700;color:#638d40}
+.avatar-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.avatar-choice{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;padding:7px 3px 6px;border:1px solid #bdcb9d88;border-bottom:3px solid #b3c58d66;border-radius:15px;background:#faffed;color:#7c905b;font-size:12px;font-weight:700;cursor:pointer;transition:transform .25s,background .2s,border-color .2s}
+.avatar-choice input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer;z-index:1}
+.avatar-choice-art{display:block;width:100%;height:auto;max-width:76px;aspect-ratio:1;pointer-events:none}
+.avatar-choice-art img{position:absolute;display:block;width:125%;height:125%;left:-12.5%;top:0;object-fit:contain;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.avatar-choice:has(input:checked){background:var(--avatar-wash);border-color:var(--avatar-color);color:#635c74}
+.avatar-choice:has(input:focus-visible){outline:3px solid #4c946b;outline-offset:3px}
+.avatar-choice:has(input:disabled){opacity:.6;cursor:wait}
+.avatar-choice-check{position:absolute;top:4px;right:4px;display:none;width:17px;height:17px;padding:2px;border-radius:50%;background:#87ac57;color:#fff}
+.avatar-choice:has(input:checked) .avatar-choice-check{display:block}.avatar-choice-check .icon{display:block;width:100%;height:100%}
+.profile-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.profile-editor-actions button{display:flex;align-items:center;justify-content:center;gap:5px;min-height:40px;padding:7px 11px;border:1px solid #b5ca8c;border-bottom:3px solid #a1ba76;border-radius:12px;background:#f5fbdf;color:#75934f;font-size:13px;font-weight:750}
+.profile-editor-actions button[type="submit"]{background:#acd374;color:#416628;border-color:#8cb251}
+.profile-editor-actions .icon{width:16px;height:16px}
+.modal:is([data-kind="settings"],[data-kind="profile"]) .profile-status{margin:8px 0 0;font-size:12px;line-height:1.4;color:#8c6644}.profile-status:empty{display:none}
+@media(hover:hover) and (pointer:fine){
+ .settings-content button:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.035);box-shadow:0 4px 8px #67813c16}
+ .settings-content button:not(:disabled):hover>.icon{rotate:-7deg}
+ .avatar-choice:not(:has(input:disabled)):hover .avatar-choice-art img{transform:translateY(-3px) rotate(-3deg)}
 }
-@media(max-height:650px) and (min-width:601px){
- .modal[data-kind="settings"]{width:min(500px,calc(100vw - 32px));translate:0 16px}
- .settings-content{padding:7cqw 9cqw 10cqw}
- .modal[data-kind="settings"] .settings-mascot{width:23cqw;top:-13.7cqw}
- .modal[data-kind="settings"] h2{font-size:29px}
- .modal[data-kind="settings"] .settings-description{font-size:14px;margin-top:1cqw}
- .settings-level{margin-top:2.5cqw}.settings-level h3{font-size:19px}
- .modal[data-kind="settings"] .level-options{margin-top:2cqw}
- .modal[data-kind="settings"] .level-options button{min-height:60px;gap:2px;font-size:17px}
- .settings-level-stars{height:18px}.settings-level-stars .game-inline-icon{width:15px;height:15px}
- .modal[data-kind="settings"] .settings-level-hint{font-size:13px;min-height:2.4em;margin-top:1.5cqw}
- .modal[data-kind="settings"] .settings-sound{margin-top:1.5cqw;padding-top:2cqw;font-size:17px}
- .settings-ready{height:44px;min-height:44px;margin-top:2.5cqw;font-size:19px}
+.settings-content button:not(:disabled):active{transform:translateY(1px) scale(.97);filter:brightness(.99);box-shadow:none}
+.avatar-choice:active{transform:scale(.97)}
+
+/* Editing replaces the account details, keeping the same panel footprint. */
+.settings-profile:has(#profile-avatar-form) .profile-id,.settings-profile:has(#profile-avatar-form) .profile-card-footer{display:none}
+.settings-profile:has(#profile-avatar-form) .profile-points{display:none}
+.settings-profile:has(#profile-avatar-form) .profile-initial{width:62px;height:62px}
+.settings-profile:has(#profile-avatar-form) .profile-summary small{display:none}
+.settings-profile:has(#profile-avatar-form) .avatar-picker{margin-top:12px}
+@media(max-height:760px) and (min-width:601px){
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-content{padding:51px 43px 48px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) h2{font-size:29px}
+ .settings-grid{gap:14px;margin-top:14px}
+ .settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-redeem{padding:12px}
+ .profile-card-heading{margin-bottom:6px}.profile-initial.player-face{width:54px;height:54px}
+ .profile-id{margin-top:8px}.profile-card-footer{padding-top:10px}
+ .settings-tools{gap:12px}.settings-footer{margin-top:14px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem>p{font-size:12px}
+ .settings-profile:has(#profile-avatar-form) .profile-summary{display:none}
+ .avatar-choice-art{max-width:64px}
 }
-@media(max-height:430px) and (min-width:601px){.modal[data-kind="settings"]{translate:0 0}.modal[data-kind="settings"] .settings-mascot,.modal[data-kind="settings"] .settings-description{display:none}.settings-content{padding-top:5cqw;padding-bottom:8cqw}}
-@media(prefers-reduced-motion:reduce){.modal[data-kind="settings"] .level-options button:hover,.modal[data-kind="settings"] .level-options button:active,.modal[data-kind="settings"] .sound-button:hover{transform:none}}
+/* On small screens, one complete section stays visible instead of requiring a scrollbar. */
+@media(max-width:600px),(max-height:560px){
+ .modal:is([data-kind="settings"],[data-kind="profile"]){width:min(520px,calc(100vw - 20px));max-height:calc(100dvh - 80px);translate:0 12px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-content{padding:34px 30px 34px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) h2{font-size:28px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-description{font-size:12px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .close-modal{top:23px;right:22px;width:32px;height:32px;min-width:32px;min-height:32px}
+ .settings-peeker{top:-55px;width:96px;height:64px}
+ .settings-tabs{display:flex;justify-content:center;gap:6px;margin-top:12px}
+ .settings-tabs button{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;min-width:0;min-height:38px;padding:7px 8px;border:1px solid #d7cba5;border-bottom:2px solid #c7b88b;border-radius:12px;background:#f7efd7;color:#8c8d61;font-size:13px;font-weight:700}
+ .settings-tabs button[aria-pressed="true"]{background:#e4efc4;border-color:#abc179;color:#64883b}
+ .settings-tabs .icon{width:17px;height:17px}
+ .settings-grid{display:block;margin-top:12px}
+ .settings-tools{display:contents}
+ .settings-content .settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-content .settings-redeem{display:none}
+ .settings-content[data-tab="profile"] .settings-profile{display:flex}
+ .settings-content[data-tab="sound"] .settings-sound{display:flex}
+ .settings-content[data-tab="redeem"] .settings-redeem{display:block}
+ .settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-redeem{padding:14px}
+ .profile-card-heading{margin-bottom:7px}
+ .profile-summary strong{font-size:21px}.profile-initial.player-face{width:60px;height:60px}
+ .profile-summary small{font-size:12px}
+ .profile-id{margin-top:10px}.profile-card-footer{padding-top:12px}
+ .settings-footer{margin-top:14px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-ready{width:180px;min-height:44px;font-size:17px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound{min-height:180px;justify-content:center;flex-direction:column;text-align:center;gap:16px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound h3{justify-content:center}
+ .settings-profile:has(#profile-avatar-form) .profile-summary{display:none}
+ .avatar-choice-art{max-width:68px}
+ .profile-editor-actions button{min-height:40px}
+}
+@media(max-width:600px) and (max-height:650px),(max-height:560px){
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-content{padding:28px 23px 30px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) h2{font-size:26px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-description{display:none}
+ .settings-tabs{margin-top:8px;gap:5px}.settings-tabs button{min-height:34px;padding:5px;font-size:12px}
+ .settings-grid{margin-top:9px}
+ .settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-redeem{padding:12px}
+ .profile-card-heading{position:absolute;top:9px;right:9px;margin:0}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .profile-card-heading h3{display:none}
+ .profile-edit{min-height:32px;padding:4px 6px}.profile-edit span{display:none}
+ .profile-summary{gap:8px;padding-right:24px}
+ .profile-initial.player-face{width:46px;height:46px}.profile-summary strong{font-size:19px}.profile-summary small{display:none}
+ .profile-id{gap:4px;margin-top:8px}.profile-code-row{padding:3px 3px 3px 10px}.profile-code-row button{width:34px;height:34px}
+ .profile-id code{font-size:18px}
+ .profile-card-footer{padding-top:10px}.settings-profile-button{min-height:40px;font-size:14px;padding:7px}
+ .settings-footer{margin-top:10px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-ready{min-height:40px;padding:8px;font-size:16px}
+ .avatar-picker legend{font-size:13px}.avatar-picker{margin-top:0!important}.avatar-choice-art{max-width:48px}
+ .avatar-choice{padding:5px 3px;font-size:11px}.profile-editor-actions{margin-top:8px}.profile-editor-actions button{min-height:36px;padding:6px 9px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound{min-height:160px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem>p{font-size:12px}
+ .redeem-input-row{flex-wrap:nowrap}.redeem-input-row input{width:0;flex:1;min-height:38px;font-size:12px}.redeem-input-row button{width:auto;min-height:38px;font-size:12px}
+ #redeem-form label{display:none}
+ #redeem-form{margin-top:10px}
+}
+@media(min-width:450px) and (max-height:430px){
+ .modal:is([data-kind="settings"],[data-kind="profile"]){width:min(660px,calc(100vw - 24px));max-height:calc(100dvh - 64px);translate:0 12px}
+ .settings-peeker{top:-41px;width:72px;height:48px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-content{padding:19px 28px 19px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) h2{font-size:23px;line-height:1.1;margin-bottom:0}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-description{display:none}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .close-modal{top:17px;right:20px;width:28px;height:28px;min-width:28px;min-height:28px}
+ .settings-tabs{margin-top:7px}.settings-tabs button{min-height:28px;padding:3px 8px;font-size:12px;line-height:1.15}
+ .settings-grid{margin-top:5px}
+ .settings-profile,.modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound,.settings-redeem{padding:9px 12px;border-radius:15px}
+ .settings-content[data-tab="profile"] .settings-profile{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;align-items:center}
+ .profile-card-heading{position:absolute;top:8px;left:auto;right:8px;margin:0}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .profile-card-heading h3{display:none}
+ .profile-edit{min-height:28px;padding:4px}.profile-edit span{display:none}
+ .profile-summary{grid-column:1;grid-row:1;gap:6px;padding:0}
+ .profile-summary strong{font-size:18px}.profile-summary small{display:none}.profile-initial.player-face{width:42px;height:42px}
+ .profile-id{grid-column:2;grid-row:1;gap:2px;margin:0;padding-right:28px;font-size:11px}
+ .profile-id>span{display:none}
+ .profile-id code{font-size:16px;letter-spacing:1px}.profile-code-row{padding:2px 2px 2px 8px;gap:4px}.profile-code-row button{width:28px;height:28px;padding:6px}
+ .profile-card-footer{grid-column:1/-1;padding:0}
+ .settings-profile-button{min-height:34px;padding:5px 8px;font-size:13px}
+ .settings-content[data-tab="profile"] .settings-profile:has(#profile-avatar-form){display:block}
+ #profile-avatar-form{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+ .avatar-picker{margin:0!important}.avatar-picker legend{margin-bottom:3px;font-size:12px}.avatar-choices{gap:6px}
+ .avatar-choice{padding:3px;font-size:11px;gap:0;border-radius:10px}.avatar-choice-art{max-width:36px}
+ .profile-editor-actions{flex-direction:column;gap:5px;margin:0}.profile-editor-actions button{min-height:32px;padding:5px 9px;font-size:12px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .profile-status{grid-column:1/-1;grid-row:2;font-size:11px;margin:0}
+ .settings-footer{margin-top:8px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-ready{min-height:36px;padding:4px 10px;font-size:15px;width:160px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-sound{min-height:100px;flex-direction:row;text-align:left;gap:18px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem h3{font-size:16px;margin-bottom:3px}
+ .modal:is([data-kind="settings"],[data-kind="profile"]) .settings-redeem>p{font-size:11px;line-height:1.3}
+ #redeem-form{margin-top:5px}.redeem-input-row{flex-wrap:nowrap}.redeem-input-row input{width:0;flex:1;min-height:34px;font-size:12px}.redeem-input-row button{width:auto;min-height:34px;font-size:12px}
+ #redeem-form label{display:none}.modal:is([data-kind="settings"],[data-kind="profile"]) .redeem-status:not(:empty){font-size:11px;margin-top:4px}
+}
+@media(prefers-reduced-motion:reduce){
+ .settings-content button,.avatar-choice,.avatar-choice-art img{transition:none}
+ .settings-content button:not(:disabled):is(:hover,:active),.avatar-choice:active,.avatar-choice:hover .avatar-choice-art img{transform:none}
+ .settings-content button:not(:disabled):hover>.icon{rotate:none}
+}
+
+/* Status feedback must never make a fitted dialog taller. The copy icon becomes a check; its live text remains accessible. */
+.settings-redeem:has(.redeem-status:not(:empty)) #redeem-hint{display:none}
+.profile-copy-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* The account badge opens the same profile card in its own compact frame. */
+.modal[data-kind="profile"]{width:min(520px,calc(100vw - 28px));max-height:calc(100dvh - 100px)}
+.modal[data-kind="profile"] .profile-panel-content{padding:40px 38px 38px}
+.modal[data-kind="profile"] .settings-grid{display:block;margin-top:16px}
+.modal[data-kind="profile"] .profile-summary{padding:0}
+.modal[data-kind="profile"] .profile-initial{width:76px;height:76px}
+.modal[data-kind="profile"] .settings-description{font-size:13px}
+.modal[data-kind="profile"] h2{font-size:29px}
+.modal[data-kind="profile"] .profile-account-status{margin:10px 0 0;font-size:12px;line-height:1.4;color:#8c6644}
+@media(max-height:760px){
+ .modal[data-kind="profile"] .profile-panel-content{padding:32px 30px 30px}
+ .modal[data-kind="profile"] .profile-initial{width:58px;height:58px}
+ .modal[data-kind="profile"] .profile-card-heading{margin-bottom:6px}
+ .modal[data-kind="profile"] .profile-summary small{display:none}
+ .modal[data-kind="profile"] .settings-profile{padding:12px}
+ .modal[data-kind="profile"] .profile-id{margin-top:8px}
+ .modal[data-kind="profile"] .profile-card-footer{padding-top:10px}
+ .modal[data-kind="profile"] .settings-profile-button{min-height:40px;padding:7px;font-size:14px}
+ .modal[data-kind="profile"] .settings-footer{margin-top:10px}
+ .modal[data-kind="profile"] .settings-ready{min-height:40px;padding:8px;font-size:16px}
+}
+@media(max-width:600px) and (max-height:650px),(max-height:560px){
+ .modal[data-kind="profile"] .profile-panel-content{padding:28px 24px}
+ .modal[data-kind="profile"] .settings-grid{margin-top:10px}
+ .modal[data-kind="profile"] .profile-initial{width:48px;height:48px}
+ .modal[data-kind="profile"] .profile-summary{padding-right:24px}
+ .modal[data-kind="profile"] .profile-account-status{font-size:11px;line-height:1.3;margin-top:7px}
+}
+@media(min-width:450px) and (max-height:430px){
+ .modal[data-kind="profile"]{width:min(660px,calc(100vw - 24px));max-height:calc(100dvh - 64px)}
+ .modal[data-kind="profile"] .profile-panel-content{padding:20px 28px}
+ .modal[data-kind="profile"] h2{font-size:23px}
+ .modal[data-kind="profile"] .profile-initial{width:42px;height:42px}
+ .modal[data-kind="profile"] .profile-id,.modal[data-kind="profile"] .profile-card-footer{padding:0;margin:0}
+ .modal[data-kind="profile"] .profile-id{padding-right:30px}
+ .modal[data-kind="profile"] .settings-profile-button{min-height:34px;padding:5px 8px;font-size:13px}
+ .modal[data-kind="profile"] .settings-grid{margin-top:7px}
+ .modal[data-kind="profile"] .settings-ready{min-height:36px;padding:4px 10px;font-size:15px}
+ .modal[data-kind="profile"] .profile-account-status{margin:4px 0 0}
+}
+@media(max-height:760px){
+ .profile-points{margin-top:8px;padding:8px;gap:8px}
+ .profile-points-copy strong{font-size:20px}
+ .profile-points-icon{width:34px;height:34px}
+}
+@media(min-width:450px) and (max-height:560px){
+ .profile-points{grid-column:1/-1;grid-row:2;margin:0;padding:6px 10px}
+ .profile-points-copy{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+ .profile-points-copy strong{font-size:18px}
+ .profile-points-copy small{font-size:10px}
+ .profile-points-icon{width:28px;height:28px}
+}

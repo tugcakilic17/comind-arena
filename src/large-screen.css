@@ -1,0 +1,50 @@
+/* Keep the established phone / Full HD layouts; scale the 2K and 4K stage. */
+@media (min-width:2400px) and (min-height:1200px) {
+ :root{--large-ui-scale:calc(100vw / 1920px)}
+
+ .site-header.account-header{width:92%;margin-top:1dvh;min-height:0;padding:0}
+ .site-header .brand.home-brand{width:17.7vw;height:5.84vw}
+ .site-header nav{zoom:var(--large-ui-scale)}
+ .screen-home main{align-items:center;padding:0 0 4dvh}
+ .screen-home .illustrated-home{width:82vw;height:78cqh;max-height:none;grid-template-rows:minmax(0,1fr) 14dvh;gap:3dvh}
+ .screen-home .illustrated-modes{width:100%;gap:1.2vw}
+ .screen-home .wooden-menu{width:46vw}
+
+ .illustrated-game{padding:1.8dvh 0 0;gap:1dvh}
+ .illustrated-game .game-toolbar{height:8.5dvh;grid-template-columns:1fr 40vw 1fr;padding-inline:3.5vw}
+ .illustrated-game .game-art-button{width:4.4vw;height:4.4vw}
+ .illustrated-game .game-tools{gap:1.1vw}
+ .illustrated-game .scoreboard{height:4.6vw;min-height:0;padding-inline:1.45vw;gap:.8vw}
+ .illustrated-game .avatar-slot{width:5vw;height:5vw}
+ .illustrated-game .player-score{gap:.4vw}
+ .illustrated-game .player-score strong{font-size:1.15vw}
+ .illustrated-game .player-score>b{font-size:2.1vw}
+ .illustrated-game .timer-block{width:4.6vw;gap:.2vw}
+ .illustrated-game .timer-block strong{font-size:1.9vw}
+ .illustrated-game .timer-block .game-inline-icon{width:1.8vw;height:1.8vw}
+ .illustrated-game .board-title{width:20vw;height:3.47vw}
+ .illustrated-game .play-panel{padding:6.5dvh 0 14dvh;justify-content:center}
+ .illustrated-game #board{flex:none;width:100%;height:64dvh}
+ .illustrated-game .game-cards{width:76vw;gap:1.6vw}
+ .illustrated-game .card-owner{font-size:1.4vw}
+ .illustrated-game .game-cards>.surface-woodenStage{bottom:-2.3vw;height:7.5vw}
+ .illustrated-game .sea-pier-cards{--pier-wide-card-width:min(calc(50cqw - .8vw),calc(100cqh / 1.04));--pier-wide-height:8.3vw}
+ .illustrated-game .game-progress{bottom:1.5dvh;width:16.7vw;height:3.9vw}
+ .illustrated-game .progress-caption{font-size:1vw}
+ .illustrated-game .progress-dot{width:1.05vw;height:1.05vw}
+ .illustrated-game .progress-dots{gap:.3vw}
+ .illustrated-game .match-feedback{bottom:9dvh;font-size:.95vw}
+
+ /* Layout-aware zoom scales panel typography, artwork and hit targets together. */
+ .modal.illustrated-modal,.loading-dialog,.illustrated-result{zoom:var(--large-ui-scale)}
+ .online-panel{zoom:var(--large-ui-scale)}
+ .online-hub{zoom:calc(100vw / 2560px)}
+ .online-game{max-width:none;width:100%;padding-inline:3.5vw}
+ .online-game-toolbar{zoom:var(--large-ui-scale)}
+ .online-game .board-title{position:absolute;left:50%;translate:-50% 0}
+ .online-game .online-cards{width:76vw;height:64dvh;flex:none;gap:1.6vw}
+ .online-game .online-cards>.player-card{width:min(46cqw,calc(100cqh / 1.04))}
+ .online-game .online-cards .card-owner{font-size:1.4vw}
+ .online-game .online-countdown{font-size:.9vw;min-height:1.5vw}
+ .online-game .online-progress{font-size:.8vw}
+}

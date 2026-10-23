@@ -1,0 +1,12 @@
+**
+!package.json
+!package-lock.json
+!server/
+!server/**
+!src/
+!src/game.js
+!src/match-rules.js
+!src/game-worlds.js
+!dist/
+!dist/**
+!Dockerfile

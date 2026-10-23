@@ -1,4 +1,6 @@
 import { baseUrl } from './assets.js';
+import { playerPortraitUrl } from './player-avatar.js';
+import { getSymbolSet, classicSymbolRects } from './symbol-sets.js';
 
 // Source rectangles follow the opaque artwork, so neighboring sprites never leak into a card.
 const controlAssets = {
@@ -7,16 +9,7 @@ const controlAssets = {
   spark: 'spark-hd-v16.webp', check: 'check-hd-v16.webp', cross: 'cross-hd-v16.webp',
   dot: 'progress-empty-hd-v16.webp', dotFilled: 'progress-filled-hd-v16.webp',
 };
-export const symbolRects = [
-  [40,58,171,163],[265,47,154,186],[446,66,231,150],[708,58,151,176],
-  [901,65,196,161],[1118,46,198,196],[1352,57,170,176],[1559,69,188,158],
-  [45,258,167,196],[263,261,169,180],[467,262,193,171],[685,269,193,181],
-  [907,297,201,134],[1140,267,165,180],[1349,253,167,196],[1572,283,172,143],
-  [40,459,160,199],[227,490,217,156],[496,453,125,195],[684,469,223,181],
-  [928,454,152,198],[1114,491,204,149],[1341,496,188,149],[1569,459,169,202],
-  [52,667,130,188],[240,675,188,170],[472,665,170,189],[687,677,174,172],
-  [899,677,195,166],[1163,668,118,199],[1342,682,186,162],
-];
+export const symbolRects = classicSymbolRects;
 
 function spriteStyle([x, y, width, height], atlasWidth, atlasHeight) {
   const padding = 2;
@@ -28,10 +21,15 @@ export function gameIcon(name, className = 'game-inline-icon') {
   return `<img class="game-control-asset ${className}" src="${baseUrl}assets/game-ui/${controlAssets[name] || controlAssets.spark}" alt="" width="1024" height="1024" draggable="false" aria-hidden="true" />`;
 }
 
-export function gameSymbol(id) {
-  const rect = symbolRects[id];
+export function rankingPointArt() {
+  return `<img class="ranking-point-art" src="${baseUrl}assets/game-ui/spark-hd-v16.png" alt="" width="1254" height="1254" draggable="false" aria-hidden="true" />`;
+}
+
+export function gameSymbol(id, fitted = false, setKey = 'classic') {
+  const set = getSymbolSet(setKey);
+  const rect = set.rects[id];
   const extent = Math.max(rect[2], rect[3]) + 4;
-  return `<span class="game-symbol" aria-hidden="true"><span class="game-symbol-art" style="width:${(rect[2] + 4) / extent * 90}%;height:${(rect[3] + 4) / extent * 90}%;${spriteStyle(rect, 1774, 887)}"></span></span>`;
+  return `<span class="game-symbol" aria-hidden="true"><span class="game-symbol-art" style="background-image:url('${baseUrl}assets/game-ui/${set.file}');width:${fitted ? 90 : (rect[2] + 4) / extent * 90}%;height:${fitted ? 90 : (rect[3] + 4) / extent * 90}%;${spriteStyle(rect, set.width, set.height)}"></span></span>`;
 }
 
 // A fixed source viewport keeps small, animated previews independent of
@@ -58,6 +56,8 @@ const surfaces = {
   progress: ['progress-tray-hd-v16.webp', 2103, 748, 50, 235, 2003, 269],
   roundProgress: ['progress-tray-v21.webp', 2167, 725, 30, 90, 2107, 560],
   woodenStage: ['wooden-stage-v22.webp', 2178, 722, 20, 170, 2138, 455],
+  seaPierWide: ['sea-pier-wide-v2.webp', 2172, 724, 0, 210, 2172, 360],
+  seaPierCompact: ['sea-pier-compact-v2.webp', 2172, 724, 0, 200, 2172, 430],
   resultPanel: ['result-panel-v28.webp', 1394, 1128, 24, 80, 1346, 988],
   resultScore: ['result-score-v27.webp', 2172, 724, 56, 108, 2060, 515],
   resultReplay: ['result-reference-user-v31.webp', 593, 418, 152, 263, 315, 56],
@@ -71,9 +71,12 @@ export const gameAssets = [
   ...Object.entries(controlAssets).filter(([name]) => name !== 'spark').map(([, file]) => `${baseUrl}assets/game-ui/${file}`),
   ...['scoreboard', 'roundProgress', 'woodenStage', 'resultPanel'].map(name => `${baseUrl}assets/game-ui/${surfaces[name][0]}`),
   ...['symbols-atlas-v14', 'forest-calm-warm-v23', 'card-lavender-leafy-v21', 'card-mint-paired-v21',
-    'player-idle-v27', 'player-cheer-v27', 'kofen-idle-v26', 'kofen-cheer-v26', 'title-find-leafy-v17',
+    'kofen-idle-v26', 'kofen-cheer-v26', 'title-find-leafy-v17',
     'leave-mascot-v38'].map(name => `${baseUrl}assets/game-ui/${name}.webp`),
+  playerPortraitUrl(), playerPortraitUrl('cheer'),
 ];
+export const seaPierAssets = ['seaPierWide', 'seaPierCompact'].map(name => `${baseUrl}assets/game-ui/${surfaces[name][0]}`);
+
 export function gameSurface(name) {
   const [file, width, height, x, y, artWidth, artHeight] = surfaces[name];
   return `<span class="game-surface surface-${name}" aria-hidden="true"><img src="${baseUrl}assets/game-ui/${file}" alt="" draggable="false" style="width:${width / artWidth * 100}%;height:${height / artHeight * 100}%;left:${-x / artWidth * 100}%;top:${-y / artHeight * 100}%" /></span>`;

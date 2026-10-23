@@ -49,8 +49,9 @@ try {
   await page.getByRole('button', { name: 'Kolay', exact: true }).click();
   await page.keyboard.press('Escape');
   await page.locator('[data-mode="online"]').click();
-  check('invite explains upcoming online mode', await page.locator('dialog.modal').evaluate(dialog => dialog.open) && await page.getByText('Farklı cihazlardan davet bağlantısıyla oynama yakında burada olacak.').count() === 1);
-  await page.keyboard.press('Escape');
+  await page.locator('.online-shell').waitFor();
+  check('invite requires a Google account',await page.getByRole('button',{name:'Google ile devam et',exact:true}).count()===1);
+  await page.locator('[data-action="online-home"]').click();
   await page.clock.install();
   const savedScoresBefore = await page.evaluate(() => localStorage.getItem('comind.scores.v1'));
   await page.locator('[data-mode="solo"]').click();await page.waitForSelector('.screen-game:not(.is-preparing)');
@@ -100,7 +101,8 @@ try {
   await page.screenshot({ path: 'test-results/result-desktop.png', fullPage: true });
   await page.locator('.result-panel [data-action="home"]').click();
   await page.getByRole('button', { name: 'Liderlik Tablosu', exact: true }).click();
-  check('leaderboard shows nine clearly labeled demo players', await page.locator('.ranking-row').count() === 9 && await page.locator('.ranking-demo').isVisible());
+  await page.locator('.leaderboard-content:not([aria-busy])').waitFor();
+  check('leaderboard has a real data or empty state', await page.locator('.ranking-demo').isVisible() && !(await page.locator('.ranking-demo').textContent()).includes('Örnek'));
   await page.keyboard.press('Escape');
   await page.locator('[data-mode="local"]').click();await page.waitForSelector('.screen-game:not(.is-preparing)');
   await match('right');

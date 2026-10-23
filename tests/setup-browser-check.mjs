@@ -1,0 +1,168 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+import { buildApp, readConfig } from '../server/app.js';
+
+await mkdir('test-results/setup', { recursive: true });
+const api = await buildApp({ db: { pool: {} }, config: readConfig({ APP_URL: 'http://localhost:5174/' }) });
+const browser = await chromium.launch({ channel: 'msedge', headless: true });
+const errors = [];
+let checks = 0;
+const arenaWrites=[];
+const check = (value, message) => { assert.ok(value, message); checks++; console.log(`PASS ${message}`); };
+try {
+  const page = await browser.newPage({ viewport: { width: 1366, height: 900 }, reducedMotion: 'reduce' });
+  page.on('pageerror', error => errors.push(error.message));
+  page.on('request',request=>{if(request.method()!=='GET' && new URL(request.url()).pathname.startsWith('/api/arena/')) arenaWrites.push(request.url());});
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user:{id:'setup-test-player',name:'Ada',publicCode:'ABCD1234',avatar:'white'}, configured:true } }));
+  // Exercise the real server endpoint without depending on the user's running API process.
+  await page.route('**/api/gifts/redeem', async route => {
+    const response = await api.inject({ method: 'POST', url: '/api/gifts/redeem', headers: { origin: 'http://localhost:5174' }, payload: route.request().postDataJSON() });
+    await route.fulfill({ status: response.statusCode, contentType: 'application/json', body: response.body });
+  });
+  await page.goto('http://127.0.0.1:5174/');
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.locator('[data-action="settings"]').click();
+  await page.locator('dialog[open]:not(.is-preparing)').waitFor();
+  check(await page.locator('.settings-profile').isVisible(), 'settings displays profile');
+  check(await page.locator('dialog [data-level]').count() === 0, 'difficulty removed from settings');
+  await page.locator('#gift-code').fill('AB');
+  await page.locator('#redeem-form button').click();
+  await page.getByText(/3–64 karakterlik/).waitFor();
+  await page.locator('#gift-code').fill('gift-2026');
+  await page.locator('#redeem-form button').click();
+  await page.locator('#redeem-status').filter({ hasText: 'henüz kullanıma açılmadı' }).waitFor();
+  check(true, 'gift code validates and real server returns inactive without granting rewards');
+  await page.screenshot({ path: 'test-results/setup/settings-desktop.png' });
+  await page.keyboard.press('Escape');
+  await page.locator('[data-mode="solo"]').click();
+  await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
+  check(await page.locator('.screen-game').count() === 0, 'solo opens setup before gameplay');
+  check(await page.locator('[data-option="parrot"]').count() === 4, 'four parrot opponents');
+  check(await page.locator('[data-option="symbolCount"]').count() === 6, 'all symbol counts from 3 through 8');
+  check(await page.locator('[data-option="winTarget"]').count() === 4, 'all correct-answer targets from 5 to 20');
+  check(await page.locator('.setup-eyebrow,#setup-description,.setup-field>p').count() === 0, 'requested introductory copy removed');
+  check(new Set(await page.locator('.parrot-options img').evaluateAll(images=>images.map(image=>image.src))).size === 4, 'each parrot has its own artwork');
+  await page.locator('[data-option="winTarget"][data-value="20"]').click();
+  check(await page.locator('[data-option="winTarget"][data-value="20"]').getAttribute('aria-pressed') === 'true', '20 correct-answer target can be selected');
+  await page.locator('[data-option="winTarget"][data-value="5"]').click();
+  await page.locator('[data-option="parrot"][data-value="koak"]').click();
+  await page.locator('[data-level="fast"]').click();
+  check((await page.evaluate(() => JSON.parse(localStorage.getItem('comind.preferences.v1')).difficulty)) === 'fast', 'difficulty selection persists');
+  await page.locator('[data-level="easy"]').click();
+  await page.locator('[data-option="symbolCount"][data-value="3"]').click();
+  await page.locator('[data-option="rule"][data-value="empty"]').click();
+  await page.screenshot({ path: 'test-results/setup/setup-desktop.png' });
+  await page.locator('.setup-start').click();
+  await page.locator('.screen-game:not(.is-preparing)').waitFor();
+  await page.clock.install();
+  check(await page.locator('#score-left').textContent() === '0' && await page.locator('#score-right').textContent() === '0', 'both correct-answer counters start at zero');
+  check(await page.locator('.opponent strong').textContent() === 'Koak', 'selected opponent carries into gameplay');
+  check(await page.locator('[data-owner="0"] .symbol:enabled').count() === 3 && await page.locator('[data-owner="1"] .symbol:enabled').count() === 0, 'empty mode selects own card');
+  check(await page.locator('.play-panel').getAttribute('data-motion') === 'ready', 'static cards retain Phaser rendering');
+  const poses = await page.locator('#board .symbol').evaluateAll(items => items.map(el => [Number.parseFloat(el.style.getPropertyValue('--tilt')), Number(el.style.getPropertyValue('--size'))]));
+  check(new Set(poses.map(p => p[0])).size > 3 && new Set(poses.map(p => p[1])).size > 3, 'symbols have independent random sizes and full-circle angles');
+  async function common() {
+    return page.locator('#board').evaluate(board => {
+      const cards = [...board.querySelectorAll('.hex-card')].map(card => [...card.querySelectorAll('.symbol')].map(el => el.dataset.symbol));
+      return cards[0].find(id => cards[1].includes(id));
+    });
+  }
+  async function answer(owner) {
+    for (let step = 0; step < 20 && await page.locator('#board[aria-busy="true"], #board .symbol.matched').count(); step++) await page.clock.runFor(200);
+    const id = await common();
+    await page.locator(`[data-owner="${owner}"] [data-symbol="${id}"]`).click();
+    const feedback = await page.locator('#match-feedback').textContent();
+    assert.ok(feedback.includes('+1 doğru'), `answer must award immediately: ${feedback}`);
+    await page.clock.runFor(1500);
+    for (let step = 0; step < 20 && await page.locator('.screen-game #board[aria-busy="true"], .screen-game #board .symbol.matched').count(); step++) await page.clock.runFor(200);
+    assert.deepEqual(errors, [], 'a dealt pair must not produce browser errors');
+  }
+  await answer(0);
+  check(await page.locator('#score-left').textContent() === '1' && await page.locator('#score-right').textContent() === '0', 'empty mode awards one correct answer');
+  for (let step = 0; step < 4; step++) await answer(0);
+  await page.locator('.screen-result').waitFor();
+  check(await page.locator('#result-title').textContent() === 'Sen kazandın!', 'five correct answers wins empty mode');
+  check(await page.locator('.result-player strong').first().textContent() === '5', 'result displays the winning correct-answer count');
+  await page.locator('.result-home').click();
+  await page.locator('[data-mode="solo"]').click();
+  await page.locator('[data-option="rule"][data-value="collect"]').click();
+  await page.locator('[data-option="rotating"]').click();
+  await page.locator('[data-level="easy"]').click();
+  await page.locator('.setup-start').click();
+  await page.locator('.screen-game:not(.is-preparing)').waitFor();
+  check(await page.locator('[data-owner="1"] .symbol:enabled').count() === 3 && await page.locator('[data-owner="0"] .symbol:enabled').count() === 0, 'collect mode selects opposing card');
+  check(await page.locator('.play-panel').getAttribute('data-rotating') === 'true', 'rotation selection carried into game');
+  await answer(1);
+  check(await page.locator('#score-left').textContent() === '1' && await page.locator('#score-right').textContent() === '0', 'collect mode also awards one correct answer');
+  await page.locator('[data-action="pause"]').click();
+  const counts = await page.locator('#score-left').textContent();
+  await page.clock.runFor(12000);
+  check(await page.locator('#score-left').textContent() === counts, 'bot stays paused');
+  await page.keyboard.press('Escape');
+  for (let step = 0; step < 4; step++) await answer(1);
+  await page.locator('.screen-result').waitFor();
+  check(await page.locator('#result-title').textContent() === 'Sen kazandın!' && await page.locator('.result-player strong').first().textContent() === '5', 'five correct answers wins collect mode');
+  await page.locator('.result-home').click();
+  await page.reload();
+  await page.locator('[data-mode="solo"]').click();
+  await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
+  check(await page.locator('[data-option="parrot"][data-value="koak"]').getAttribute('aria-pressed') === 'true' && await page.locator('[data-option="rule"][data-value="collect"]').getAttribute('aria-pressed') === 'true', 'setup choices survive reload');
+  for (const [width, height] of [[320,480],[360,640],[390,844],[844,390],[1366,768]]) {
+    await page.setViewportSize({ width, height });
+    await page.clock.runFor(100);
+    await page.locator('.setup-start').scrollIntoViewIfNeeded();
+    const layout = await page.evaluate(() => ({ width:innerWidth, scrollWidth:document.documentElement.scrollWidth, dialog:document.querySelector('dialog[open]').getBoundingClientRect().toJSON() }));
+    check(await page.locator('.setup-start').isVisible() && layout.scrollWidth <= width, `setup reachable without horizontal overflow at ${width}x${height}: ${JSON.stringify(layout)}`);
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator('dialog.modal').evaluate(el => el.scrollTo(0,0));
+  await page.screenshot({ path: 'test-results/setup/setup-mobile.png' });
+  await page.keyboard.press('Escape');
+  await page.locator('[data-mode="local"]').click();
+  await page.locator('dialog[data-kind="setup"][open]:not(.is-preparing)').waitFor();
+  check(await page.locator('.parrot-options').count() === 0, 'local setup keeps human opponents');
+  await page.locator('[data-option="rotating"]').click();
+  await page.locator('.setup-start').click();
+  await page.locator('.screen-game:not(.is-preparing)').waitFor();
+  check(await page.locator('#board .symbol:enabled').count() === 6, 'both players can select in local mode');
+  const own = await page.locator('[data-owner="0"]').boundingBox();
+  const other = await page.locator('[data-owner="1"]').boundingBox();
+  check(own.y > other.y, 'mobile places opponent above and own card below');
+  await page.screenshot({ path: 'test-results/setup/game-mobile.png' });
+  for (const [width,height] of [[320,480],[360,640],[390,844],[844,390],[1366,768]]) {
+    await page.setViewportSize({width,height});
+    await page.clock.runFor(100);
+    check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `game has no horizontal overflow at ${width}x${height}`);
+  }
+  await page.clock.fastForward(91000);
+  check(await page.locator('.screen-game').count() === 1 && (await page.locator('#timer').textContent()).startsWith('1:'), 'match continues past 90 seconds until the target is reached');
+  for (const owner of [0,1,0,1,0]) await answer(owner);
+  check(await page.locator('.screen-game').count() === 1, 'five total rounds do not end a five-correct-answer match at 3–2');
+  await answer(0); await answer(0);
+  await page.locator('.screen-result').waitFor();
+  check(await page.locator('#result-title').textContent() === '2. Oyuncu kazandı!', 'local opponent wins on its fifth correct answer');
+  await page.locator('.result-home').click();
+  await page.locator('[data-mode="local"]').click();
+  await page.locator('[data-option="winTarget"][data-value="20"]').click();
+  await page.locator('[data-option="rule"][data-value="empty"]').click();
+  await page.locator('.setup-start').click();
+  await page.locator('.screen-game:not(.is-preparing)').waitFor();
+  check(await page.locator('.game-progress, #progress-caption, .scoreboard .player-score small').count() === 0, 'game hides the lower goal panel and score captions');
+  const wrong = await page.locator('#board').evaluate(board => {
+    const right = [...board.querySelectorAll('[data-owner="1"] .symbol')].map(el => el.dataset.symbol);
+    return [...board.querySelectorAll('[data-owner="0"] .symbol')].find(el => !right.includes(el.dataset.symbol)).dataset.symbol;
+  });
+  await page.locator(`[data-owner="0"] [data-symbol="${wrong}"]`).click();
+  check(await page.locator('#score-left').textContent() === '0', 'wrong answers do not advance the target');
+  await page.clock.runFor(400);
+  for (let point = 0; point < 19; point++) await answer(0);
+  check(await page.locator('.screen-game').count() === 1 && await page.locator('#score-left').textContent() === '19', '20-point match continues through 19 correct answers');
+  await answer(0);
+  await page.locator('.screen-result').waitFor();
+  check(await page.locator('.result-player strong').first().textContent() === '20', '20th correct answer ends the match at exactly 20');
+  check(arenaWrites.length === 0, 'signed-in solo and same-device matches never submit ranking awards or create server rooms');
+  check(errors.length === 0, `no browser errors: ${errors.join('; ')}`);
+  console.log(`${checks} checks passed`);
+} finally { await browser.close(); await api.close(); }

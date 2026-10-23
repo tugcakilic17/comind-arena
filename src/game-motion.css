@@ -4,6 +4,7 @@
 .phaser-ready .symbol,.phaser-ready .symbol:not(:disabled):hover,.phaser-ready .symbol:not(:disabled):active,.phaser-ready .symbol.matched{scale:1}
 .phaser-ready .symbol.wrong{animation:none}
 .illustrated-game .symbol,.illustrated-game .symbol:not(:disabled):hover,.illustrated-game .symbol.matched,.illustrated-game .symbol.wrong{background:transparent;box-shadow:none;scale:1}
+.play-panel:not(.phaser-ready) .symbol.wrong .game-symbol-art{filter:sepia(.55) saturate(1.5) hue-rotate(320deg)}
 
 .illustrated-game.is-paused .avatar-cheer{animation-play-state:paused}
 .game-cards{will-change:transform,opacity}
@@ -15,8 +16,6 @@
 
 /* Result artwork is decorative; the content follows normal document flow. */
 #app.screen-result{height:100dvh;min-height:0}
-.screen-result .forest-background{background-image:url('/assets/forest-clearing-v1.webp');filter:none}
-.screen-result .forest-background::after{background:radial-gradient(ellipse at 50% 55%,#fff9e320,transparent 65%)}
 .screen-result .site-header.account-header{position:absolute;z-index:2;top:8px;left:50%;translate:-50% 0;width:calc(100% - clamp(28px,10vw,120px));min-height:0;margin:0;pointer-events:none}
 .screen-result .site-header .brand.home-brand{width:clamp(180px,18vw,300px);height:clamp(64px,6vw,102px);pointer-events:auto}
 .screen-result .site-header nav>.account-button{width:clamp(154px,13vw,220px);height:clamp(58px,4.5vw,78px);pointer-events:auto}

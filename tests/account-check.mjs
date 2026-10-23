@@ -8,6 +8,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1148, height: 636 }, reducedMotion: 'reduce' });
   const errors = [];
   const externalRequests = [];
+  await page.route('**/api/auth/me', route => route.fulfill({ json: { user: null, configured: false } }));
   page.on('pageerror', error => errors.push(error.message));
   page.on('request', request => { if (!request.url().startsWith('http://127.0.0.1:5174/')) externalRequests.push(request.url()); });
   await page.goto('http://127.0.0.1:5174/');
@@ -32,8 +33,9 @@ try {
     await page.screenshot({ path: `test-results/account-v34-${width}-${height}.png` });
   }
   await page.locator('[data-action="google-signin"]').click();
+  await page.locator('.account-status').waitFor({ state: 'visible' });
   assert.equal(await page.locator('.account-status').isVisible(), true);
-  assert.ok(await page.locator('.account-status').textContent().then(text => text.includes('yakında')));
+  assert.ok(await page.locator('.account-status').textContent().then(text => text.includes('ulaşılamıyor')));
   assert.ok(await page.locator('.account-content').evaluate(el => el.getBoundingClientRect().bottom <= innerHeight), 'provider availability notice fits short screens');
   await page.screenshot({ path: 'test-results/account-v34-google-status-landscape.png' });
   await page.keyboard.press('Escape');
@@ -42,7 +44,7 @@ try {
 
   await page.setViewportSize({ width:1148, height:636 });
   await page.locator('[data-action="account"]').click();
-  assert.equal(await page.locator('.account-status').isVisible(), false, 'opening resets the availability notice');
+  assert.equal(await page.locator('.account-status').isVisible(), true, 'a service failure remains explained when reopening');
   for (let index=0; index<5; index++) {
     await page.keyboard.press('Tab');
     assert.ok(await page.locator('dialog.modal').evaluate(dialog => dialog.contains(document.activeElement)), 'keyboard focus stays inside dialog');
@@ -56,7 +58,7 @@ try {
   assert.equal(await page.locator('.forest-background').evaluate(el => getComputedStyle(el).backgroundImage), originalBackground);
   assert.equal(await page.locator('.illustrated-mode').count(), 3);
   assert.deepEqual(errors, []);
-  assert.deepEqual(externalRequests, [], 'UI does not pretend to contact Google');
+  assert.deepEqual(externalRequests, [], 'an unavailable backend never redirects to Google');
   console.log('PASS account layout, backdrop blur, provider notice, keyboard focus, all dismissal controls and unchanged home');
 } finally {
   await browser.close();

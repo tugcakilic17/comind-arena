@@ -50,7 +50,7 @@ try {
   await page.keyboard.press('Escape');
   console.log('PASS sound and difficulty survive reload');
 
-  for (const kind of ['leaderboard', 'invite']) {
+  for (const kind of ['leaderboard']) {
     await page.locator(kind === 'invite' ? '[data-mode="online"]' : '[data-action="leaderboard"]').click();
     await page.locator('dialog.modal:not(.is-preparing)').waitFor();
     for (const [width, height] of [[1920,869],[1366,768],[390,844],[360,640],[844,390],[360,480]]) {
@@ -66,9 +66,9 @@ try {
     await page.keyboard.press('Escape');
   }
   await page.locator('[data-mode="online"]').click();
-  await page.locator('.community-ready').click();
-  await gameReady(page);
-  assert.equal(await page.locator('[data-side="right"]').count(), 6, 'invite leads to a playable local match');
+  await page.locator('.online-shell').waitFor();
+  assert.equal(await page.getByRole('button',{name:'Google ile devam et',exact:true}).count(),1,'friend match requires a real account');
+  await page.locator('[data-action="online-home"]').click();
   assert.deepEqual(errors, []);
   await page.close();
 
@@ -110,5 +110,5 @@ try {
   await privatePage.locator('[data-mode="local"]').click();
   await gameReady(privatePage);
   await privatePage.close();
-  console.log('PASS loading cancellation, six community layouts, invite-to-local flow and unavailable browser storage');
+  console.log('PASS loading cancellation, leaderboard layouts, friend account requirement and unavailable browser storage');
 } finally { await browser.close(); }

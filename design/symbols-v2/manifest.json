@@ -1,0 +1,181 @@
+{
+  "sourceFolder": "C:\\Users\\tugca\\Desktop\\Kelime-Görsel Seti (1)",
+  "generatedFolder": "C:\\Users\\tugca\\.codex\\generated_images\\01a16858-48c3-7a32-bbe3-4b5d97074483",
+  "themes": {
+    "koak": {
+      "columns": 4,
+      "rows": 3,
+      "names": [
+        "Kaptan şapkası",
+        "Denizci fuları",
+        "Pusula",
+        "Denizci dürbünü",
+        "Çapa",
+        "Can simidi",
+        "Deniz kabuğu",
+        "Denizyıldızı",
+        "Dümen",
+        "Yengeç",
+        "Cam şişe"
+      ],
+      "objects": "Row 1: a white captain sailor cap with navy blue band and tiny gold anchor badge; a bright turquoise neckerchief tied in a single simple knot; a round brass compass with one red needle; a short brass-and-brown collapsible spyglass.\nRow 2: a single navy-blue anchor; a red-and-white lifebuoy with no rope; a peach scallop seashell; an orange five-armed starfish.\nRow 3: a plain brown wooden ship steering wheel with six spokes; a single red crab with two claws; a corked turquoise clear glass bottle with NO letter inside; EMPTY transparent final cell.",
+      "sheet": "exec-aeb88a19-1a42-440e-8e91-ec5ccdd4efd0.png",
+      "existing": [
+        [
+          "balık",
+          "Balık"
+        ],
+        [
+          "kayık",
+          "Kayık"
+        ],
+        [
+          "yelken",
+          "Yelken"
+        ],
+        [
+          "kova",
+          "Kova"
+        ]
+      ]
+    },
+    "kofen": {
+      "columns": 4,
+      "rows": 2,
+      "names": [
+        "Yeşil fular",
+        "Kaşif şapkası",
+        "Kaşif çantası",
+        "Büyüteç",
+        "Su matarası",
+        "Kozalak",
+        "Meşe palamudu"
+      ],
+      "objects": "Row 1: a green neckerchief tied in one simple knot with a small round plain gold clasp; a tan safari explorer hat with a green band and ONE small green leaf, NO feathers; a plain brown small cross-body explorer satchel with green flap and one rounded brass buckle; a hand magnifying glass with a thick gold rim and brown handle.\nRow 2: a transparent turquoise water bottle with green lid and small carry loop; one brown pinecone with only a few large readable scales; a single brown acorn with green-brown cap; EMPTY transparent final cell.",
+      "sheet": "exec-aef84cb8-f2a8-4a91-8562-7857527c8e95.png",
+      "existing": [
+        [
+          "yaprak",
+          "Yaprak"
+        ],
+        [
+          "mantar",
+          "Mantar"
+        ],
+        [
+          "çadır",
+          "Çadır"
+        ],
+        [
+          "fener",
+          "Kamp feneri"
+        ],
+        [
+          "çiçek",
+          "Çiçek"
+        ],
+        [
+          "kelebek",
+          "Kelebek"
+        ],
+        [
+          "kaya",
+          "Kaya"
+        ],
+        [
+          "pati",
+          "Pati izi"
+        ]
+      ]
+    },
+    "komat": {
+      "columns": 5,
+      "rows": 2,
+      "names": [
+        "Kırmızı fular",
+        "Abaküs",
+        "Sayı küpleri",
+        "Gönye",
+        "Kırmızı gözlük",
+        "Zar",
+        "İletki",
+        "Pergel",
+        "Hesap makinesi",
+        "Artı işareti"
+      ],
+      "objects": "Row 1: a red neckerchief tied in one simple knot with plain small round gold clasp; a wooden abacus with three rows of large colorful beads; one triangular stack of three chunky number blocks showing only the digits 1,2,3; a single orange triangular set-square ruler; a pair of simple round red eyeglasses.\nRow 2: a single ivory six-sided dice with large dark blue pips; one cyan semicircle protractor with a few clear ticks but NO tiny numbering; a single blue-and-yellow drawing compass tool with two legs; a small purple calculator with a blank light screen and large colorful keys; a freestanding chunky green plus sign, no tile.",
+      "sheet": "exec-9c6d1ca1-0112-43f2-8650-ea960db5506c.png",
+      "existing": [
+        [
+          "cetvel",
+          "Cetvel"
+        ],
+        [
+          "kalem",
+          "Kalem"
+        ],
+        [
+          "küre",
+          "Dünya küresi"
+        ],
+        [
+          "saat",
+          "Saat"
+        ],
+        [
+          "kağıt",
+          "Kâğıt"
+        ]
+      ]
+    },
+    "kuik": {
+      "columns": 4,
+      "rows": 2,
+      "names": [
+        "Mavi fular",
+        "Hikâyeci şapkası",
+        "K madalyonu",
+        "Hikâye kitabı",
+        "Kulaklık",
+        "Mikrofon",
+        "Müzik notası"
+      ],
+      "objects": "Row 1: a turquoise neckerchief with one simple knot and small orange clasp; a soft white storyteller sailor cap with blue band and one small orange feather; a round orange-and-turquoise medallion showing only one capital K in the center, no necklace; one closed turquoise story book with an orange spine and a single large shell emblem on the cover, NO letters or title.\nRow 2: a pair of chunky orange and turquoise over-ear headphones; one simple turquoise hand microphone with silver round mesh head; a single large purple eighth music note; EMPTY transparent final cell.",
+      "sheet": "exec-81b2bd84-b4ea-4ee7-bbcf-e11a1cc02462.png",
+      "existing": [
+        [
+          "zarf",
+          "Zarf"
+        ],
+        [
+          "kaset",
+          "Kaset"
+        ],
+        [
+          "radyo",
+          "Radyo"
+        ],
+        [
+          "piyano",
+          "Piyano"
+        ],
+        [
+          "çan",
+          "Çan"
+        ],
+        [
+          "ıslık",
+          "Düdük"
+        ],
+        [
+          "zurna",
+          "Zurna"
+        ],
+        [
+          "mum",
+          "Mum"
+        ]
+      ]
+    }
+  }
+}

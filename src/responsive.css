@@ -16,6 +16,13 @@ body{min-width:320px}
 }
 
 /* Results grow with their content on short screens; every action stays reachable. */
+@media(max-width:900px) and (pointer:coarse),(max-width:700px),(max-height:500px) and (max-width:1000px){
+ .illustrated-game .game-cards>.surface-woodenStage,
+ .illustrated-game .player-card>.surface-woodenStage,
+ .illustrated-game .game-cards>.surface-seaPierWide,
+ .illustrated-game .player-card>.surface-seaPierCompact{display:none!important}
+ .illustrated-game .hex-card::before,.illustrated-game .hex-card::after{display:none}
+}
 @media(max-height:600px) and (max-width:600px){
  #app.screen-result{height:auto;min-height:100dvh;overflow:visible}
  .screen-result main{height:auto;min-height:100dvh;padding-top:100px}
@@ -48,31 +55,10 @@ body{min-width:320px}
  .modal:is([data-kind="leave"],[data-kind="pause"]) .leave-description{font-size:15px;margin-top:10px}
  .leave-continue{height:auto;min-height:48px;margin-top:16px;padding:12px;font-size:19px}
  .leave-home{height:auto;min-height:44px;margin-top:8px;font-size:15px}
- .help-content{min-height:0;padding:44px 24px 48px}
- .help-practice{width:min(100%,300px);margin-top:12px}
- .modal[data-kind="help"] h2{font-size:28px}
- .modal[data-kind="help"] .help-description{font-size:15px}
- .help-rules{margin-top:12px;padding-top:12px}
- .help-ready{margin-top:14px;min-height:44px;height:auto}
- .settings-content{padding:44px 26px 28px}
- .modal[data-kind="settings"] h2{font-size:28px}
- .modal[data-kind="settings"] .settings-description{font-size:14px;margin-top:6px}
- .settings-level{margin-top:14px}
- .settings-level h3{font-size:18px}
- .modal[data-kind="settings"] .level-options{margin-top:10px}
- .modal[data-kind="settings"] .level-options button{min-height:60px;font-size:16px}
- .modal[data-kind="settings"] .settings-level-hint{min-height:2.8em;font-size:13px;margin-top:8px}
- .modal[data-kind="settings"] .settings-sound{margin-top:10px;padding-top:12px}
- .settings-ready{margin-top:16px;min-height:44px;height:auto}
+
 }
 
-@media(max-height:430px) and (min-width:450px){
- .settings-content{padding:36px 26px 24px}
- .modal[data-kind="settings"] h2{font-size:26px}
- .settings-level{margin-top:10px}
- .modal[data-kind="settings"] .settings-level-hint{min-height:2.2em}
- .settings-ready{margin-top:12px}
-}
+
 
 @media(max-height:500px) and (orientation:landscape) and (max-width:600px){
  .illustrated-game .game-toolbar{grid-template-columns:44px minmax(0,1fr) 88px;gap:4px}
@@ -86,35 +72,6 @@ body{min-width:320px}
  .illustrated-game .timer-block strong{font-size:23px}
  .illustrated-game .timer-block .game-inline-icon{width:17px;height:17px}
  .illustrated-game .game-cards{width:94%;gap:12px}
-}
-
-/* A narrow landscape window needs the same two-column help as a wide one. */
-@media(max-height:500px) and (min-width:450px) and (max-width:600px){
- .help-content{display:grid;grid-template-columns:1fr 1fr;column-gap:14px;padding:38px 24px 24px}
- .modal[data-kind="help"] h2,.modal[data-kind="help"] .help-description{grid-column:1/-1;max-width:none}
- .help-practice{grid-column:1;grid-row:3/5;gap:6px;align-self:center}
- .help-card-label{font-size:11px;gap:3px;white-space:nowrap}
- .help-card-label::before{width:6px;height:6px}
- .help-rules{grid-column:2;margin-top:10px;padding-top:10px}
- .help-limits{font-size:12px;gap:8px}
- .help-limits .game-inline-icon{width:17px;height:17px}
- .modal[data-kind="help"] .help-rules p{font-size:12px}
- .modal[data-kind="help"] .help-rules .help-together{font-size:11px}
- .help-ready{grid-column:2;width:100%;font-size:16px;gap:6px;justify-self:center}
-}
-
-@media(max-height:430px) and (min-width:450px) and (max-width:600px){
- .settings-content{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;padding:36px 24px 24px}
- .modal[data-kind="settings"] h2{grid-column:1/-1}
- .modal[data-kind="settings"] .settings-description{display:none}
- .settings-level{grid-column:1;grid-row:2/4;margin:0}
- .settings-level h3{font-size:16px}
- .modal[data-kind="settings"] .level-options{gap:5px}
- .modal[data-kind="settings"] .level-options button{font-size:14px;padding-inline:0}
- .modal[data-kind="settings"] .settings-level-hint{font-size:12px;min-height:2.8em}
- .modal[data-kind="settings"] .settings-sound{grid-column:2;grid-row:2;flex-direction:column;gap:8px;margin:0;padding:0;border:0}
- .settings-ready{grid-column:2;grid-row:3;width:100%;margin:0;font-size:18px;gap:8px}
- .settings-ready .icon{width:22px;height:22px}
 }
 
 @media(max-width:380px){

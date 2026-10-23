@@ -3,5 +3,10 @@ dist/
 .env
 .env.*
 !.env.example
+!deploy/.env.production.example
 *.local
 test-results/
+.local/
+release/
+*.dump
+*.sql.gz

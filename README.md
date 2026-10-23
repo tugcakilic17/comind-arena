@@ -8,10 +8,31 @@ Node.js 22.12 veya üstü gerekir. Bu klasörde terminal açın:
 
 ```sh
 npm install
-npm run dev
+npm run dev:full
 ```
 
-Tarayıcı: http://127.0.0.1:5174
+Tarayıcı: http://localhost:5174
+
+Her iki oyunu birlikte açmak için `npm run dev:all` veya `Baslat.cmd` kullanın: Arena **http://localhost:5174/**, Keşif Dünyası **http://localhost:5173/**. Keşif Dünyası başka klasördeyse `KESIF_PROJECT_DIR` ile proje kökünü belirtin.
+
+`dev:full`, yerel PostgreSQL'i (yalnızca 127.0.0.1:55432), hesap backend'ini (3001) ve Vite'ı (5174) birlikte başlatır. İlk açılışta veritabanı hazırlanır. Veriler ve yerel veritabanı parolası Git'e eklenmeyen `.local/` dizininde kalır. `.env.example` dosyasını `.env` olarak kopyalayarak Google istemci bilgilerini tanımlayın. Yalnızca arayüz geliştirmek için `npm run dev` kullanılabilir.
+
+Google girişinin kurulumu, ortak hesap yapısı ve sunucuya geçiş: [design/AUTH-SETUP.md](design/AUTH-SETUP.md).
+
+**Sunucuya teslim:** `npm run release` arayüz + backend + ortak oyun modülleri + migration'ları içeren, gizli bilgi barındırmayan bir `release/comind-arena-...` klasörü hazırlar. Ana alan adına yayın için `npm run release -- --base=/` kullanın. Kurulum, Docker/HTTPS ve PostgreSQL adımları: [deploy/README.md](deploy/README.md). Canlı sunucuya dağıtım yapılmadı.
+
+## Arkadaş davetini kendin dene
+
+`Arkadas_Testini_Ac.cmd` dosyasına çift tıkla veya `npm run demo:friends` çalıştır. Üç ayrı Edge penceresinde Ada, Bora ve Cem test hesapları açılır. Bunlar birbirine arkadaş olarak eklenmiştir; gerçek hesabın ve kayıtların kullanılmaz. Test için ayrıca geliştirme sunucusu başlatman gerekmez.
+
+1. Ada penceresinde üç oyuncu ve ilk beş doğru seçili gelir. **Oda oluştur** düğmesine bas. Odada üç oyuncu yeri ve paylaşılabilir davet bağlantısı görünür.
+2. **Arkadaş listemden davet et** üzerinden Bora ve Cem'i davet et. Diğer pencerelerde **Arkadaşlarım → Oyun davetleri → Katıl** yolunu izle. Alternatif olarak bağlantıyı kopyalayıp diğer test penceresinin adres çubuğunda açabilirsin.
+3. Üç pencerede de **Hazırım, başlayalım** düğmesine bas. Geri sayımın ardından herkes aynı iki altıgendeki ortak simgeyi arar. Üç oyuncunun puanı ayrı gösterilir; doğruyu ilk seçen puan alır, ilk beşe ulaşan kazanır.
+4. İki veya dört kişiyi denemek için yeni oda açarken oyuncu sayısını değiştir. Bu başlatıcı üç hesap açtığından dört kişilik oda dördüncü oyuncuyu bekleme görünümünü gösterir.
+
+Testi bitirmek için üç test penceresini kapat veya açılan terminalde Ctrl+C tuşlarına bas. Geçici hesaplar ve oda kayıtları silinir. Test bağlantıları bu bilgisayardaki test ortamında çalışır; başka bir cihazdan gerçek davet için uygulamanın internete açık sunucuda çalışması gerekir.
+
+Otomatik kontrol: `node scripts/friends-demo.mjs --check` davet gönderme, katılma, üç kişinin hazırlanması ve ortak skor güncellemesini doğrular.
 
 Windows’ta `Baslat.cmd` dosyasına çift tıklamak da geliştirme sunucusunu başlatır. Açılan terminal pencereyi kapatana veya Ctrl+C tuşlarına basana kadar çalışır.
 
@@ -44,22 +65,22 @@ Geliştirme sunucusu açıkken, kurulu Playwright paketinin dizinini `COMIND_PLA
 - Bilgisayara karşı üç hızda oynama; rakip Kofen süre sonunda eşleşmeyi bulur.
 - Aynı cihazda iki kişi: her oyuncu kendi kartındaki ortak simgeyi seçer. Dokunmatik çoklu giriş desteklenir; ilk işlenen doğru seçim puan alır.
 - 90 saniye veya toplam 10 tur; yüksek puan kazanır. Mola, yeniden oynama ve sonuç ekranı.
-- Maç sonunda kazanan, maç skoru ve yeniden oynama. Kofen ve yan yana modları genel sıralama puanı kazandırmaz; liderlik tablosu rekabetçi modla birlikte açılacak.
+- Arkadaşını Çağır: 2–4 ayrı hesapla davet bağlantısı, kopyalama ve WhatsApp paylaşımı; 5/10/15/20 doğru hedefi ve 3–8 simge seçimi. Kullanıcı ID’siyle onaylı arkadaşlık ve oda daveti. Hedefe ilk ulaşan kazanır; liderlik puanı yalnızca arkadaş maçlarından kazanılır. 2 kişide +30/−10, 3 kişide +30/+10/−10, 4 kişide +30/+10/0/−10 uygulanır. Eşit skorda aynı sıra ve puan paylaşılır; toplam sıfırın altına inmez.
 - Ses açma/kapama, klavye erişimi, modal pencereler ve küçük ekran düzeni.
 
 ## Sonraki aşama
 
-Backend öncesi güncel kontrol ve geçiş notları: [design/FRONTEND-AUDIT.md](design/FRONTEND-AUDIT.md). Oyun, gerekli WebP görselleri decode edilip animasyon katmanı (veya sabit görünüm) hazır olduktan sonra başlar. Yükleme hatasında tekrar deneme/iptal sunulur. Ses ve zorluk bu tarayıcıda saklanır. Liderlik tablosunda 30 örnek oyunculu tasarım önizlemesi vardır: dokuz satır, merkezde 15. sıradaki “Sen”, ilk/önceki/sonraki/son sıra ve kendi sırana dönüş düğmeleri. Gerçek sıralama henüz bağlı değildir.
+Güncel hesap/maç kuralları: [design/ONLINE-ACCOUNTS.md](design/ONLINE-ACCOUNTS.md). Liderlik tablosu PostgreSQL'deki tamamlanmış maçlardan okunur. İlk/önceki/sonraki/son sıra ve kendi sırana dönüş çalışır. Henüz maç yoksa gerçek boş durum, ağ hatasında yeniden deneme gösterilir; örnek oyuncu yoktur.
 
-**Henüz backend, hesap, çevrim içi oda veya gerçek ortak liderlik tablosu yoktur.** Arayüzde bu alanlar açıkça “yakında” olarak belirtilir. Gerçek hesap veya davet bağlantısı oluşturulmaz.
+**Google hesabı, gerçek arkadaş odaları, sunucu puanı, liderlik ve Keşif Dünyası ortak hesap bağlantısı yerelde çalışır.** GitHub Pages yalnızca statik dosya sunduğu için mevcut Pages yayını bu backend'i çalıştıramaz; canlı kullanım firmanın sunucusunda yayın gerektirir.
 
-Üyelik tasarlanırken CoMind Arena ve Keşif Dünyası için tek kimlik sistemi kullanılacak. Aynı veritabanında ortak `profiles` tablosu, oyunlara özgü ayrı tablo/şemalar düşünülebilir. Keşif Dünyası’nın bütün veritabanını şimdi kurmak gerekmez. İki ayrı site alan adının oturum açma yönlendirmeleri ayrıca tanımlanmalıdır; ortak hesap, siteler arası kendiliğinden oturum aktarımı anlamına gelmez.
+Ortak hesaplar `accounts.users` içinde tutulur; Google'ın sabit `sub` kimliği eşsizdir. Keşif Dünyası aynı backend'e bağlanır; hesap adı, Arena puanı ve hesaba özel keşif kayıtları kullanılır. Bu kurulum ortak çerez için aynı site adını kullanır: yerelde localhost'un iki portu, üretimde aynı HTTPS alan adının iki yolu.
 
 Sonraki geliştirmeler:
 
-1. Ortak kimlik sağlayıcı ile e-posta/Google kayıt ve giriş, doğrulama ve parola sıfırlama.
-2. Kullanıcı ve oyun verileri için erişim kuralları. Liderlik puanları sunucuda doğrulanmalı.
-3. Süresi sınırlı davet kodlarıyla çevrim içi odalar; sunucu tarafından yürütülen tur, zaman ve puan otoritesi.
+1. Firmanın sunucusunda iki oyunu, API'yi, PostgreSQL'i ve HTTPS'i yayınlama; üretim Google dönüş adresini tanımlama.
+2. Gerçek trafik ölçümlerine göre yoklama sıklığı, eşzamanlı kapasite ve bakım ayarlarını değerlendirme.
+3. Firma için yedekleme, izleme ve hesap sahipliğini tamamlama.
 4. İlgili bilgilendirme metinleri, onay kayıtları ve yaş/veli onayı akışının kesinleştirilmesi. Hukuki metinler bu prototipte oluşturulmadı.
 
 ## Tasarım
@@ -95,3 +116,48 @@ V26 sonuç ekranı kullanıcının yapraklı krem panel referansına göre yenil
 V27'de insan oyuncuya oyuna özel, aksesuarı olmayan lavanta/mor papağan atandı; normal ve sevinçli pozları aynı 3B estetikte yeniden üretildi. Oyun barı, skor, mola ve sonuçlar bu iki pozu kullanır. İlk oyuncunun puan/nokta renkleri tekrar mora döndü. Sonuç ekranı artık ana sayfanın ormanını kullanır; oyun içi sade fon korunur. Sonuç kompozisyonu baştan ölçeklendi: büyük ekranda daha geniş/yüksek panel, daha büyük başlık/skor/avatarlar ve ferah aralıklar; yeni ince çerçeveli skor şeridi kullanılır. Gerçek 1920×869 görünümünde panel yaklaşık 690×605 pikseldir. Tam varlık yolları ve üretim istemleri public/assets/game-ui/GENERATION-GAME-V27.md içindedir.
 
 V28'de sonuç ekranının kompozisyonu yenilendi. Yeni boş krem panel ve yazısız yeşil buton ImageGen ile üretildi. Kazanan panelin arkasından görünür; iki skor portresi aynı çapta yuvarlak kırpılır. İç içe altın skor çerçevesi kaldırıldı. Başlık, açıklama, skorlar ve düğmeler normal içerik akışında yerleşir; buton metni rasterla birlikte esnemez. Ana ekran bağlantısı daha hafif ev simgeli metindir. Ana sayfa ormanı, mor oyuncu/yeşil Kofen kimlikleri ve maç akışı korunur. Kaynaklar ve istemler public/assets/game-ui/GENERATION-GAME-V28.md içindedir.
+
+
+## Oyun hazırlığı ve kart modları
+
+Kofen’le Oyna ve Yan Yana Oynayalım artık önce hazırlık panelini açar. Tek kişilik oyunda Koak, Komat, Kofen veya Kuik ve zorluk seçilir. Her iki akışta altıgen başına 3–8 simge, Elini Bitir / Kart Topla ve saat yönünde dönüş seçilebilir. Ayrıca 5/10/15/20 doğru cevap hedefi seçilir (varsayılan 10); simge sayısı bu hedeften bağımsızdır. Her oyuncu hedef kadar kartla başlar. Her görünen kart çifti tam bir ortak simge içerir. Eski cardCount tercihi symbolCount alanına taşınır. Seçimler yerel tercihlerde saklanır.
+
+Elini Bitir, doğru eşleşmede oyuncunun üst kartını rakibin destesinin altına aktarır. Kart Topla, rakibin üst kartını oyuncunun destesinin altına alır. İki modda da seçilen doğru cevap hedefine **ilk ulaşan oyuncu** kazanır; toplam tur sayısı ve kart farkı oyunu bitirmez. Yanlış seçim puan getirmez. Süre göstergesi geçen zamanı sayar, 90 saniyede maç kesilmez; duraklatma süreyi ve botu durdurur. Üst sayaçlar ve sonuç ekranı her oyuncunun doğru cevap sayısını gösterir. Büyük hedeflerde deste tekrar kullanılabilir; görünen iki üst kartın aynı olması engellenir. Bu iki yerel oyun genel sıralamaya puan yazmaz. Mevcut çevrimiçi maç kuralları ayrıdır.
+
+Hazırlık paneli masaüstünde iki sütunlu seçeneklerle tek pencereye sığar; dar ekranlarda dokunarak kaydırılır. İnce sıcak renkli kaydırma çubuğunda ok düğmeleri yoktur. Seçenekler hover sırasında hafifçe yükselir, seçimde kısa bir zıplama yapar; papağanlar selamlama hareketiyle tepki verir. Hareket azaltma tercihi korunur. Mavi Koak, kırmızı Komat, yeşil Kofen ve küçük turuncu Kuik kendi şeffaf görsellerini kullanır. Seçim kartlarının kenarlıkları ve gölgeleri hafiftir; isimler görsellerden ayrı boşlukla yerleşir. Kısa masaüstü pencerelerinde de 600 piksel yüksekliğe kadar panel kaydırmadan sığar. Oyun ve sonuç ekranları seçimdeki ayakta duran görsel yerine normal ve iki kanadı kaldırılmış sevinç portrelerini kullanır; iki poz da oyun açılmadan yüklenir. Komat/Kofen mevcut pozlarını, Koak/Kuik bunlarla uyumlu yeni pozlarını kullanır. Kaynaklar ve tam istemler `public/assets/characters/GENERATION-POSES-V2.md` içindedir. Built-in image_gen kaynakları, WebP kopyaları ve tam istemler `public/assets/characters/GENERATION.md` içindedir.
+
+Simgeler her dağıtımda sabit yuvalar yerine kart yüzeyine rastgele ve birbirini kapatmadan yerleşir; küçük/büyük boyutlar ve 0–359 derece açılar bağımsızdır. Yerleşim simge sayısına ve görselin gerçek en-boy oranına göre ölçeklenir. Her kart açık küçük/orta/büyük boyut kademeleri içerir; en büyük simge en küçüğün yaklaşık iki katıdır. Çakışma ve kenar payı, atlasın alfa kanalından ölçülmüş sekiz kenarlı görünür simge sınırlarıyla kontrol edilir. Böylece şeffaf görsel köşeleri gereksiz alan ayırmaz ve standart simge boyutu daha büyük tutulur; sınır verileri src/symbol-outlines.js içindedir. Yerleşim sınırı iki kart görselinin gerçek iç yüzeyinden ölçülür; düz üst/alt kenarlar da kullanılabilir alana dahildir. Kompozisyon seçimi hem iç bölgelerdeki hem de her kenardaki boşluğu değerlendirir. Simgeler önce yüzeye yayılır, ardından kendi çevrelerindeki alana göre büyütülür; açıları ve belirgin küçük/büyük boyut farkı korunur. Her adımda görünür simge sınırları ve kenar payı yeniden kontrol edilir. Hover/tıklama hareketi başlangıç açısından bağımsız küçük bir açı farkını animasyonlandırır; Phaser’ın ±180 derece normalizasyonu tam tur dönüşe neden olmaz. Önceki Phaser hover ve eşleşme animasyonları dönüş açıkken de korunur. Kart başına Phaser kapsayıcısı, kart sanatı ve yerel dokunma alanlarıyla aynı dönüşü izler; simgelerin kendi animasyonları bundan bağımsız kalır. Kart aktarımı iki modun yönünü izler, duraklatmada durur ve ekran değişiminde temizlenir. Hareket azaltma tercihi sürekli dönüşü ve aktarım hareketini kapatır. Dikey mobil görünümde rakip üstte, oyuncu alttadır; kısa telefonlarda oyun dikey kaydırılabilir.
+
+Ayarlar artık Profilim, ses ve hediye kodu formunu içerir. `POST /api/gifts/redeem`, biçim ve istek kaynağı kontrolü ile hız sınırı uygular; bütün geçerli kodlar için `status: inactive` döndürür. Aktif kampanya, ödül kaydı veya hediye dağıtımı yoktur. İleride gerçek kampanyalar eklenirken kodun tek kullanımlılığı, hesap yetkilendirmesi ve ödül verme işlemi sunucuda aynı veritabanı işlemi içinde uygulanmalıdır. Bu sunucu değişikliği çalışan API sürecinin yeniden başlatılmasıyla devreye girer. Papağanların özel ortam temaları sonraki aşamadır.
+
+Doğrulama: `npm test`, `npm run build`, `npm run test:setup`, `npm run test:setup-motion`, `npm run test:parrots`, `npm run test:symbols`, `npm run test:responsive`. Yeni tarayıcı kontrolleri için geliştirme sunucusu 5174 portunda çalışmalıdır. Eski sürümlere ait diğer tasarım kontrol betikleri önceki 10 tur / puan düzenine göre yazılmıştır.
+
+
+## Oyuncu profili ve kısa kullanıcı kodu
+
+Ayarlar, liderlik ve mola pencerelerindeki gerçek yapraklı krem paneli kullanır. Profil, ses ve hediye alanları mint, sarı ve şeftali kartlarıyla ayrılır; düğmelerde kısa hover/basma hareketleri bulunur. Profilin hesap düğmesi kartın altına hizalanır. Ana sayfadaki hesap düğmesinde ek yuva veya kapsül kullanılmaz; seçilen papağan şeffaf olarak adın yanında görünür.
+
+Her hesaba sunucuda benzersiz, kalıcı **4 harf + 4 rakam** kullanıcı kodu atanır; ayarlardan kopyalanabilir. İç UUID, ortak hesap/oturum/maç bağlantıları için korunur. `003-player-profile.sql`, mevcut hesapları ve oturumları koruyarak kodları doldurur. Kod çakışmaları tekrar denenir. Arkadaşlarım sekmesinde bu kodla istek gönderilir; alıcı kabul edince oda daveti gönderilebilir. Güncel akış [ONLINE-ACCOUNTS.md](design/ONLINE-ACCOUNTS.md) içindedir.
+
+Profilde **Düzenle** ile İnci (beyaz), Lavanta veya Pudra seçilebilir. Önizleme Kaydet'e kadar mevcut seçimi değiştirmez; Vazgeç geri alır. Giriş yapılmış hesaplarda `PATCH /api/auth/profile` seçimi kalıcı kaydeder; oturum, kaynak, seçenek ve hız sınırı sunucuda kontrol edilir. Misafir seçimi yalnız bu tarayıcıda saklanır. Kayıt başarısızsa eski seçim korunur ve tekrar denenebilir. Seçim hesap başlığında, yerel oyun ve sonuçlarda, kendi liderlik avatarında kullanılır; normal/sevinme görselleri oyun başlamadan yüklenir. Ortak Keşif hesabının UUID kimliği değişmez.
+
+Yeni renklerin PNG asılları, WebP kopyaları ve yerleşik imagegen promptları `public/assets/characters/GENERATION-PLAYER-COLORS-V1.md` içindedir. Doğrulama: `node --test tests/auth.test.js`, `node tests/auth-ui-check.mjs`, `npm run test:profile`, `npm run test:responsive`, `npm run build`.
+
+
+### Ana sayfa ve kaydırmasız ayarlar
+
+Ortadaki 6gen görseli kaldırıldı; erişilebilir ana başlık korunur. Üç oyun kartı mevcut alanı daha büyük kullanır. Masaüstü ve yatay ekranda yan yana, dar ekranlarda mevcut yüksekliğe göre iki sıra veya üç dikey kart görünür. Hesap adı ve seçilen papağan, oyundaki gerçek boyalı skor şeridi üzerinde gösterilir; papağan için ek daire/yuva kullanılmaz.
+
+Ayarların başlığı, açıklaması ve Tamam düğmesi ortadadır; mevcut küçük yeşil kuş üst çerçeveden bakar. Çerçevenin normalleştirilmiş görseli ayrı bir `overflow:clip` dekor katmanında tutulur; içerik kırpılmaz. Böylece raster görselin saydam tuval kenarları kaydırma çubuğu üretmez. Masaüstünde profil/ses/hediye yan yana kalır. Dar veya kısa ekranlarda Profilim, Ses ve Hediye bölüm düğmeleriyle tek bölüm gösterilir; tüm içerik gerçek ölçülerle ekrana sığar. Profil düzenleme aynı kartta kimlik detaylarının yerini alır. `npm run test:settings-fit`, oturum açılmış hesapta 26 ekran ölçüsünde normal/düzenleme/ses/hediye, kopyalama ve hediye yanıtı durumlarının hiçbirinde yatay/dikey kaydırma, dışarı taşan veya örtülü kontrol olmadığını kontrol eder. Genel responsive kontrolü de yardım ve ayarlarda kaydırmayı hata sayar.
+
+
+### Yüz portreleri ve profil rozeti
+
+Ana sayfadaki üç oyun kartı ölçülü biçimde küçültüldü; ortadaki 6gen görseli geri eklenmedi. Sağ üstteki rozet, gönderilen referanstaki yuvarlak altın portre halkası, krem isim levhası ve yaprak yerleşimiyle HTML/CSS olarak oluşturulur; örnekteki mavi karakter kopyalanmaz, kullanıcının seçtiği nötr papağan gösterilir. Profil, ayarlar ve renk seçicilerindeki görseller sonuç ekranındakiyle aynı %125 yüz kadrajını ve yuvarlak kırpmayı kullanır. Seçicilerde görünür İnci/Lavanta/Pudra isimleri yoktur; ekran okuyucular için renk açıklamaları korunur.
+
+Giriş yapılmışken sağ üstteki isim **Profilim** penceresini açar. Aynı profil kartı kısa oyuncu kodunu/kopyalamayı, papağan seçimini ve çıkış yapmayı içerir; giriş yapılmamış düğme Google girişini açmaya devam eder. Ayarlardaki Profilimi aç düğmesi de bu pencereye gider. Kaydet, Vazgeç, hata sonrası yeniden deneme ve mevcut oturum davranışları korunur. `test:profile`, `test:settings-fit` ve `tests/auth-ui-check.mjs` yeni profil penceresini ve portreleri de kapsar.
+
+
+### Arkadaş odaları
+
+Arkadaşını Çağır panelinde Oda oluştur / Arkadaşlarım sekmeleri bulunur; davet bağlantısı/kodu aynı ekrandaki Davetin mi var? kartından girilir. Panel dışına tıklamak açık bekleme odasından ayrılarak ana ekrana döner. Oda sahibi 2–4 kişi, 5/10/15/20 doğru ve 3–8 simge seçer. Bağlantı veya kodla katılım, kopyalama, WhatsApp paylaşımı, kullanıcı ID’siyle onaylı arkadaşlık ve uygulama içi oda daveti desteklenir. Herkes aynı iki kartta yarışır; doğru hedefine ilk ulaşan kazanır. Bu maçlar sıralamaya göre liderlik puanı üretir; aynı cihazdaki iki kişilik maçlar ve bilgisayara karşı maçlar üretmez. `005-ranking-losses.sql` imzalı puan değişimlerini destekler, mevcut kayıtları korur. Her sonuç tek kez işlenir ve kesinti mevcut toplam puanla sınırlanır. Yeni kontroller: `npm run test:online`, `node tests/friends-fit-check.mjs` (Vite açıkken).

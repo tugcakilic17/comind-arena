@@ -1,15 +1,14 @@
-/* The shared illustrated frame surrounds an automatic matching example. */
-.modal[data-kind="help"]{width:min(620px,calc(100vw - 24px));container-type:inline-size;max-width:none;max-height:none;margin:auto;translate:0 28px;padding:0;border:0;border-radius:32px;background:none;box-shadow:none;overflow:visible;color:#3d6042}
-.help-content{min-height:640px;padding:8cqw 8cqw 15cqw;display:flex;flex-direction:column;align-items:center}
-.modal[data-kind="help"] .help-mascot{width:min(26cqw,151px);top:max(-15.5cqw,-90px);margin-top:7px}
-.modal[data-kind="help"] h2{margin:0;font-size:clamp(28px,6.5cqw,40px);font-weight:800;line-height:1.15;letter-spacing:-.015em}
-.modal[data-kind="help"] .help-description{margin:1cqw 0 0;font-size:clamp(15px,3.1cqw,19px);line-height:1.4;color:#718567}
-.help-practice{display:grid;grid-template-columns:1fr 1fr;gap:6cqw;width:84%;margin-top:2.5cqw;pointer-events:none;user-select:none}
-.help-card-group{display:flex;flex-direction:column;align-items:center;gap:.6cqw;min-width:0}
-.help-card-label{display:flex;align-items:center;gap:1.2cqw;color:#8254aa;font-size:clamp(13px,2.65cqw,16px);font-weight:700;line-height:1.4}
-.help-card-label::before{content:'';width:1.5cqw;height:1.5cqw;border-radius:50%;background:#9362b9}
-.help-card-label.is-opponent{color:#377d47}
-.help-card-label.is-opponent::before{background:#4a9859}
+/* The matching example and rules fit together, including short phone screens. */
+.modal[data-kind="help"]{width:min(740px,calc(100vw - 20px));max-width:none;max-height:calc(100dvh - 20px);margin:auto;translate:none;padding:0;border:1px solid #e6d8b2;border-bottom:4px solid #b3c298;border-radius:26px;background:#fffaf0;box-shadow:0 24px 80px #203d3540;overflow:visible;color:#3d6042;container-type:inline-size}
+.modal[data-kind="help"] .close-modal{top:14px;right:14px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0}
+.help-content{min-height:0;padding:24px;display:grid;grid-template-columns:1.12fr 1fr;grid-template-areas:"title title" "intro intro" "example rules" "example ready";gap:12px 22px;align-items:center;text-align:left}
+.modal[data-kind="help"] h2{grid-area:title;margin:0 36px 0 0;font-size:32px;font-weight:800;line-height:1.15;letter-spacing:-.015em}
+.modal[data-kind="help"] .help-description{grid-area:intro;margin:0;color:#718567;font-size:16px;line-height:1.4}
+.help-practice{grid-area:example;display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin:0;pointer-events:none;user-select:none}
+.help-card-group{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.help-card-label{display:flex;align-items:center;gap:5px;color:#8254aa;font-size:12px;font-weight:700;line-height:1.4;white-space:nowrap}
+.help-card-label::before{content:'';width:7px;height:7px;border-radius:50%;background:#9362b9}
+.help-card-label.is-opponent{color:#377d47}.help-card-label.is-opponent::before{background:#4a9859}
 .help-card{position:relative;width:100%;aspect-ratio:1;isolation:isolate}
 .help-card-art{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 2px #7d633222);pointer-events:none}
 .help-symbol{position:absolute;display:grid;place-items:center;width:30%;aspect-ratio:1;padding:4.5%;background:none;border:0;border-radius:50%;transform:translate(-50%,-50%)}
@@ -17,51 +16,48 @@
 .help-symbol .game-symbol-preview{display:block;width:90%;height:90%;overflow:hidden;image-rendering:auto}
 .help-pos-0{left:50%;top:23%}.help-pos-1{left:75%;top:39%}.help-pos-2{left:75%;top:66%}.help-pos-3{left:50%;top:80%}.help-pos-4{left:25%;top:66%}.help-pos-5{left:25%;top:39%}
 .help-card.is-opponent .help-pos-4 .game-symbol{rotate:15deg;scale:1}
-.help-symbol.is-match{--match-turn:11deg}
-.help-card.is-opponent .help-symbol.is-match{--match-turn:-11deg}
+.help-symbol.is-match{--match-turn:11deg}.help-card.is-opponent .help-symbol.is-match{--match-turn:-11deg}
 .help-symbol.is-match .game-symbol{animation:help-match-loop 1.8s .4s ease-in-out infinite}
 @keyframes help-match-loop{0%,46.2%,100%{transform:translate(0,0) scale(1) rotate(0)}13.3%{transform:translate(2px,-5px) scale(1.18) rotate(var(--match-turn))}24.9%{transform:translate(-2px,-3px) scale(1.12) rotate(calc(var(--match-turn)*-.7))}35.6%{transform:translate(1px,-1px) scale(1.05) rotate(calc(var(--match-turn)*.4))}}
-.help-rules{width:100%;margin-top:3cqw;padding-top:2.4cqw;border-top:1px solid #dccda64d}
-.help-limits{display:flex;align-items:center;justify-content:center;gap:3cqw;color:#647b52;font-weight:700;font-size:clamp(14px,2.9cqw,17px)}
-.help-limits span{display:flex;align-items:center;gap:1.2cqw}.help-limits .game-inline-icon{width:4cqw;height:4cqw;object-fit:contain}.help-limits i{width:1px;height:3.5cqw;background:#dcca9f}
-.modal[data-kind="help"] .help-rules p{margin:1.2cqw 0 0;color:#5d7754;font-size:clamp(14px,2.9cqw,17px);line-height:1.4;font-weight:600}
-.modal[data-kind="help"] .help-rules .help-together{margin-top:.8cqw;color:#7c8c70;font-size:clamp(12px,2.45cqw,14px);font-weight:500}
-.help-ready{width:70%;height:8cqw;min-height:44px;margin-top:3cqw;font-size:clamp(17px,3.4cqw,21px);border-radius:3.5cqw;gap:2cqw}
-.help-ready .icon{width:3.6cqw;height:3.6cqw}
-@media(max-width:600px){
- .modal[data-kind="help"]{translate:0 14px}
- .help-content{min-height:500px;padding:12cqw 8cqw 20cqw}
- .modal[data-kind="help"] .help-mascot{width:32cqw;top:-19cqw}
- .help-practice{width:100%;gap:5cqw;margin-top:4cqw}
- .modal[data-kind="help"] .help-description{max-width:240px}
- .help-rules{margin-top:4cqw;padding-top:3cqw}
- .help-limits .game-inline-icon{width:20px;height:20px}
- .help-ready{width:82%;margin-top:4cqw;gap:10px;border-radius:16px}
- .help-ready .icon{width:20px;height:20px}
+.help-rules{grid-area:rules;align-self:end;width:100%;margin:0;padding:0;border:0}
+.help-limits{display:flex;align-items:center;justify-content:flex-start;gap:14px;color:#647b52;font-weight:700;font-size:14px}
+.help-limits span{display:flex;align-items:center;gap:6px}.help-limits .game-inline-icon{width:20px;height:20px;object-fit:contain}.help-limits i{width:1px;height:17px;background:#dcca9f}
+.modal[data-kind="help"] .help-rules p{margin:10px 0 0;color:#5d7754;font-size:14px;line-height:1.4;font-weight:600}
+.modal[data-kind="help"] .help-rules .help-together{margin-top:10px;color:#7c8c70;font-size:12px;font-weight:500}
+.help-ready{grid-area:ready;align-self:start;width:100%;height:auto;min-height:46px;margin:0;padding:10px 12px;font-size:17px;border-radius:15px;gap:10px}
+.help-ready .icon{width:20px;height:20px}
+@media(max-width:520px) and (min-height:561px){
+ .help-content{grid-template-columns:1fr;grid-template-areas:"title" "intro" "example" "rules" "ready";padding:22px 18px;gap:12px}
+ .modal[data-kind="help"] h2{font-size:28px}
+ .modal[data-kind="help"] .help-description{font-size:14px}
+ .help-practice{width:min(100%,320px);justify-self:center;gap:16px}
+ .help-limits{justify-content:center}
+ .modal[data-kind="help"] .help-rules p{font-size:13px;margin-top:8px}
+ .modal[data-kind="help"] .help-rules .help-together{font-size:12px;margin-top:8px}
 }
-@media(max-height:700px) and (min-width:601px){
- .modal[data-kind="help"]{width:min(620px,calc(100vw - 24px));translate:0 16px}
- .help-content{padding-top:7cqw;padding-bottom:15cqw}
- .modal[data-kind="help"] .help-mascot{width:24cqw;top:-14cqw}
- .help-practice{width:84%;margin-top:2cqw}
- .help-rules{margin-top:2cqw;padding-top:2cqw}
- .help-ready{height:44px;margin-top:2cqw}
+@media(max-width:449px) and (max-height:560px){
+ .help-content{grid-template-columns:100px 1fr;gap:9px 12px;padding:18px 14px}
+ .modal[data-kind="help"] h2{font-size:26px}
+ .modal[data-kind="help"] .help-description{font-size:13px}
+ .help-practice{grid-template-columns:1fr;gap:8px}
+ .help-card-label{font-size:11px;gap:4px}
+ .help-limits{font-size:11px;gap:7px;flex-wrap:wrap}
+ .help-limits .game-inline-icon{width:16px;height:16px}
+ .modal[data-kind="help"] .help-rules p{font-size:12px;margin-top:8px}
+ .modal[data-kind="help"] .help-rules .help-together{font-size:11px;margin-top:8px}
+ .help-ready{font-size:14px;gap:5px;padding:8px 6px;min-height:44px}
+ .help-ready .icon{width:16px;height:16px}
 }
-@media(max-height:700px) and (min-width:601px){
- .modal[data-kind="help"]{width:min(700px,calc(100vw - 32px));translate:0 10px}
- .help-content{min-height:0;display:grid;grid-template-columns:1.08fr 1fr;column-gap:4cqw;padding:5.5cqw 7cqw 8cqw}
- .modal[data-kind="help"] .help-mascot{width:19cqw;top:-11cqw}
- .modal[data-kind="help"] h2{grid-column:1/-1;font-size:28px}
- .modal[data-kind="help"] .help-description{grid-column:1/-1;font-size:15px}
- .help-practice{grid-column:1;grid-row:3/5;width:100%;gap:2cqw;margin-top:1cqw}
- .help-card-label{font-size:12px;gap:5px}.help-card-label::before{width:7px;height:7px}
- .help-rules{grid-column:2;align-self:end;margin-top:1.5cqw;padding-top:1.5cqw}
- .help-limits{font-size:13px;gap:12px}.help-limits .game-inline-icon{width:18px;height:18px}
- .modal[data-kind="help"] .help-rules p{font-size:13px}
- .modal[data-kind="help"] .help-rules .help-together{font-size:11px}
- .help-ready{grid-column:2;align-self:start;justify-self:center;width:88%;font-size:17px;height:42px;min-height:42px;margin-top:2cqw}
- .help-ready .icon{width:20px;height:20px}
+@media(min-width:450px) and (max-height:500px){
+ .help-content{padding:14px 18px;column-gap:16px;row-gap:8px;grid-template-columns:1fr 1.15fr}
+ .modal[data-kind="help"] h2{font-size:26px}
+ .modal[data-kind="help"] .help-description{font-size:13px}
+ .help-practice{gap:7px;max-width:280px;justify-self:center}
+ .help-card-label{font-size:11px}
+ .help-limits{font-size:12px;gap:10px}
+ .help-limits .game-inline-icon{width:17px;height:17px}
+ .modal[data-kind="help"] .help-rules p{font-size:12px;margin-top:7px}
+ .modal[data-kind="help"] .help-rules .help-together{font-size:11px;margin-top:7px}
+ .help-ready{min-height:44px;font-size:15px;padding:8px;gap:6px}
 }
 @media(prefers-reduced-motion:reduce){.help-symbol.is-match .game-symbol{animation:none}}
-@media(max-height:480px) and (min-width:601px){.modal[data-kind="help"] .help-mascot{display:none}}
-@media(min-height:701px) and (max-height:800px) and (min-width:601px){.help-content{padding-top:6cqw;padding-bottom:15cqw}}

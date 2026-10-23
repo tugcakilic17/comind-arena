@@ -1,75 +1,66 @@
-import { gameSurface } from './game-ui.js';
+import { gameSurface, rankingPointArt } from './game-ui.js';
 import { icon } from './icons.js';
 import { baseUrl } from './assets.js';
+import { playerPortraitUrl } from './player-avatar.js';
+import { api, escapeHtml as esc } from './api.js';
 
-// Preview data only. Competitive scores will come from the backend later.
-const names = ['OrmanKaşifi', 'MinikDahi', 'NeşeliPapağan', 'YıldızAvcısı', 'FındıkKurdu',
-  'MaviKanat', 'MeraklıBaykuş', 'GüneşTozu', 'HızlıPati', 'BalPeteği',
-  'Kozalak', 'BulutGezgini', 'ZıpZıp', 'YeşilYaprak', 'Sen',
-  'Pofuduk', 'KüçükGezgin', 'ÇilekŞekeri', 'KıpırKıpır', 'AyIşığı',
-  'Çınar', 'RenkliKanat', 'UçanTohum', 'MinikMucit', 'Tarçın',
-  'DenizYıldızı', 'MutluKirpi', 'Kelebek', 'ŞenPalamut', 'PamukBulut'];
-export const demoPlayers = names.map((name, index) => ({
-  name, rank: index + 1, score: 4200 - index * 95 - index % 3 * 7, isSelf: index === 14,
-}));
 export const visibleRanks = 9;
-const selfIndex = demoPlayers.findIndex(player => player.isSelf);
-const number = new Intl.NumberFormat('tr-TR');
-
-export function leaderboardStart(current = 0, action = 'self') {
-  const max = Math.max(0, demoPlayers.length - visibleRanks);
-  const next = ({ first: 0, up: current - 1, down: current + 1, last: max, self: selfIndex - 4 })[action] ?? current;
+export function leaderboardStart(current = 0, action = 'self', total = 0, selfRank = 0) {
+  const max = Math.max(0, total - visibleRanks);
+  const next = ({ first: 0, up: current - 1, down: current + 1, last: max, self: Math.max(0, selfRank - 5) })[action] ?? current;
   return Math.max(0, Math.min(max, next));
 }
-
-function rows(start) {
-  return demoPlayers.slice(start, start + visibleRanks).map(player => `<tr class="ranking-row${player.isSelf ? ' is-self' : ''}" data-rank="${player.rank}"${player.isSelf ? ' aria-current="true"' : ''}>
+const number = new Intl.NumberFormat('tr-TR');
+const views = new WeakMap();
+function rows(players) {
+  return players.map(player => `<tr class="ranking-row${player.isSelf ? ' is-self' : ''}" data-rank="${player.rank}"${player.isSelf ? ' aria-current="true"' : ''}>
     <th scope="row"><span class="ranking-place${player.rank <= 3 ? ` medal-${player.rank}` : ''}">${player.rank <= 3 ? icon('trophy') : ''}<span>${player.rank}</span></span></th>
-    <td><span class="ranking-player"><span class="ranking-avatar avatar-color-${player.rank % 5}" aria-hidden="true">${player.isSelf ? `<img src="${baseUrl}assets/game-ui/player-idle-v27.webp" alt="" draggable="false" />` : player.name[0]}</span><span class="ranking-name">${player.name}</span>${player.isSelf ? '<span class="ranking-you">Sensin!</span>' : ''}</span></td>
-    <td class="ranking-points">${number.format(player.score)}</td>
-  </tr>`).join('');
+    <td><span class="ranking-player"><span class="ranking-avatar avatar-color-${player.rank % 5}" aria-hidden="true">${player.isSelf ? `<img data-player-avatar="idle" src="${playerPortraitUrl()}" alt="" draggable="false" />` : esc(Array.from(player.name)[0])}</span><span class="ranking-name">${esc(player.name)}</span>${player.isSelf ? '<span class="ranking-you">Sensin!</span>' : ''}</span></td>
+    <td class="ranking-points">${number.format(player.score)}</td></tr>`).join('');
 }
-
-function arrow(kind) {
-  const up = kind === 'first' || kind === 'up';
-  const double = kind === 'first' || kind === 'last';
-  return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${up ? 'm6 15 6-6 6 6' : 'm6 9 6 6 6-6'}"/>${double ? `<path d="${up ? 'M6 5h12' : 'M6 19h12'}"/>` : ''}</svg>`;
+function nav(action, label) {
+  return `<button type="button" class="ranking-nav-button" data-action="ranking" data-rank-nav="${action}" aria-controls="ranking-rows" disabled><span>${label}</span></button>`;
 }
-
-function navButton(action, label, start) {
-  const disabled = ['first', 'up'].includes(action) ? start === 0 : start === demoPlayers.length - visibleRanks;
-  return `<button type="button" class="ranking-nav-button" data-action="ranking" data-rank-nav="${action}" aria-controls="ranking-rows" aria-label="${({ first: 'İlk sıraya git', up: 'Bir sıra yukarı', down: 'Bir sıra aşağı', last: 'Son sıraya git' })[action]}"${disabled ? ' disabled' : ''}><span class="ranking-nav-icon" aria-hidden="true">${arrow(action)}</span><span>${label}</span></button>`;
-}
-
 export function leaderboardView() {
-  const start = leaderboardStart();
   return `${gameSurface('resultPanel')}<img class="leave-mascot leaderboard-mascot" src="${baseUrl}assets/game-ui/leave-mascot-v38.webp" alt="" draggable="false" aria-hidden="true" />
-    <div class="leaderboard-content" data-rank-start="${start}">
-      <div class="leaderboard-heading"><h2 id="modal-title">Liderlik tablosu</h2><p id="community-description">Ormanın eşleştirme yıldızları</p></div>
-      <div class="ranking-summary"><span class="ranking-demo">Örnek sıralama <span class="ranking-demo-count">· 30 oyuncu</span></span><button type="button" class="ranking-self-link" data-action="ranking" data-rank-nav="self" aria-label="Sıramı göster, 15. sıradayım" aria-controls="ranking-rows">${icon('user')}<span>15. sıradasın</span><span class="ranking-self-hint">Sıramı göster</span></button></div>
-      <nav class="ranking-navigation ranking-top" aria-label="Üst sıralara git">${navButton('first', 'En üste', start)}${navButton('up', 'Yukarı', start)}<span class="ranking-range" aria-hidden="true">${start + 1}–${start + visibleRanks} / ${demoPlayers.length}</span></nav>
-      <table class="ranking-table" aria-label="Örnek oyuncu sıralaması"><thead><tr><th scope="col">Sıra</th><th scope="col">Oyuncu</th><th scope="col">Puan</th></tr></thead><tbody id="ranking-rows">${rows(start)}</tbody></table>
-      <nav class="ranking-navigation ranking-bottom" aria-label="Alt sıralara git">${navButton('down', 'Aşağı', start)}${navButton('last', 'En alta', start)}</nav>
-      <p class="sr-only ranking-announcement" role="status" aria-live="polite" aria-atomic="true">${start + 1}–${start + visibleRanks}. sıralar gösteriliyor. Sen 15. sıradasın.</p>
-      <div class="ranking-footer"><button type="button" class="community-ready leaderboard-ready" data-action="close"><span class="ranking-home-badge" aria-hidden="true">${icon('homeSolid')}</span><span>Ana ekrana dön</span></button></div>
-    </div>`;
+    <div class="leaderboard-content" data-empty="true"><div class="leaderboard-heading"><h2 id="modal-title">Liderlik tablosu</h2><p id="community-description">Oyunun yıldızları</p></div>
+    <div class="ranking-summary"><span class="ranking-demo">Oyuncular yükleniyor…</span><button type="button" class="ranking-self-link" data-action="ranking" data-rank-nav="self">${icon('user')}<span>Sıramı göster</span></button></div>
+    <nav class="ranking-navigation ranking-top" aria-label="Üst sıralara git">${nav('first', 'En üste')}${nav('up', 'Yukarı')}<span class="ranking-range"></span></nav>
+    <p class="ranking-status" role="status" aria-live="polite">Sıralama yükleniyor…</p>
+    <table class="ranking-table" aria-label="Oyuncu sıralaması"><thead><tr><th scope="col">Sıra</th><th scope="col">Oyuncu</th><th scope="col"><span class="ranking-points-label">${rankingPointArt()}Puan</span></th></tr></thead><tbody id="ranking-rows"></tbody></table>
+    <nav class="ranking-navigation ranking-bottom" aria-label="Alt sıralara git">${nav('down', 'Aşağı')}${nav('last', 'En alta')}</nav>
+    <button type="button" class="text-button ranking-retry" data-action="ranking" data-rank-nav="retry" hidden>Yeniden dene</button>
+    <div class="ranking-footer"><button type="button" class="community-ready leaderboard-ready" data-action="close"><span class="ranking-home-badge" aria-hidden="true">${icon('homeSolid')}</span><span>Ana ekrana dön</span></button></div></div>`;
 }
-
-export function updateLeaderboard(dialog, action) {
-  const content = dialog.querySelector('.leaderboard-content');
+export async function updateLeaderboard(dialog, action = 'self') {
+  const content = dialog?.querySelector('.leaderboard-content');
   if (!content) return;
-  const start = leaderboardStart(Number(content.dataset.rankStart), action);
-  content.dataset.rankStart = start;
-  dialog.querySelector('#ranking-rows').innerHTML = rows(start);
-  dialog.querySelector('#ranking-rows').scrollTop = 0;
-  dialog.querySelector('.ranking-range').textContent = `${start + 1}–${start + visibleRanks} / ${demoPlayers.length}`;
-  dialog.querySelector('.ranking-announcement').textContent = `${start + 1}–${start + visibleRanks}. sıralar gösteriliyor. Sen 15. sıradasın.`;
-  dialog.querySelectorAll('[data-rank-nav]').forEach(button => {
-    const direction = button.dataset.rankNav;
-    button.disabled = ['first', 'up'].includes(direction) ? start === 0 : ['last', 'down'].includes(direction) && start === demoPlayers.length - visibleRanks;
-  });
-  // A boundary can disable the pressed button; keep keyboard focus in the panel.
-  if (document.activeElement?.matches('[data-rank-nav]:disabled') || !dialog.contains(document.activeElement)) {
-    dialog.querySelector('[data-rank-nav="self"]').focus({ preventScroll: true });
-  }
+  const previous = views.get(content) || { start: 0, total: 0, self: null, request: 0 };
+  const request = previous.request + 1;
+  views.set(content, { ...previous, request });
+  const start = leaderboardStart(previous.start, action, previous.total, previous.self?.rank);
+  content.setAttribute('aria-busy', 'true');
+  const status = content.querySelector('.ranking-status');
+  try {
+    const data = await api(`arena/leaderboard?start=${start}${action === 'self' ? '&center=self' : ''}`);
+    if (!content.isConnected || views.get(content)?.request !== request) return;
+    views.set(content, { ...data, request });
+    content.dataset.empty = String(data.total === 0);
+    content.querySelector('#ranking-rows').innerHTML = rows(data.players);
+    content.querySelector('.ranking-demo').textContent = `${data.total} oyuncu`;
+    content.querySelector('.ranking-self-link span').textContent = data.self ? `${data.self.rank}. sıradasın · ${number.format(data.self.score)} puan` : 'Henüz sıralama puanın yok';
+    content.querySelector('.ranking-range').textContent = data.total ? `${data.start + 1}–${data.start + data.players.length} / ${data.total}` : '0 oyuncu';
+    status.textContent = data.total ? '' : 'İlk arkadaş maçını oyna, liderlik tablosuna katıl!';
+    content.querySelector('.ranking-retry').hidden = true;
+    content.querySelectorAll('[data-rank-nav]').forEach(button => {
+      const direction = button.dataset.rankNav;
+      button.disabled = direction === 'self' ? !data.self : ['first','up'].includes(direction) ? data.start === 0 : ['down','last'].includes(direction) && data.start >= Math.max(0, data.total - visibleRanks);
+    });
+    if (document.activeElement?.matches('[data-rank-nav]:disabled')) content.querySelector('[data-action="close"]').focus();
+  } catch (error) {
+    if (!content.isConnected || views.get(content)?.request !== request) return;
+    status.textContent = error.message;
+    content.dataset.empty = 'true';
+    content.querySelector('.ranking-retry').hidden = false;
+  } finally { if (views.get(content)?.request === request) content.removeAttribute('aria-busy'); }
 }

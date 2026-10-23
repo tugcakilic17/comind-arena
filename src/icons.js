@@ -54,6 +54,9 @@ export function symbolSvg(id, className = '') {
 }
 
 const uiPaths = {
+  edit: '<path d="m15 4 5 5M4 20l5-1L21 7a2.1 2.1 0 0 0-4-4L5 15l-1 5Z"/>',
+  copy: '<rect x="8" y="8" width="12" height="13" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3"/>',
+  gift: '<rect x="4" y="10" width="16" height="11" rx="2"/><path d="M3 6h18v5H3zM12 6v15m0-15C4 7 5-2 12 6c7-8 8 1 0 0Z"/>',
   playSolid: '<path d="M4 3.8a1.8 1.8 0 0 1 2.7-1.5l14.2 8.2a1.8 1.8 0 0 1 0 3L6.7 21.7A1.8 1.8 0 0 1 4 20.2Z" fill="currentColor" stroke="none"/>',
   homeSolid: '<path d="M10.6 2.8a2.2 2.2 0 0 1 2.8 0l3 2.5V4.1a.8.8 0 0 1 .8-.8h1.5a.8.8 0 0 1 .8.8v4l3.4 2.8c1 .9.4 2.5-.9 2.5h-1.5v7a1.5 1.5 0 0 1-1.5 1.5h-4.2v-6.1a1.4 1.4 0 0 0-1.4-1.4h-2.8a1.4 1.4 0 0 0-1.4 1.4v6.1H5.3a1.5 1.5 0 0 1-1.5-1.5v-7H2.1c-1.3 0-1.9-1.6-.9-2.5Z" fill="currentColor" stroke="none"/>',
   home: '<path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"/>',

@@ -1,5 +1,7 @@
 # Backend öncesi frontend kontrolü — 21 Ekim 2026
 
+22 Ekim güncellemesi: hesap, çevrim içi arkadaş maçı, gerçek liderlik ve Keşif Dünyası ortak hesap bağlantısı yerelde tamamlandı. Bu belgenin aşağısı önceki frontend denetiminin tarihsel kaydıdır. Güncel kurallar ve doğrulama: [ONLINE-ACCOUNTS.md](ONLINE-ACCOUNTS.md); Google kurulumu: [AUTH-SETUP.md](AUTH-SETUP.md).
+
 ## Düzeltilenler
 
 - **Soğuk oyun açılışı:** Önceden kart görselleri henüz yüklenmeden sayaç başlıyordu. 2,2 saniye geciktirilmiş kart isteğinde eksik kartla süre 89'a düşüyordu. Artık `assets.js` gerekli görselleri (CSS fonu ve simge atlası dahil) yükleyip decode eder. Ekran ve animasyon katmanı hazır olmadan sayaç/giriş açılmaz.

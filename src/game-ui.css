@@ -8,8 +8,11 @@
 
 /* Every painted surface is a raster UI asset; CSS only lays out the live game. */
 #app.screen-game{height:100dvh;min-height:0}
-.screen-game .forest-background{background-image:url('/assets/game-ui/forest-calm-warm-v23.webp');background-position:center;background-size:cover;filter:none;transform:none}
-.screen-game .forest-background::after{display:block;background:#fff6d714}
+:is(.screen-game,.screen-result) .forest-background{background-image:var(--match-background,url('/assets/game-ui/forest-calm-warm-v23.webp'));background-position:center;background-size:cover;filter:none;transform:none}
+:is(.screen-game,.screen-result) .forest-background::after{display:block;background:#fff6d714}
+@media(max-width:900px) and (orientation:portrait){
+ :is(.screen-game,.screen-result) .forest-background{background-image:var(--match-portrait-background,var(--match-background,url('/assets/game-ui/forest-calm-warm-v23.webp')))}
+}
 .screen-game main{width:100%;height:100%;min-height:0;flex:none}
 .illustrated-game{padding:18px 0 0;gap:8px}
 .illustrated-game .game-toolbar{grid-template-columns:1fr minmax(0,600px) 1fr;gap:20px;padding:0 3.5%;height:84px;flex-shrink:0;align-items:center}
@@ -113,7 +116,6 @@
  
 }
 @media(max-width:900px) and (orientation:portrait) and (min-height:701px){
- .screen-game .forest-background{background-size:auto 100%;background-position:center}
  .illustrated-game .play-panel{padding-top:60px}
  .illustrated-game .game-cards{width:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(2,minmax(0,1fr));gap:32px}
  .illustrated-game .game-cards>.surface-woodenStage{display:none}
@@ -142,4 +144,21 @@
  .illustrated-game .match-feedback{bottom:49px;font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.illustrated-game .game-art-button:hover,.illustrated-game .game-art-button:active{transform:none}.avatar-slot.is-cheering .avatar-cheer{animation:none}}
+
+/* The deck and its contact shadows share the cards' baseline; only Koak uses it. */
+/* Card PNGs have a 4.4% transparent margin below their painted base. */
+.illustrated-game .sea-pier-cards{--pier-wide-card-width:min(50cqw,calc(100cqh / 1.04));--pier-wide-height:clamp(112px,17dvh,160px)}
+.illustrated-game .sea-pier-cards>.surface-seaPierWide{inset:auto -4% calc(var(--pier-wide-card-width)*.04576 - var(--pier-wide-height)*.62);height:var(--pier-wide-height);overflow:visible}
+.illustrated-game .sea-pier-cards .player-card>.surface-seaPierCompact{display:none}
+.illustrated-game .sea-pier-cards .hex-card::before{left:18%;bottom:1%;width:64%;height:7%;background:radial-gradient(ellipse,#3e2d234d 0%,#3e2d2326 38%,#3e2d2300 72%);filter:blur(4px);transform:skewX(-8deg)}
+.illustrated-game .sea-pier-cards .hex-card::after{left:35%;bottom:3.2%;width:30%;height:2.4%;background:radial-gradient(ellipse,#37271b99 0%,#37271b52 38%,#37271b00 74%);filter:blur(1.3px)}
+@media(max-width:900px) and (orientation:portrait){
+ .illustrated-game .sea-pier-cards{--pier-card-width:min(82cqw,calc((50cqh - 11px)/1.04),350px);--pier-height:clamp(56px,8.5dvh,90px)}
+ .illustrated-game .sea-pier-cards>.surface-seaPierWide{display:none}
+ .illustrated-game .sea-pier-cards .player-card>.surface-seaPierCompact{display:block;inset:auto;left:50%;top:calc(50% + var(--pier-card-width)*.474 - var(--pier-height)*.38);translate:-50% 0;width:calc(var(--pier-card-width)*1.15);height:var(--pier-height);overflow:visible}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .illustrated-game .sea-pier-cards{--pier-wide-height:82px}
+ .illustrated-game .sea-pier-cards>.surface-seaPierWide{left:0;right:0}
+}
 

@@ -1,0 +1,310 @@
+{
+  "koak": [
+    {
+      "name": "Kaptan şapkası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Denizci fuları",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Pusula",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Denizci dürbünü",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Çapa",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Can simidi",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Deniz kabuğu",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Denizyıldızı",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Dümen",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Yengeç",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Cam şişe",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Balık",
+      "source": "balık.png",
+      "generated": false
+    },
+    {
+      "name": "Kayık",
+      "source": "kayık.png",
+      "generated": false
+    },
+    {
+      "name": "Yelken",
+      "source": "yelken.png",
+      "generated": false
+    },
+    {
+      "name": "Kova",
+      "source": "kova.png",
+      "generated": false
+    }
+  ],
+  "kofen": [
+    {
+      "name": "Yeşil fular",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Kaşif şapkası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Kaşif çantası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Büyüteç",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Su matarası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Kozalak",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Meşe palamudu",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Yaprak",
+      "source": "yaprak.png",
+      "generated": false
+    },
+    {
+      "name": "Mantar",
+      "source": "mantar.png",
+      "generated": false
+    },
+    {
+      "name": "Çadır",
+      "source": "çadır.png",
+      "generated": false
+    },
+    {
+      "name": "Kamp feneri",
+      "source": "fener.png",
+      "generated": false
+    },
+    {
+      "name": "Çiçek",
+      "source": "çiçek.png",
+      "generated": false
+    },
+    {
+      "name": "Kelebek",
+      "source": "kelebek.png",
+      "generated": false
+    },
+    {
+      "name": "Kaya",
+      "source": "kaya.png",
+      "generated": false
+    },
+    {
+      "name": "Pati izi",
+      "source": "pati.png",
+      "generated": false
+    }
+  ],
+  "komat": [
+    {
+      "name": "Kırmızı fular",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Abaküs",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Sayı küpleri",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Gönye",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Kırmızı gözlük",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Zar",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "İletki",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Pergel",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Hesap makinesi",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Artı işareti",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Cetvel",
+      "source": "cetvel.png",
+      "generated": false
+    },
+    {
+      "name": "Kalem",
+      "source": "kalem.png",
+      "generated": false
+    },
+    {
+      "name": "Dünya küresi",
+      "source": "küre.png",
+      "generated": false
+    },
+    {
+      "name": "Saat",
+      "source": "saat.png",
+      "generated": false
+    },
+    {
+      "name": "Kâğıt",
+      "source": "kağıt.png",
+      "generated": false
+    }
+  ],
+  "kuik": [
+    {
+      "name": "Mavi fular",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Hikâyeci şapkası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "K madalyonu",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Hikâye kitabı",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Kulaklık",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Mikrofon",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Müzik notası",
+      "source": "generated-sheet.png",
+      "generated": true
+    },
+    {
+      "name": "Zarf",
+      "source": "zarf.png",
+      "generated": false
+    },
+    {
+      "name": "Kaset",
+      "source": "kaset.png",
+      "generated": false
+    },
+    {
+      "name": "Radyo",
+      "source": "radyo.png",
+      "generated": false
+    },
+    {
+      "name": "Piyano",
+      "source": "piyano.png",
+      "generated": false
+    },
+    {
+      "name": "Çan",
+      "source": "çan.png",
+      "generated": false
+    },
+    {
+      "name": "Düdük",
+      "source": "ıslık.png",
+      "generated": false
+    },
+    {
+      "name": "Zurna",
+      "source": "zurna.png",
+      "generated": false
+    },
+    {
+      "name": "Mum",
+      "source": "mum.png",
+      "generated": false
+    }
+  ]
+}

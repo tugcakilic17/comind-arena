@@ -1,4 +1,4 @@
-import { gameIcon, gameSurface, previewSymbol } from './game-ui.js';
+import { gameIcon, previewSymbol } from './game-ui.js';
 import { icon, symbols } from './icons.js';
 import { baseUrl } from './assets.js';
 
@@ -18,15 +18,14 @@ function practiceCard(ids, ownCard) {
 }
 
 export function helpView() {
-  return `${gameSurface('resultPanel')}
-    <img class="leave-mascot help-mascot" src="${baseUrl}assets/game-ui/leave-mascot-v38.webp" alt="" width="1536" height="1024" draggable="false" aria-hidden="true" />
-    <div class="help-content">
+  return `<div class="help-content">
       <h2 id="modal-title">Nasıl oynanır?</h2>
       <p class="help-description" id="help-description">İki kartta da aynı olan simgeyi bul!</p>
       <div class="help-practice" role="group" aria-label="Eşleşme örneği: iki kartta da balina var.">${practicePair.map((ids, index) => practiceCard(ids, index === 0)).join('')}</div>
-      <div class="help-rules"><div class="help-limits"><span>${gameIcon('spark')}10 tur</span><i aria-hidden="true"></i><span>${gameIcon('time')}90 saniye</span></div>
-      <p>En çok eşleşmeyi bulan kazanır!</p>
-      <p class="help-together">Yan yana oynarken herkes kendi kartına dokunur.</p></div>
+      <div class="help-rules"><div class="help-limits"><span>${gameIcon('spark')}2 mod</span><i aria-hidden="true"></i><span>${gameIcon('check')}5–20 doğru</span></div>
+      <p><strong>Elini Bitir:</strong> Kendi kartından seç, kartını rakibine gönder.</p>
+      <p><strong>Kart Topla:</strong> Rakibin kartından seç, kartı kendine al.</p>
+      <p class="help-together">Her altıgen için 3–8 simge seç. Seçtiğiniz doğru cevap hedefine ilk ulaşan kazanır!</p></div>
       <button type="button" class="leave-continue help-ready" data-action="close">${icon('playSolid')}<span>Tamam, hazırım!</span></button>
     </div>`;
 }

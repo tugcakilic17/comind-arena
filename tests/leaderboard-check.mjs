@@ -6,12 +6,22 @@ const browser = await chromium.launch({ channel: 'msedge', headless: true });
 try {
   const page = await browser.newPage({ viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' });
   const errors = [];
+  const players = Array.from({length:30},(_,index)=>({user_id:`test-${index}`,name:`Oyuncu ${index+1}`,rank:index+1,score:3000-index*10,isSelf:index===14}));
+  await page.route('**/api/arena/leaderboard?*',route=>{
+    const url=new URL(route.request().url());
+    const start=Math.max(0,Math.min(21,url.searchParams.get('center')==='self'?10:Number(url.searchParams.get('start')||0)));
+    return route.fulfill({json:{start,total:30,self:players[14],players:players.slice(start,start+9)}});
+  });
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('http://127.0.0.1:5174/');
   await page.locator('[data-action="leaderboard"]').click();
   await page.locator('dialog.modal:not(.is-preparing)').waitFor();
   const ranks = () => page.locator('.ranking-row').evaluateAll(rows => rows.map(row => Number(row.dataset.rank)));
-  const nav = direction => page.locator(`[data-rank-nav="${direction}"]`);
+  await page.locator('.ranking-row[data-rank="15"]').waitFor();
+  const nav = direction => ({
+    click:async()=>{await page.locator(`[data-rank-nav="${direction}"]`).click();await page.locator('.leaderboard-content:not([aria-busy])').waitFor();},
+    isDisabled:()=>page.locator(`[data-rank-nav="${direction}"]`).isDisabled(),
+  });
   assert.deepEqual(await ranks(), [11,12,13,14,15,16,17,18,19]);
   assert.equal(await page.locator('.ranking-row[aria-current="true"]').getAttribute('data-rank'), '15');
   await nav('up').click(); assert.deepEqual(await ranks(), [10,11,12,13,14,15,16,17,18]);
@@ -73,6 +83,7 @@ try {
   assert.ok(await page.locator('[data-action="leaderboard"]').evaluate(el => el === document.activeElement));
   await page.locator('[data-action="leaderboard"]').click();
   await page.locator('dialog.modal:not(.is-preparing)').waitFor();
+  await page.locator('.ranking-row[data-rank="15"]').waitFor();
   assert.equal((await ranks())[4],15,'reopening starts around self');
   await page.locator('.leaderboard-ready').click();
   assert.equal(await page.locator('dialog.modal').evaluate(dialog => dialog.open), false);

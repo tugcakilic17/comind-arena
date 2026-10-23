@@ -1,0 +1,462 @@
+/* Illustrated friend hub: leave a generous inset inside the painted frame. */
+#app.screen-online{height:100dvh;min-height:0;overflow:clip}
+.screen-online .site-header{display:none}
+.screen-online main{width:100%;height:100%;min-height:0;margin:0;flex:1}
+.online-shell{height:100%;display:grid;place-items:center;padding:78px 24px 28px;box-sizing:border-box}
+.online-panel{position:relative;isolation:isolate;display:flex;flex-direction:column;gap:18px;width:min(940px,100%);max-height:100%;min-height:0;padding:36px 48px 44px;color:#416a43}
+.online-hub{width:min(1020px,100%);height:min(610px,100%)}
+.online-panel>.surface-resultPanel{overflow:clip;border-radius:42px}
+.online-panel h1,.online-panel h2,.online-panel p{margin:0}
+.online-panel h1{font-size:30px;line-height:1.15;color:#3b714a;font-weight:800;text-align:center}
+.online-panel h2{font-size:19px;line-height:1.25;font-weight:750}
+.online-panel p{line-height:1.4}
+.online-peeker{position:absolute;z-index:1;left:50%;top:-60px;translate:-50% 0;width:110px;height:74px;object-fit:contain;pointer-events:none;user-select:none;filter:drop-shadow(0 2px 1px #48613920)}
+.online-heading{position:relative;display:flex;align-items:center;justify-content:center;width:100%;max-width:760px;align-self:center;padding:0 100px;min-height:36px;flex:none}
+.online-heading .online-text{position:absolute;right:0;top:50%;translate:0 -50%;font-size:12px;background:#edf4d4;border:1px solid #c7d9a680;border-radius:18px;padding:7px 10px;color:#698346}
+.online-tabs{display:flex;gap:7px;padding:4px;background:#eae8d04d;border-radius:25px;flex:none;width:min(480px,100%);align-self:center}
+.online-tabs button{position:relative;flex:1;background:transparent;color:#899268;padding:8px 12px;font-size:15px}
+.online-tabs button[aria-pressed="true"]{background:#fffdf2;color:#557b42;box-shadow:0 3px 7px #80663812,inset 0 -2px 0 #d4dcb7}
+.online-badge{font-size:11px;color:#fffdf2;background:#d78d4a;border-radius:50%;min-width:19px;padding:2px 5px}
+.online-tab-content{display:grid;align-content:start;flex:1;width:100%;max-width:760px;align-self:center;min-height:0;overflow:auto;scrollbar-width:thin;scrollbar-color:#c7cf9e transparent;padding:5px 5px 7px}
+.online-create-grid,.online-lobby-grid,.online-friends-grid{display:grid;grid-template-columns:1.06fr 1fr;gap:18px;min-width:0}
+.online-box{border-radius:24px;background:linear-gradient(135deg,#e2f4cc,#f1f9dd);border:1px solid #dae5be80;box-shadow:inset 0 1px 0 #fffef4,0 2px 0 #cfdaaa18;padding:22px;min-width:0}
+/* Sky, honey and lilac choices echo the parrots and illustrated cards. */
+.online-choice:nth-of-type(1){--choice-light:#effaff;--choice-top:#a4dfef;--choice-bottom:#75c4df;--choice-shadow:#5aabc5;--choice-ink:#326b83}
+.online-choice:nth-of-type(2){--choice-light:#fff7de;--choice-top:#ffdb8f;--choice-bottom:#efbd65;--choice-shadow:#d49e4e;--choice-ink:#8c622d}
+.online-choice:nth-of-type(3){--choice-light:#f7f0ff;--choice-top:#decbf3;--choice-bottom:#c4a5e6;--choice-shadow:#a78ac7;--choice-ink:#755291}
+.online-join-card h2{color:#94622e}
+.online-share-box h2{color:#397d76}
+.online-setup{display:flex;flex-direction:column;gap:9px}
+.online-world-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px}
+.online-world-heading>span{font-size:13px;font-weight:650;color:#678156}
+.online-world-picker{position:relative;z-index:5;flex:none}
+.online-world-picker summary{display:flex;align-items:center;justify-content:center;gap:7px;min-height:34px;padding:2px 11px 2px 5px;border:1px solid #b9ca96;border-radius:18px;background:#fffdf0;color:#476c38;font-size:14px;font-weight:750;cursor:pointer;list-style:none;user-select:none}
+.online-world-picker summary::-webkit-details-marker{display:none}
+.online-world-picker summary:focus-visible{outline:3px solid #137da8;outline-offset:3px}
+.online-world-picker summary img{width:28px;height:28px;object-fit:contain}
+.online-world-chevron{display:block;width:16px;height:16px;flex:none;color:#58783e;overflow:visible}
+.online-world-picker[open] .online-world-chevron{rotate:180deg}
+.online-world-menu{position:absolute;top:calc(100% + 7px);right:0;width:244px;max-width:calc(100vw - 86px);padding:12px;border:1px solid #d2d6ae;border-radius:19px;background:#fffbee;box-shadow:0 9px 25px #4c63382b;text-align:left}
+.online-world-menu>strong{display:block;margin:0 0 8px;font-size:12px;color:#73845d}
+.online-world-menu>div{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.online-panel .online-world-menu button{display:flex;justify-content:flex-start;gap:5px;min-height:59px;padding:7px 5px;border:1px solid #e2e2c9;border-radius:13px;background:#f8f7e6;color:#62784f;text-align:left;font-size:12px;box-shadow:none}
+.online-panel .online-world-menu button[aria-pressed="true"]{background:#e4f1ca;border-color:#a9c779;color:#426e35}
+.online-world-menu button img{width:37px;height:39px;object-fit:contain;flex:none}
+.online-world-menu button span{display:block;min-width:0}
+.online-world-menu button small{display:block;margin-top:2px;font-size:9px;line-height:1.2;color:#8b9575;font-weight:550}
+.online-world-badge{display:inline-flex!important;align-items:center;gap:3px;white-space:nowrap}
+.online-world-badge img{width:17px;height:17px;object-fit:contain}
+.screen-online[data-online-world] .forest-background{background-image:var(--match-background);filter:none;transform:none}
+@media(max-width:700px),(max-height:500px){
+ .online-setup{position:relative}
+ .online-world-heading{display:contents}
+ .online-world-heading>span{display:none}
+ .online-world-picker{position:absolute;right:16px;top:12px}
+ .online-world-picker summary{min-height:25px;padding:1px 7px 1px 3px;font-size:11px;gap:3px}
+ .online-world-picker summary img{width:22px;height:22px}
+ .online-setup .online-choice:first-of-type legend{min-height:24px;padding-right:95px}
+}
+@media(max-width:600px) and (max-height:700px),(min-width:601px) and (max-height:500px){
+ .online-world-picker{top:9px;right:12px}
+}
+@media(max-width:600px) and (orientation:portrait){
+ .screen-online[data-online-world] .forest-background{background-image:var(--match-portrait-background,var(--match-background))}
+}
+.online-choice{border:0;padding:0;margin:0;min-width:0}
+.online-choice legend{font-weight:650;font-size:13px;line-height:1.3;margin-bottom:7px;padding:0;color:#678156}
+.online-choice-options{display:flex;gap:7px}
+.online-choice button{flex:1;min-width:0;background:linear-gradient(#fffef6,#fffbee);color:#8a8d60;border:1px solid #dbe2c48c;box-shadow:inset 0 2px 0 #ffffffb0,0 3px 0 #d4dfb5;font-size:20px;padding:6px 4px}
+.online-choice button[aria-pressed="true"]{background:linear-gradient(#c7e29c,#b2d27e);border-color:#a9c97480;color:#446a2f;box-shadow:inset 0 2px 0 #e7fac3,0 3px 0 #8fab61}
+.online-choice button{background:linear-gradient(#fffef8,var(--choice-light));color:var(--choice-ink)}
+.online-choice button[aria-pressed="true"]{background:linear-gradient(var(--choice-top),var(--choice-bottom));color:var(--choice-ink);box-shadow:inset 0 2px 0 #ffffff80,0 3px 0 var(--choice-shadow);border-color:transparent}
+.online-choice small{display:block;font-size:11px;line-height:1.2;color:#8e9a71;margin-top:6px}
+.online-panel button,.online-whatsapp{font-family:inherit;font-weight:700;min-height:39px;border-radius:22px;display:inline-flex;align-items:center;justify-content:center;gap:7px;line-height:1.2;touch-action:manipulation;transition:box-shadow .16s,background .16s,filter .16s}
+.online-panel button:disabled{opacity:.58;cursor:default}
+.online-panel .icon,.online-whatsapp svg{width:18px;height:18px;flex:none}
+.online-panel .online-primary{position:relative;background:linear-gradient(#b9df7b,#8dc353);box-shadow:inset 0 2px 0 #e8ffc1,0 4px 0 #74a447;color:#486a2e;border:1px solid #a0bf6780;padding:10px 15px;min-height:42px;width:100%;font-size:15px;isolation:isolate}
+.online-primary::before{content:'';position:absolute;z-index:-1;left:12px;right:12px;top:4px;height:35%;border-radius:30px;background:linear-gradient(#ffffff38,#ffffff00);pointer-events:none}
+.online-secondary{background:linear-gradient(#fffdf1,#fff5d7);border:1px solid #e8d5a580;box-shadow:inset 0 2px 0 #fffef8,0 3px 0 #e0cea3;color:#8c7044;padding:9px 12px;font-size:13px}
+.online-panel .online-text{background:transparent;padding:6px 8px;color:#8d9873;font-size:12px;min-height:30px}
+.online-join-card{background:linear-gradient(145deg,#fff0bf,#ffe1b0);border-color:#f0dfb480;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;gap:23px;padding:22px}
+.online-join-card .online-join-form{flex:1}
+.online-join-card .online-join-form>.online-primary{margin-top:auto}
+.online-join-form,.online-add-friend form{display:flex;flex-direction:column;gap:10px;width:100%}
+.online-panel label{font-size:12px;color:#929573;font-weight:600;text-align:left;display:block}
+.online-panel input{width:100%;min-width:0;min-height:42px;border:1px solid #e2d9b8b0;background:#fffdf7;border-radius:14px;padding:9px 11px;color:#4c7148;font:inherit;font-size:13px;outline-offset:2px}
+.online-panel input:focus-visible{outline:2px solid #9aba7a}
+.online-panel input::placeholder{color:#a6a17f;font-size:11px}
+.online-status{color:#a06d43;text-align:center;font-size:13px;line-height:1.3;margin:0!important;flex:none}
+.online-status:empty{display:none}
+.online-hub>.online-status{position:absolute;left:48px;right:48px;bottom:15px;font-size:11px;line-height:1.25;pointer-events:none}
+.online-room-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.online-room-title>span{font-size:12px;color:#8d9d78;white-space:nowrap}
+.online-room-rules{display:flex;gap:7px;margin:11px 0 15px}
+.online-room-rules span{background:#fffdf19c;border-radius:10px;padding:4px 8px;font-size:11px;color:#8b936a}
+.online-seats{display:grid;grid-template-columns:repeat(var(--seats,2),minmax(0,1fr));gap:9px}
+.online-seat{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:103px;border-radius:18px;border:1px dashed #cddbadb0;background:#ffffff1f;padding:10px 4px}
+.online-seat.is-occupied{background:#fffdf18c;border:1px solid #e7e8ca50}
+.online-face{position:relative;display:block;width:49px;height:49px;flex:none;background:#f5efdc;border:2px solid #fffdf1;border-radius:50%;box-shadow:0 2px 4px #8e87531a;overflow:hidden}
+.online-face img{position:absolute;width:125%;height:125%;max-width:none;object-fit:contain;left:-12.5%;top:0;pointer-events:none}
+.online-seat strong{font-size:12px;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;line-height:1.3;margin-top:6px}
+.online-seat small{font-size:10px;color:#9ca782;line-height:1.3;text-align:center}
+.online-empty-seat{display:grid;place-items:center;width:43px;height:43px;border-radius:50%;background:#e7eed280;color:#b1be91}
+.online-panel .online-lobby-help{font-size:11px;line-height:1.4;text-align:center;color:#98a180;margin:13px 0}
+.online-lobby-actions{display:flex;align-items:center;gap:8px;margin-top:14px}
+.online-lobby-actions .online-primary{flex:1;font-size:13px}
+.online-lobby-actions .online-text{flex:none;font-size:11px;padding:5px}
+.online-share-box{display:flex;flex-direction:column;gap:10px;background:linear-gradient(135deg,#e0f5fc,#d3f0e8);border-color:#f0dfba80}
+.online-share-box>h2{margin-bottom:5px}
+.online-share-body{display:grid;grid-template-columns:128px minmax(0,1fr);align-items:center;gap:12px;min-width:0}
+.online-share-actions{display:flex;flex-direction:column;gap:9px;min-width:0}
+.online-invite-qr{margin:0;min-width:0;text-align:center}
+.online-invite-qr svg{display:block;width:100%;height:auto;aspect-ratio:1;background:white;border:1px solid #deeadc;border-radius:12px;box-shadow:0 3px 7px #5e85651a}
+.online-invite-qr figcaption{font-size:11px;line-height:1.3;color:#66836d;font-weight:650;margin-top:5px}
+.online-share-actions .online-primary{font-size:11px;text-align:center;min-height:42px;line-height:1.25;padding:8px}
+.online-link-row{display:flex;gap:7px;align-items:center;min-width:0}
+.online-panel .online-icon-button{width:34px;min-height:34px;flex:none;padding:7px;background:linear-gradient(#f8edc9,#eee1b4);color:#96804e;border-radius:50%;box-shadow:inset 0 1px 0 #fff9de,0 2px 0 #d5c39180}
+.online-panel .online-icon-button .icon{width:17px;height:17px}
+.online-link-row{margin-top:-4px}
+.online-link-row input{font-size:11px;text-overflow:ellipsis}
+.online-whatsapp{text-decoration:none}
+.online-tab-content:has(.online-friends-grid){align-content:stretch;grid-template-rows:minmax(0,1fr);max-width:720px;min-height:0}
+.online-friends-grid{grid-template-columns:.85fr 1.15fr;grid-template-rows:minmax(0,1fr);height:auto;min-height:0;overflow:hidden}
+.online-friends-grid>.online-box{min-height:0}
+.online-add-friend{display:flex;flex-direction:column;align-self:start;gap:14px}
+.online-add-friend>p{font-size:13px;color:#909b74}
+.online-own-code{border-top:1px solid #d8e2be80;padding-top:12px}
+.online-own-code>small{color:#91a073;font-size:11px}
+.online-own-code>div{display:flex;align-items:center;justify-content:space-between;margin-top:5px;gap:6px}
+.online-own-code strong{font-size:22px;letter-spacing:1.5px;color:#628447;user-select:all}
+.online-panel .online-own-code .online-icon-button{background:#dcebc3;color:#779a4c}
+.online-add-friend>small{font-size:11px;color:#a39875;text-align:center;line-height:1.4}
+.online-friend-list{height:auto;max-height:min(300px,100%);align-self:start;min-height:0;background:linear-gradient(135deg,#fff8e6,#fff0d6);border-color:#f0e3c180;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#d1d39f transparent}
+.online-friend-list section+section{border-top:1px solid #eee0bd80;margin-top:16px;padding-top:16px}
+.online-friend-list h2{font-size:17px;display:flex;align-items:center;gap:8px}
+.online-friend-list h2>span{font-size:11px;padding:3px 7px;background:#e7edcf;border-radius:10px;color:#8b9b6d}
+.online-friend-list ul{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.online-friend-row{display:flex;align-items:center;gap:8px;padding:8px;background:#fffdf4b0;border:1px solid #f2e7cb80;border-radius:16px;min-width:0}
+.online-friend-row .online-face{width:38px;height:38px}
+.online-friend-row>span:not(.online-face){display:flex;flex-direction:column;min-width:0;flex:1}
+.online-friend-row strong{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.online-friend-row small{font-size:10px;line-height:1.2;color:#a2a080}
+.online-friend-actions{display:flex;flex-direction:column;gap:2px;flex:none}
+.online-panel .online-small{min-height:30px;font-size:11px;background:linear-gradient(#e8f3d7,#deedc8);color:#6c8948;border:1px solid #d2e3b880;box-shadow:0 2px 0 #bed1a380;padding:6px 9px}
+.online-panel .online-friend-actions .online-text{min-height:23px;padding:3px 5px;font-size:10px;color:#a8a17e}
+.online-panel .online-empty{padding:35px 5px;color:#a49c7b;text-align:center;font-size:13px}
+.online-login,.online-result{width:min(540px,100%);align-items:center;text-align:center;padding:40px;gap:20px}
+.online-login>p,.online-result>p{color:#919b77}
+.online-welcome-bird{display:block;width:135px;height:125px;object-fit:contain;filter:drop-shadow(0 3px 2px #886a2322)}
+.online-panel button,.online-whatsapp{position:relative}
+.online-join-card .online-primary{background:linear-gradient(#9cdded,#73c5d7);color:#356e7b;border-color:#72bacb70;box-shadow:inset 0 2px 0 #dcfaff,0 4px 0 #5ca4b5}
+@media(hover:hover) and (pointer:fine){
+ .online-panel button:not(:disabled):hover,.online-whatsapp:hover{transform:none;filter:brightness(1.035)}
+ .online-panel .online-primary:not(:disabled):hover{box-shadow:inset 0 2px 0 #efffcd,0 6px 0 #86a554,0 9px 14px #6b81451c}
+}
+.online-panel button:not(:disabled):active,.online-whatsapp:active{transform:none;box-shadow:inset 0 1px 0 #ffffff60,0 1px 0 #93a95b66;transition-duration:.09s}
+.online-scores{display:flex;list-style:none;padding:0;margin:0;gap:9px;min-width:0}
+.online-scores li{display:flex;align-items:center;gap:8px;min-width:0;flex:1;padding:9px 12px;background:#fff8e7;border:1px solid #e4d9b5;border-radius:18px;box-shadow:0 3px 0 #b4a77526}
+.online-scores .online-face{width:42px;height:42px}
+.online-scores li>span:not(.online-face){min-width:0;display:flex;flex-direction:column}
+.online-scores strong{font-size:15px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.online-scores small{font-size:10px;line-height:1.3;color:#a2a17d;white-space:nowrap}
+.online-scores b{margin-left:auto;font-size:28px;line-height:1;color:#8b8d5c}
+.online-scores .is-you{background:#edf3db;border-color:#cbdcad}
+.online-scores .is-you b{color:#668846}
+.online-scores .has-left{opacity:.5}
+.online-scores .is-winner{background:#eff7d7;border-color:#bad784}
+.online-scores.is-final{flex-direction:column;width:100%;max-height:330px;overflow:auto;padding-bottom:5px}
+.online-scores.is-final li{flex:none;min-height:65px}
+.online-scores.is-final strong{max-width:250px;font-size:18px}
+.online-scores.is-final b{font-size:30px}
+.online-result-shell{position:relative;padding-top:112px;overflow:clip}
+.online-result{gap:17px}
+.online-result .online-scores.is-final{flex:none;max-height:none;overflow:visible;list-style:none}
+.online-result .online-scores.is-final li{min-height:60px;padding:9px 13px}
+.online-result .online-scores.is-final b{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:48px;color:#77519b;font-variant-numeric:tabular-nums}
+.online-result .online-scores.is-final b small{font-size:11px;line-height:1;color:#8f81a0;font-weight:650}
+.online-result .online-scores .online-ranking-points{color:#7b6995;font-weight:650;margin-top:3px}
+.online-result .online-scores .online-ranking-points[data-points^="-"]{color:#ad7546}
+.online-result .online-scores .online-ranking-points:not([data-points="0"]):not([data-points^="-"]){color:#548447}
+.online-result .online-scores .is-winner{background:linear-gradient(120deg,#f4e5ae,#fff5d7);border-color:#e5c874}
+.online-result .online-scores .is-winner b{color:#b17b29}
+.online-result .online-scores .has-left{opacity:.75}
+.online-result-bird{position:absolute;z-index:-1;left:50%;bottom:calc(100% - 13px);translate:-50% 0;width:180px;height:100px;overflow:hidden;pointer-events:none}
+.online-result-bird img{display:block;width:180px;height:180px;object-fit:contain}
+.online-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.online-confetti i{position:absolute;left:var(--x);top:12%;width:9px;height:15px;border-radius:3px;background:var(--confetti-color);opacity:0;animation:online-confetti-fall 1.9s var(--delay) ease-out both}
+.online-confetti i:nth-child(3n){width:11px;height:11px;border-radius:50%}
+.is-celebrating .online-result-bird img{animation:online-bird-cheer .8s .12s cubic-bezier(.22,1,.36,1) both}
+.is-celebrating .online-scores li{animation:online-score-reveal .45s .1s ease-out both}
+.is-celebrating .online-scores li:nth-child(2){animation-delay:.18s}
+.is-celebrating .online-scores li:nth-child(3){animation-delay:.26s}
+.is-celebrating .online-scores li:nth-child(4){animation-delay:.34s}
+@keyframes online-confetti-fall{0%{opacity:0;transform:translateY(-30px) rotate(0)}15%{opacity:.9}100%{opacity:0;transform:translate(var(--drift),62dvh) rotate(var(--turn))}}
+@keyframes online-bird-cheer{from{opacity:0;transform:translateY(28px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes online-score-reveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+html.online-result-navigation::view-transition-old(root){animation:online-page-out .28s ease-in both}
+html.online-result-navigation::view-transition-new(root){animation:online-page-in .5s cubic-bezier(.22,1,.36,1) both}
+@media(max-height:600px){
+ .online-result-shell{padding-top:72px;padding-bottom:16px}
+ .online-result{padding:23px 30px;gap:10px}
+ .online-result .online-scores.is-final{gap:6px}
+ .online-result .online-scores.is-final li{min-height:42px;padding:5px 10px}
+ .online-result .online-scores.is-final b{font-size:24px}
+ .online-result .online-scores.is-final b small{font-size:9px}
+ .online-result-bird{height:65px;width:125px}
+ .online-result-bird img{width:125px;height:125px}
+}
+@media(prefers-reduced-motion:reduce){
+ .online-confetti{display:none}
+ .is-celebrating .online-result-bird img,.is-celebrating .online-scores li{animation:none}
+ html.online-result-navigation::view-transition-old(root),html.online-result-navigation::view-transition-new(root){animation:none}
+}
+.online-game{height:100%;padding:20px;gap:12px;max-width:1260px;margin:auto;min-height:0}
+.online-game-toolbar{display:flex;align-items:center;gap:12px;flex:none}
+.online-game-toolbar .online-scores{flex:1}
+.online-game-toolbar #online-timer{font-size:12px;color:#658247;background:#fff9e9;border-radius:10px;padding:8px;white-space:nowrap}
+.online-game .play-panel{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;min-height:0;max-height:none;padding:0;background:none;border:0;box-shadow:none;overflow:visible;gap:4px}
+.online-game .play-panel:before{display:none}
+.online-game .board-title{position:relative;left:auto;translate:none;margin:0;flex:none}
+.online-game .online-cards{display:flex;container-type:size;align-items:center;justify-content:space-evenly;position:relative;width:100%;height:auto;flex:1;min-height:0;gap:14px}
+.online-game .online-cards>.player-card{display:flex;position:relative;width:min(46cqw,94cqh);height:auto;aspect-ratio:1/1.04;flex:none;container-type:normal;min-height:0;gap:0}
+.online-game .online-cards .hex-card{width:100%;height:100%;aspect-ratio:1/1.04}
+.online-game .online-cards .card-owner{font-size:clamp(11px,1.7vw,22px);width:42%;max-width:none}
+.online-countdown{min-height:24px;text-align:center;font-size:15px;color:#637d4a;margin:0;flex:none}
+.online-progress{font-size:12px;color:#849465;text-align:center;flex:none}
+.online-game .online-status{margin:0}
+.ranking-status{font-size:14px;color:#7b6a49;text-align:center}
+.ranking-status:empty{display:none}
+
+/* Stack both create and join cards on phones; joining never needs an extra tab. */
+@media(max-width:700px){
+ .online-shell{padding:58px 10px 14px}
+ .online-panel{padding:27px 24px 30px;gap:12px}
+ .online-heading{padding:0 35px;min-height:28px}
+ .online-panel h1{font-size:25px}.online-panel h2{font-size:17px}
+ .online-heading .online-text{right:0;width:30px;min-height:30px;padding:4px}
+ .online-heading .online-text span{display:none}
+ .online-heading .icon{width:17px;height:17px}
+ .online-peeker{top:-48px;width:90px;height:60px}
+ .online-tabs{width:min(360px,100%);padding:3px}
+ .online-tabs button{font-size:13px;min-height:34px;padding:7px 9px}
+ .online-tab-content{padding:4px 3px 6px}
+ .online-create-grid,.online-lobby-grid,.online-friends-grid{grid-template-columns:1fr;gap:10px}
+ .online-box{padding:16px;border-radius:20px}
+ .online-setup{gap:12px}.online-setup>h2{display:none}
+ .online-choice legend{font-size:12px;margin-bottom:5px}
+ .online-choice button{min-height:34px;font-size:19px;padding:5px 3px}
+ .online-choice-options{gap:6px}
+ .online-panel .online-primary{font-size:13px;min-height:38px;padding:9px 10px}
+ .online-join-card{gap:10px;padding:15px 16px}
+ .online-join-card h2{font-size:16px}
+ .online-join-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px}
+ .online-join-form label{grid-column:1/-1;font-size:11px}
+ .online-join-form button{grid-column:2;grid-row:2}
+ .online-panel input{min-height:38px;padding:8px 9px;font-size:12px}
+ .online-panel input::placeholder{font-size:10px}
+ .online-join-form button .icon{display:none}
+ .online-lobby-grid>.online-box{padding:13px}
+ .online-room-title h2{font-size:17px}.online-room-title>span{font-size:11px}
+ .online-room-rules{margin:7px 0 10px}.online-room-rules span{padding:3px 7px;font-size:10px}
+ .online-seats{gap:6px}.online-seat{min-height:80px;padding:7px 3px;border-radius:14px}
+ .online-seat .online-face{width:37px;height:37px}.online-seat strong{font-size:10px}.online-seat small{font-size:8px}
+ .online-empty-seat{width:32px;height:32px}
+ .online-panel .online-lobby-help{display:none}
+ .online-lobby-actions{gap:7px;margin-top:11px}.online-lobby-actions .online-primary{font-size:12px}
+ .online-lobby-actions .online-text{font-size:10px}
+ .online-share-box{gap:8px}
+ .online-share-box>h2{display:none}
+ .online-share-body{grid-template-columns:104px minmax(0,1fr);gap:9px}
+ .online-share-actions{gap:6px}
+ .online-invite-qr figcaption{font-size:10px}
+ .online-share-box label{font-size:10px}
+ .online-link-row{margin:0;gap:4px}
+ .online-share-box .online-icon-button{width:27px;min-height:29px;padding:5px}
+ .online-share-box .online-icon-button .icon{width:15px;height:15px}
+ .online-share-box input{min-height:38px;font-size:10px;padding:7px}
+ .online-share-box .online-primary{font-size:10px;min-height:40px;line-height:1.25;padding:6px;gap:4px;border-radius:22px;text-align:center;margin:0}
+ .online-share-box .online-primary .icon,.online-whatsapp svg{width:16px;height:16px}
+ .online-tab-content:has(.online-friends-grid){padding-bottom:65px}
+ .online-friends-grid{grid-template-rows:auto minmax(0,1fr)}
+ .online-add-friend{gap:10px;padding:14px}.online-add-friend>p{font-size:12px}.online-add-friend>small{display:none}
+ .online-own-code{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-top:9px}
+ .online-own-code>div{margin:0;gap:8px}.online-own-code strong{font-size:20px;letter-spacing:1px}
+ .online-login,.online-result{padding:32px 26px;gap:17px}.online-login h1,.online-result h1{font-size:27px}
+ .online-game{padding:12px 9px;gap:8px}.online-game-toolbar{gap:7px;flex-wrap:wrap}
+ .online-game-toolbar .round-control{width:34px;height:34px;border-radius:12px;flex:none;order:0}
+ .online-game-toolbar .online-scores{order:2;flex-basis:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ .online-scores li{padding:7px 8px;gap:6px;border-radius:13px}.online-scores .online-face{width:31px;height:31px}
+ .online-scores strong{font-size:12px;max-width:120px}.online-scores b{font-size:23px}.online-scores small{font-size:9px}
+ .online-game-toolbar #online-timer{order:1;margin-left:auto;padding:5px 9px}
+ .online-countdown{font-size:12px;min-height:20px}.online-progress{font-size:10px}
+}
+@media(max-width:550px) and (min-height:500px){
+ .online-game .online-cards{flex-direction:column;gap:0}
+ .online-game .online-cards>.player-card{width:min(87cqw,46cqh)}
+ .online-game .online-cards>.player-card:first-child{order:1}
+ .online-game .online-cards .card-owner{font-size:14px}
+}
+@media(max-width:600px) and (max-height:700px){
+ .online-shell{padding:50px 8px 12px}
+ .online-panel{padding:23px 22px 28px;gap:9px}
+ .online-hub>.online-status{left:28px;right:28px;bottom:6px;font-size:10px}
+ .online-heading{min-height:25px}.online-panel h1{font-size:22px}
+ .online-tabs button{min-height:30px;font-size:12px;padding:6px}
+ .online-peeker{top:-43px;width:82px;height:55px}
+ .online-box{padding:12px}.online-setup{gap:9px}
+ .online-choice legend{font-size:11px;margin-bottom:4px}
+ .online-choice button{min-height:29px;font-size:17px;padding:4px 2px}
+ .online-choice-options{gap:5px}
+ .online-panel .online-primary{min-height:34px;font-size:12px;padding:8px}
+ .online-join-card{width:calc(100% - 32px);justify-self:center;padding:12px;gap:8px}.online-join-card h2{font-size:15px}
+ .online-panel input{min-height:34px;padding:7px 8px}.online-panel label{font-size:10px}
+ .online-lobby-grid>.online-box{padding:11px}.online-seat{min-height:73px}.online-seat .online-face{width:31px;height:31px}
+ .online-lobby-grid>.online-share-box{width:calc(100% - 32px);justify-self:center}
+ .online-room-title h2{font-size:16px}.online-room-title>span{font-size:10px}
+ .online-lobby-actions .online-text{font-size:9px}
+ .online-share-box .online-primary{font-size:9px;min-height:38px}
+ .online-share-body{grid-template-columns:96px minmax(0,1fr);gap:8px}
+ .online-add-friend{gap:8px}.online-add-friend>p{display:none}
+ .online-own-code strong{font-size:17px}
+ .online-game-toolbar .online-scores li{padding:5px 6px}.online-game-toolbar .online-face{width:28px;height:28px}
+ .online-game .online-cards>.player-card{width:min(90cqw,47cqh)}
+}
+@media(min-width:701px) and (max-height:700px){
+ .online-shell{padding:66px 22px 20px}
+ .online-panel{padding:28px 42px 34px;gap:13px}
+ .online-tab-content{max-width:760px}
+ .online-panel h1{font-size:27px}.online-panel h2{font-size:18px}
+ .online-peeker{top:-52px;width:98px;height:66px}
+ .online-box{padding:18px}.online-setup{gap:12px}
+ .online-choice legend{font-size:12px;margin-bottom:5px}.online-choice button{min-height:34px;font-size:18px;padding:5px}
+ .online-tabs button{min-height:35px;padding:7px;font-size:14px}
+ .online-panel .online-primary{min-height:38px;font-size:14px;padding:9px}
+ .online-share-box{gap:8px}.online-share-box>h2{margin-bottom:2px}
+ .online-add-friend>small{display:none}
+ .online-seat{min-height:91px}.online-seat .online-face{width:41px;height:41px}
+ .online-seat strong{font-size:11px}.online-seat small{font-size:9px}
+ .online-panel .online-lobby-help{margin:10px 0;font-size:10px}
+ .online-game{padding:12px 20px;gap:8px}.online-scores li{padding:6px 10px}
+}
+@media(max-height:500px) and (min-width:601px){
+ .online-shell{padding:28px 16px 12px}
+ .online-panel{padding:18px 32px 23px;gap:7px}
+ .online-tab-content{width:calc(100% - 120px)}
+ .online-tab-content:has(.online-friends-grid){padding-bottom:7px}
+ .online-hub>.online-status{left:36px;right:36px;bottom:6px;font-size:10px}
+ .online-panel h1{font-size:23px}.online-heading{min-height:26px;padding:0 85px}
+ .online-peeker{top:-26px;width:64px;height:42px}
+ .online-tabs{padding:3px}.online-tabs button{min-height:29px;padding:5px;font-size:12px}
+ .online-create-grid,.online-lobby-grid,.online-friends-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;gap:13px}
+ .online-box{padding:12px 14px;border-radius:18px}.online-box h2{font-size:16px}
+ .online-setup{gap:7px;padding:10px 12px}.online-setup>h2{display:none}
+ .online-choice legend{font-size:10px;line-height:1.2;margin-bottom:3px}.online-choice button{min-height:26px;font-size:16px;padding:3px}
+ .online-panel .online-primary{min-height:30px;font-size:12px;padding:6px}
+ .online-panel input{min-height:33px;padding:7px 8px;font-size:11px}.online-panel label{font-size:10px}
+ .online-join-card{gap:12px;padding:10px 14px}.online-join-form{display:flex;gap:7px}
+ .online-seat{min-height:76px;padding:5px 3px}.online-seat .online-face{width:32px;height:32px}.online-seat strong{font-size:10px}.online-seat small{font-size:8px}
+ .online-empty-seat{width:30px;height:30px}.online-room-rules{margin:6px 0 9px}
+ .online-share-box{display:flex;flex-direction:column;gap:3px}.online-share-box>h2{display:none}
+ .online-share-body{grid-template-columns:100px minmax(0,1fr);gap:10px}
+ .online-share-actions{gap:5px}
+ .online-lobby-grid>.online-share-box{padding:8px 12px}
+ .online-panel .online-share-box .online-primary{min-height:32px;padding:7px}
+ .online-panel .online-share-box .online-icon-button{min-height:28px;width:28px;padding:5px}
+ .online-share-box label{font-size:10px}
+ .online-panel .online-lobby-help{display:none}.online-lobby-actions{margin-top:6px}
+ .online-lobby-actions .online-primary{font-size:11px}.online-lobby-actions .online-text{font-size:10px}
+ .online-whatsapp,.online-secondary{font-size:11px;min-height:32px;padding:7px}
+ .online-add-friend{gap:8px}.online-add-friend>p,.online-add-friend>small{display:none}
+ .online-add-friend form{gap:6px}.online-own-code{padding-top:7px}.online-own-code strong{font-size:18px}
+ .online-game{padding:8px 16px;gap:5px}.online-game-toolbar{gap:8px;flex-wrap:nowrap}.online-game-toolbar .online-scores{display:flex;flex-basis:auto;order:0;gap:5px}.online-game-toolbar #online-timer{order:0}
+ .online-scores strong{font-size:11px;max-width:90px}.online-scores small{font-size:8px}.online-scores .online-face{width:28px;height:28px}.online-scores li{padding:5px 7px;gap:5px}.online-scores b{font-size:22px}
+ .online-countdown{font-size:12px;min-height:18px}.online-progress{font-size:10px}
+ .online-result{gap:9px;padding:22px 30px}.online-result .online-scores.is-final{max-height:195px}.online-scores.is-final li{min-height:40px}.online-scores.is-final strong{font-size:14px}.online-scores.is-final .online-face{width:32px;height:32px}
+}
+@media(prefers-reduced-motion:reduce){
+ .online-panel button,.online-whatsapp{transition:none}
+ .online-panel button:not(:disabled):hover,.online-panel button:not(:disabled):active,.online-whatsapp:hover,.online-whatsapp:active{transform:none}
+}
+.leaderboard-content[data-empty="true"] .ranking-table,.leaderboard-content[data-empty="true"] .ranking-navigation{display:none}
+.leaderboard-content[data-empty="true"] .ranking-status{display:flex;flex:1;align-items:center;justify-content:center}
+@media(max-height:500px) and (min-width:601px){.leaderboard-content[data-empty="true"] .ranking-status{grid-column:2;grid-row:2}}
+@media(max-height:430px) and (max-width:600px){.leaderboard-content[data-empty="true"]{height:auto;min-height:0;padding:20px 28px 28px;gap:6px}.leaderboard-content[data-empty="true"] .ranking-status{margin:6px 0}.leaderboard-content[data-empty="true"] .ranking-footer{margin:0}}
+
+
+/* One short crossfade for the complete navigation, independent of room polling. */
+html.online-navigation::view-transition-old(root){animation:online-page-out .2s ease-in both}
+html.online-navigation::view-transition-new(root){animation:online-page-in .32s cubic-bezier(.22,1,.36,1) both}
+@keyframes online-page-out{to{opacity:0;transform:translateY(-5px) scale(.99)}}
+@keyframes online-page-in{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
+/* Tighten only the frame's empty margins; inner card widths and controls stay unchanged. */
+@media(min-width:901px) and (min-height:501px){
+ .online-hub{width:min(920px,100%);height:min(580px,100%);padding:30px 54px 38px;gap:12px}
+ .online-create-grid>.online-box{min-height:358px}
+}
+@media(min-width:901px) and (max-height:700px){
+ .online-create-grid>.online-box{min-height:0}
+}
+@media(min-width:701px) and (min-height:501px) and (max-height:700px){
+ .online-create-grid .online-setup{row-gap:9px}
+}
+@media(min-width:701px) and (min-height:501px){
+ .online-create-grid{margin-inline:8px}
+}
+@media(max-width:700px) and (min-height:501px){
+ .online-create-grid>.online-join-card,.online-lobby-grid>.online-share-box{width:calc(100% - 32px);justify-self:center}
+}
+@media(min-width:601px) and (max-height:430px){
+ .online-create-grid .online-setup{gap:5px}
+ .online-friends-grid>.online-add-friend{padding-block:11px}
+}
+@media(max-width:360px) and (max-height:650px){
+ .online-lobby-grid{row-gap:6px}
+ .online-lobby-grid>.online-share-box{padding:10px}
+ .online-share-body{grid-template-columns:64px minmax(0,1fr);gap:7px}
+ .online-share-actions{gap:4px}
+ .online-share-box .online-primary{font-size:9px;min-height:32px;padding:5px;line-height:1.15}
+ .online-share-box input{min-height:29px}
+ .online-share-box .online-invite-qr figcaption{font-size:8px}
+}
+@media(min-width:1600px) and (min-height:850px){
+ .online-hub{width:min(1120px,88vw);height:min(740px,84dvh);padding:42px 70px 54px;gap:18px}
+ .online-heading,.online-tab-content{max-width:960px}
+ .online-tabs{width:560px}
+ .online-panel h1{font-size:38px}
+ .online-tabs button{font-size:18px;min-height:44px}
+ .online-create-grid>.online-box{min-height:430px;padding:26px}
+ .online-create-grid .online-setup{gap:18px}
+ .online-choice legend,.online-world-heading>span{font-size:16px}
+ .online-choice button{font-size:25px;min-height:45px}
+ .online-join-card h2{font-size:25px}
+ .online-panel label,.online-panel input{font-size:15px}
+ .online-panel .online-primary{font-size:19px;min-height:50px}
+ .online-world-picker summary{font-size:17px;min-height:40px}
+ .online-world-picker summary img{width:34px;height:34px}
+ .online-world-menu{width:300px}
+ .online-panel .online-world-menu button{font-size:16px;min-height:72px}
+ .online-world-menu button small{font-size:12px}
+}
+@media(min-width:2400px) and (min-height:1200px){
+ .online-hub{width:1560px;height:1040px;padding:62px 100px 80px;gap:28px}
+ .online-heading,.online-tab-content{max-width:1320px}
+ .online-tabs{width:760px}
+ .online-panel h1{font-size:52px}
+ .online-tabs button{font-size:26px;min-height:60px}
+ .online-create-grid>.online-box{min-height:620px;padding:38px}
+ .online-create-grid .online-setup{gap:28px}
+ .online-choice legend,.online-world-heading>span{font-size:24px}
+ .online-choice button{font-size:36px;min-height:64px}
+ .online-panel label,.online-panel input{font-size:22px}
+ .online-panel input{min-height:60px}
+ .online-panel .online-primary{font-size:28px;min-height:70px}
+ .online-join-card h2{font-size:34px}
+ .online-world-picker summary{font-size:26px;min-height:56px;padding-inline:10px 16px}
+ .online-world-picker summary img{width:48px;height:48px}
+ .online-world-chevron{width:24px;height:24px}
+ .online-world-menu{width:420px;padding:18px}
+ .online-world-menu>strong{font-size:20px}
+ .online-panel .online-world-menu button{font-size:24px;min-height:105px}
+ .online-world-menu button small{font-size:18px}
+ .online-world-menu button img{width:58px;height:64px}
+}

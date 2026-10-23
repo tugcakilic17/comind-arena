@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: ..
+    env_file: ../.env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3001
+      TRUST_PROXY: uniquelocal
+      NODE_ENV: production
+      AUTO_MIGRATE: "false"
+      SERVE_STATIC: "true"
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+  https:
+    image: caddy:2-alpine
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Gerçek alan adını .env dosyasına yazın}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  caddy_data:
+  caddy_config:

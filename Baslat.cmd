@@ -13,6 +13,6 @@ if not exist node_modules\vite (
     exit /b 1
   )
 )
-echo CoMind Arena: http://127.0.0.1:5174
-call npm.cmd run dev
+echo CoMind Arena: http://localhost:5174
+call npm.cmd run dev:all
 pause
